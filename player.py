@@ -26,7 +26,7 @@ class Player(object):
         self.direction_stack = []  #Held keys in the order they were pressed.
         self.redraw = False  #Force redraw if needed.
         self.image = None
-        self.frame  = 0
+        self.frame = 0
 
         self.frames = self.get_frames(image_path, \
                                       [[i, 1] for i in xrange(6)], \
@@ -82,6 +82,8 @@ class Player(object):
             elif self.direction_stack:
                 self.frame = (self.frame+1)%len(self.walkframes)
                 self.image = self.walkframes[self.frame]
+            else:
+                self.image = self.walkframes[self.frame]
             self.animate_timer = now
         if not self.image:
             self.image = self.walkframes[self.frame]
@@ -110,7 +112,6 @@ class Player(object):
     def pop_slash(self, key):
         if key == pg.K_e:
             self.is_slash = False
-            self.image = self.frames[2]
 
     def update(self, screen_rect):
         """Updates our player appropriately every frame."""
