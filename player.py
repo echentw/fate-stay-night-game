@@ -27,19 +27,30 @@ class Player(object):
         self.redraw = False  #Force redraw if needed.
         self.image = None
         self.frame  = 0
-        self.frames = self.get_frames(image_path)
+
+        self.frames = self.get_frames(image_path, \
+                                      [[i, 1] for i in xrange(6)], \
+                                      self.rect.size)
+
+        self.rect2 = pg.Rect(rect2);
+        self.slashframes = []
+        self.frames2 = self.get_frames(image2_path, \
+                                       [[0,0]], \
+                                       self.rect2.size)
+        self.is_slash = False
+
         self.animate_timer = 0.0
         self.animate_fps = 7.0
         self.walkframes = []
         self.walkframe_dict = self.make_frame_dict()
         self.adjust_images()
 
-    def get_frames(self, image_path):
+
+    def get_frames(self, image_path, indices, size):
         """Get a list of all frames."""
         sheet = pg.image.load(image_path).convert()
         sheet.set_colorkey(Player.COLOR_KEY)
-        indices = [[0,1], [1,1], [2,1], [3,1], [4,1], [5,1]] # walk left
-        return get_images(sheet, indices, self.rect.size)
+        return get_images(sheet, indices, size)
 
     def make_frame_dict(self):
         """
@@ -50,7 +61,8 @@ class Player(object):
                   pg.K_RIGHT: [pg.transform.flip(self.frames[i], True, False) \
                       for i in xrange(6)],
                   pg.K_DOWN : [self.frames[2]],
-                  pg.K_UP   : [self.frames[2]]}
+                  pg.K_UP   : [self.frames[2]],
+                  pg.K_e: [self.frames2[0]]}
         return frames
 
     def adjust_images(self):
@@ -65,7 +77,9 @@ class Player(object):
         """Update the sprite's animation as needed."""
         now = pg.time.get_ticks()
         if self.redraw or now-self.animate_timer > 1000/self.animate_fps:
-            if self.direction_stack:
+            if self.is_slash:
+                self.image = self.frames2[0]
+            elif self.direction_stack:
                 self.frame = (self.frame+1)%len(self.walkframes)
                 self.image = self.walkframes[self.frame]
             self.animate_timer = now
@@ -88,6 +102,15 @@ class Player(object):
                 self.direction_stack.remove(key)
             if self.direction_stack:
                 self.direction = self.direction_stack[-1]
+
+    def add_slash(self, key):
+        if key == pg.K_e:
+            self.is_slash = True
+
+    def pop_slash(self, key):
+        if key == pg.K_e:
+            self.is_slash = False
+            self.image = self.frames[2]
 
     def update(self, screen_rect):
         """Updates our player appropriately every frame."""

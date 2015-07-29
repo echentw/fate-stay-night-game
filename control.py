@@ -28,9 +28,15 @@ class Control(object):
             if event.type == pg.QUIT or self.keys[pg.K_ESCAPE]:
                 self.done = True
             elif event.type == pg.KEYDOWN:
-                self.player.add_direction(event.key)
+                if event.key == pg.K_e:
+                    self.player.add_slash(event.key)
+                else:
+                    self.player.add_direction(event.key)
             elif event.type == pg.KEYUP:
-                self.player.pop_direction(event.key)
+                if event.key == pg.K_e:
+                    self.player.pop_slash(event.key)
+                else:
+                    self.player.pop_direction(event.key)
 
     def display_fps(self):
         """Show the program's FPS in the window handle."""
