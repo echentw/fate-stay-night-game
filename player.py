@@ -28,23 +28,28 @@ class Player(object):
         self.image = None
         self.frame = 0
 
-        self.frames = self.get_frames(image_path, \
-                                      [[i, 1] for i in xrange(6)], \
-                                      self.rect.size)
+        self.frames = self.get_frames( \
+                image_path, [[i, 1] for i in xrange(6)], self.rect.size)
 
         self.rect2 = pg.Rect(rect2);
+        self.frames2 = self.get_frames( \
+                image2_path, [[0,0]], self.rect2.size)
         self.slashframes = []
-        self.frames2 = self.get_frames(image2_path, \
-                                       [[0,0]], \
-                                       self.rect2.size)
+        self.get_slashframes()
         self.is_slash = False
         self.slash_counter = 0
+
+        self.rect3 = pg.Rect(rect2)
 
         self.animate_timer = 0.0
         self.animate_fps = 7.0
         self.walkframes = []
         self.walkframe_dict = self.make_frame_dict()
         self.adjust_images()
+
+    def get_slashframes(self):
+        self.slashframes = [self.frames2[0], \
+                            pg.transform.flip(self.frames2[0], True, False)];
 
 
     def get_frames(self, image_path, indices, size):
@@ -62,8 +67,7 @@ class Player(object):
                   pg.K_RIGHT: [pg.transform.flip(self.frames[i], True, False) \
                       for i in xrange(6)],
                   pg.K_DOWN : [self.frames[2]],
-                  pg.K_UP   : [self.frames[2]],
-                  pg.K_e: [self.frames2[0]]}
+                  pg.K_UP   : [self.frames[2]]}
         return frames
 
     def adjust_images(self):
@@ -79,8 +83,10 @@ class Player(object):
         now = pg.time.get_ticks()
         if self.redraw or now-self.animate_timer > 1000/self.animate_fps:
             if self.is_slash:
-                self.image = self.frames2[0]
-        #        self.is_slash = False
+                if self.direction == pg.K_LEFT:
+                    self.image = self.slashframes[0]
+                else:
+                    self.image = self.slashframes[1]
             elif self.direction_stack:
                 self.frame = (self.frame+1)%len(self.walkframes)
                 self.image = self.walkframes[self.frame]
@@ -116,18 +122,28 @@ class Player(object):
         self.adjust_images()
         if self.direction_stack:
             direction_vector = Player.DIRECT_DICT[self.direction]
-            self.rect.x += self.speed*direction_vector[0]
-            self.rect.y += self.speed*direction_vector[1]
+            self.rect.x += self.speed * direction_vector[0]
+            self.rect.y += self.speed * direction_vector[1]
             self.rect.clamp_ip(screen_rect)
 
-            self.rect2.x += self.speed*direction_vector[0]
-            self.rect2.y += self.speed*direction_vector[1]
+            self.rect2.x += self.speed * direction_vector[0]
+            self.rect2.y += self.speed * direction_vector[1]
             self.rect2.clamp_ip(screen_rect)
+
+            self.rect3.x += self.speed * direction_vector[0]
+            self.rect3.y += self.speed * direction_vector[1]
+            self.rect3.clamp_ip(screen_rect)
 
     def draw(self, surface):
         """Draws the player to the target surface."""
-        if self.image == self.frames2[0]:
+        if self.image == self.slashframes[0]:
             surface.blit(self.image, self.rect2)
+            self.slash_counter += 1
+            if self.slash_counter > 15:
+                self.slash_counter = 0
+                self.is_slash = False
+        elif self.image == self.slashframes[1]:
+            surface.blit(self.image, self.rect3)
             self.slash_counter += 1
             if self.slash_counter > 15:
                 self.slash_counter = 0
@@ -140,7 +156,7 @@ def get_images(sheet, frame_indices, size):
     """Get desired images from a sprite sheet."""
     frames = []
     for cell in frame_indices:
-        frame_rect = ((size[0]*cell[0],size[1]*cell[1]), size)
+        frame_rect = ((size[0]*cell[0], size[1]*cell[1]), size)
         frames.append(sheet.subsurface(frame_rect))
     return frames
 

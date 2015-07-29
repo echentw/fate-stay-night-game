@@ -21,8 +21,10 @@ class Control(object):
                                       "saber_slash.png", (0,0,73,48))
 
         self.player.rect.center = self.screen_rect.center
-        self.player.rect2.x = self.player.rect.x - 50
+        self.player.rect2.x = self.player.rect.x - 40
         self.player.rect2.y = self.player.rect.y
+        self.player.rect3.x = self.player.rect.x + 10
+        self.player.rect3.y = self.player.rect.y
 
     def event_loop(self):
         """Add/pop directions from player's direction stack as necessary."""
