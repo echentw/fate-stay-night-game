@@ -19,7 +19,10 @@ class Control(object):
         self.keys = pg.key.get_pressed()
         self.player = myplayer.Player("saber_walk.png", (0,0,38,54), 3, \
                                       "saber_slash.png", (0,0,73,48))
+
         self.player.rect.center = self.screen_rect.center
+        self.player.rect2.x = self.player.rect.x - 50
+        self.player.rect2.y = self.player.rect.y
 
     def event_loop(self):
         """Add/pop directions from player's direction stack as necessary."""
@@ -33,10 +36,7 @@ class Control(object):
                 else:
                     self.player.add_direction(event.key)
             elif event.type == pg.KEYUP:
-                if event.key == pg.K_e:
-                    self.player.pop_slash(event.key)
-                else:
-                    self.player.pop_direction(event.key)
+                self.player.pop_direction(event.key)
 
     def display_fps(self):
         """Show the program's FPS in the window handle."""

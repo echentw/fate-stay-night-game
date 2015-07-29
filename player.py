@@ -38,6 +38,7 @@ class Player(object):
                                        [[0,0]], \
                                        self.rect2.size)
         self.is_slash = False
+        self.slash_counter = 0
 
         self.animate_timer = 0.0
         self.animate_fps = 7.0
@@ -79,6 +80,7 @@ class Player(object):
         if self.redraw or now-self.animate_timer > 1000/self.animate_fps:
             if self.is_slash:
                 self.image = self.frames2[0]
+        #        self.is_slash = False
             elif self.direction_stack:
                 self.frame = (self.frame+1)%len(self.walkframes)
                 self.image = self.walkframes[self.frame]
@@ -109,10 +111,6 @@ class Player(object):
         if key == pg.K_e:
             self.is_slash = True
 
-    def pop_slash(self, key):
-        if key == pg.K_e:
-            self.is_slash = False
-
     def update(self, screen_rect):
         """Updates our player appropriately every frame."""
         self.adjust_images()
@@ -122,9 +120,20 @@ class Player(object):
             self.rect.y += self.speed*direction_vector[1]
             self.rect.clamp_ip(screen_rect)
 
+            self.rect2.x += self.speed*direction_vector[0]
+            self.rect2.y += self.speed*direction_vector[1]
+            self.rect2.clamp_ip(screen_rect)
+
     def draw(self, surface):
         """Draws the player to the target surface."""
-        surface.blit(self.image, self.rect)
+        if self.image == self.frames2[0]:
+            surface.blit(self.image, self.rect2)
+            self.slash_counter += 1
+            if self.slash_counter > 15:
+                self.slash_counter = 0
+                self.is_slash = False
+        else:
+            surface.blit(self.image, self.rect)
 
 
 def get_images(sheet, frame_indices, size):
