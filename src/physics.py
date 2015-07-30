@@ -3,7 +3,7 @@ class Physics():
     self.x_vel = 0
     self.y_vel = 0
     self.grav = 0.5
-    self.fall = False
+    self.fall = True
 
   def physics_update(self):
     if self.fall:

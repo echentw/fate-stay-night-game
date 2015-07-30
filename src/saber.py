@@ -3,14 +3,18 @@ import sys
 import pygame as pg
 
 import control as ctrl
+import physics
 
 
-class Saber(object):
+class Saber(physics.Physics, pg.sprite.Sprite):
   DIRECT_DICT = {pg.K_LEFT  : (-1, 0),
                  pg.K_RIGHT : ( 1, 0)}
   COLOR_KEY = (255, 0, 255)
 
-  def __init__(self, walk_im, walk_rect, slash_im, slash_rect, speed):
+  def __init__(self, walk_im, rect, slash_im, slash_rect, speed):
+    physics.Physics.__init__(self)
+    pg.sprite.Sprite.__init__(self)
+
     self.speed = speed                # the speed Saber moves at
     self.curr_frames = []             # the current set of frames to flip thru
     self.image = None                 # the current image of saber to display
@@ -32,20 +36,41 @@ class Saber(object):
     self.frame_id = 0
 
     # handle walking frames
-    self.walk_rect = pg.Rect(walk_rect)
+    self.rect = pg.Rect(rect)
     self.walk_frames = self.get_walk_frames(
-        walk_im, [[i, 1] for i in xrange(6)], self.walk_rect)
+        walk_im, [[i, 1] for i in xrange(6)], self.rect)
 
     # handle slashing frames
     self.slash_left_rect = pg.Rect(slash_rect)
     self.slash_right_rect = pg.Rect(slash_rect)
-    self.slash_left_rect.x = self.walk_rect.x - 36
+    self.slash_left_rect.x = self.rect.x - 36
     self.slash_frames = self.get_slash_frames(
         slash_im, [[0,0]], self.slash_right_rect)
 
     # initialize the first image
     self.adjust_images()
 
+  # Calculate Saber's position in this frame
+  def get_position(self, obstacles):
+    self.check_falling(obstacles)
+    self.physics_update()
+    if self.y_vel:
+      self.rect.y += self.y_vel
+      self.slash_left_rect.y = self.rect.y
+      self.slash_right_rect.y = self.rect.y
+    if self.x_vel:
+      self.rect.x += self.x_vel
+      self.slash_left_rect.x = self.rect.x - 36
+      self.slash_right_rect.x = self.rect.x
+      self.x_vel = 0
+
+  # Check if Saber is making contact with something below
+  def check_falling(self, obstacles):
+    self.rect.move_ip((0, 1))
+    is_collide = pg.sprite.spritecollide(self, obstacles, False)
+    self.rect.move_ip((0, -1))
+    if is_collide:
+      self.fall = False
 
   # Handle keypresses
   def handle_keydown(self, key):
@@ -66,19 +91,15 @@ class Saber(object):
         self.direction = self.direction_stack[-1]
 
   # Update the image and position
-  def update(self, screen_rect):
+  def update(self, screen_rect, obstacles):
     self.adjust_images()
     if self.direction_stack:
       direction_vector = Saber.DIRECT_DICT[self.direction]
-      self.walk_rect.x += self.speed * direction_vector[0]
-      self.walk_rect.y += self.speed * direction_vector[1]
-      self.walk_rect.clamp_ip(screen_rect)
-
-      self.slash_left_rect.x = self.walk_rect.x - 36;
-      self.slash_left_rect.y = self.walk_rect.y;
-
-      self.slash_right_rect.x = self.walk_rect.x;
-      self.slash_right_rect.y = self.walk_rect.y;
+      if self.direction == pg.K_LEFT:
+        self.x_vel -= self.speed
+      elif self.direction == pg.K_RIGHT:
+        self.x_vel += self.speed
+    self.get_position(obstacles)
 
   # Draw the image to the screen
   def draw(self, surface):
@@ -89,7 +110,7 @@ class Saber(object):
         surface.blit(self.image, self.slash_right_rect)
       self.slashing = False
     else:
-      surface.blit(self.image, self.walk_rect)
+      surface.blit(self.image, self.rect)
 
   # Helper method for update()
   def adjust_images(self):

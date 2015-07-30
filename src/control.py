@@ -44,7 +44,7 @@ class Control(object):
                 self.saber.handle_keyup(event.key)
 
     def update(self):
-      self.saber.update(self.screen_rect)
+      self.saber.update(self.screen_rect, self.obstacles)
 
     def draw(self):
       self.screen.fill(Control.BACKGROUND_COLOR)
