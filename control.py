@@ -2,7 +2,7 @@ import os
 import sys
 import pygame as pg
 
-import player as myplayer
+import saber as sab
 
 class Control(object):
     CAPTION = "My Game"
@@ -17,14 +17,10 @@ class Control(object):
         self.fps = 60.0
         self.done = False
         self.keys = pg.key.get_pressed()
-        self.player = myplayer.Player("saber_walk.png", (0,0,38,54), 3, \
-                                      "saber_slash.png", (0,0,73,48))
+        self.saber = sab.Saber("saber_walk.png", (0,0,38,54),
+                                    "saber_slash.png", (0,0,73,48), 3)
 
-        self.player.rect.center = self.screen_rect.center
-        self.player.rect2.x = self.player.rect.x - 40
-        self.player.rect2.y = self.player.rect.y
-        self.player.rect3.x = self.player.rect.x + 10
-        self.player.rect3.y = self.player.rect.y
+        self.saber.walk_rect.center = self.screen_rect.center
 
     def event_loop(self):
         """Add/pop directions from player's direction stack as necessary."""
@@ -33,12 +29,9 @@ class Control(object):
             if event.type == pg.QUIT or self.keys[pg.K_ESCAPE]:
                 self.done = True
             elif event.type == pg.KEYDOWN:
-                if event.key == pg.K_e:
-                    self.player.add_slash(event.key)
-                else:
-                    self.player.add_direction(event.key)
+                self.saber.handle_keydown(event.key)
             elif event.type == pg.KEYUP:
-                self.player.pop_direction(event.key)
+                self.saber.handle_keyup(event.key)
 
     def display_fps(self):
         """Show the program's FPS in the window handle."""
@@ -48,9 +41,9 @@ class Control(object):
         """Our main game loop; I bet you'd never have guessed."""
         while not self.done:
             self.event_loop()
-            self.player.update(self.screen_rect)
+            self.saber.update(self.screen_rect)
             self.screen.fill(Control.BACKGROUND_COLOR)
-            self.player.draw(self.screen)
+            self.saber.draw(self.screen)
             pg.display.update()
             self.clock.tick(self.fps)
             self.display_fps()
