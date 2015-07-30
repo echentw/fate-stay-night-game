@@ -17,10 +17,13 @@ class Control(object):
         self.fps = 60.0
         self.done = False
         self.keys = pg.key.get_pressed()
-        self.saber = sab.Saber("saber_walk.png", (0,0,38,54),
-                                    "saber_slash.png", (0,0,73,48), 3)
 
-        self.saber.walk_rect.center = self.screen_rect.center
+        x = self.screen_rect.center[0]
+        y = self.screen_rect.center[1]
+        self.saber = sab.Saber("saber_walk.png", (x,y,38,54),
+                               "saber_slash.png", (x,y,73,48), 3)
+
+#        self.saber.walk_rect.center = self.screen_rect.center
 
     def event_loop(self):
         """Add/pop directions from player's direction stack as necessary."""
@@ -33,12 +36,9 @@ class Control(object):
             elif event.type == pg.KEYUP:
                 self.saber.handle_keyup(event.key)
 
-    def display_fps(self):
-        """Show the program's FPS in the window handle."""
-        pg.display.set_caption(Control.CAPTION)
-
     def main_loop(self):
         """Our main game loop; I bet you'd never have guessed."""
+        pg.display.set_caption(Control.CAPTION)
         while not self.done:
             self.event_loop()
             self.saber.update(self.screen_rect)
@@ -46,5 +46,4 @@ class Control(object):
             self.saber.draw(self.screen)
             pg.display.update()
             self.clock.tick(self.fps)
-            self.display_fps()
 

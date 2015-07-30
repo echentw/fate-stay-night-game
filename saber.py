@@ -37,11 +37,14 @@ class Saber(object):
         walk_im, [[i, 1] for i in xrange(6)], self.walk_rect)
 
     # handle slashing frames
-    self.slash_rect = pg.Rect(slash_rect)
+    self.slash_left_rect = pg.Rect(slash_rect)
+    self.slash_right_rect = pg.Rect(slash_rect)
+    self.slash_left_rect.x = self.walk_rect.x - 36
     self.slash_frames = self.get_slash_frames(
-        slash_im, [[0,0]], self.slash_rect)
+        slash_im, [[0,0]], self.slash_right_rect)
 
-    self.adjust_images()              # initialize the first image
+    # initialize the first image
+    self.adjust_images()
 
 
   # Handle keypresses
@@ -71,9 +74,22 @@ class Saber(object):
       self.walk_rect.y += self.speed * direction_vector[1]
       self.walk_rect.clamp_ip(screen_rect)
 
+      self.slash_left_rect.x = self.walk_rect.x - 36;
+      self.slash_left_rect.y = self.walk_rect.y;
+
+      self.slash_right_rect.x = self.walk_rect.x;
+      self.slash_right_rect.y = self.walk_rect.y;
+
   # Draw the image to the screen
   def draw(self, surface):
-    surface.blit(self.image, self.walk_rect)
+    if self.image == self.slash_frames[self.direction][0]:
+      if self.direction == pg.K_LEFT:
+        surface.blit(self.image, self.slash_left_rect)
+      else:
+        surface.blit(self.image, self.slash_right_rect)
+      self.slashing = False
+    else:
+      surface.blit(self.image, self.walk_rect)
 
   # Helper method for update()
   def adjust_images(self):
@@ -88,7 +104,6 @@ class Saber(object):
     if self.redraw or now - self.animate_timer > 1000 / self.animate_fps:
       if self.direction_stack or self.slashing:
         self.frame_id = (self.frame_id + 1) % len(self.curr_frames)
-        self.slashing = False
       else:
         self.curr_frames = self.walk_frames[self.direction]
       self.image = self.curr_frames[self.frame_id]
