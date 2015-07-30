@@ -2,7 +2,7 @@ import os
 import sys
 import pygame as pg
 
-import control as ctrl
+from src import control as ctrl
 
 CAPTION = "My Game"
 SCREEN_SIZE = (200, 200)

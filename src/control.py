@@ -20,8 +20,8 @@ class Control(object):
 
         x = self.screen_rect.center[0]
         y = self.screen_rect.center[1]
-        self.saber = sab.Saber("saber_walk.png", (x,y,38,54),
-                               "saber_slash.png", (x,y,73,48), 3)
+        self.saber = sab.Saber("assets/saber_walk.png", (x,y,38,54),
+                               "assets/saber_slash.png", (x,y,73,48), 3)
 
 #        self.saber.walk_rect.center = self.screen_rect.center
 
