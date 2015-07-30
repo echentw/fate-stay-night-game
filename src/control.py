@@ -3,6 +3,7 @@ import sys
 import pygame as pg
 
 import saber as sab
+import block
 
 class Control(object):
     CAPTION = "My Game"
@@ -23,7 +24,11 @@ class Control(object):
         self.saber = sab.Saber("assets/saber_walk.png", (x,y,38,54),
                                "assets/saber_slash.png", (x,y,73,48), 3)
 
-#        self.saber.walk_rect.center = self.screen_rect.center
+        self.obstacles = self.make_obstacles()
+
+    def make_obstacles(self):
+        walls = [block.Block(pg.Color("darkgreen"), (100, 0, 20, 1000))]
+        return pg.sprite.Group(walls)
 
     def event_loop(self):
         """Add/pop directions from player's direction stack as necessary."""
@@ -36,14 +41,24 @@ class Control(object):
             elif event.type == pg.KEYUP:
                 self.saber.handle_keyup(event.key)
 
+    def update(self):
+      self.saber.update(self.screen_rect)
+
+    def draw(self):
+      self.screen.fill(Control.BACKGROUND_COLOR)
+      self.obstacles.draw(self.screen)
+      self.saber.draw(self.screen)
+
     def main_loop(self):
         """Our main game loop; I bet you'd never have guessed."""
         pg.display.set_caption(Control.CAPTION)
         while not self.done:
             self.event_loop()
-            self.saber.update(self.screen_rect)
-            self.screen.fill(Control.BACKGROUND_COLOR)
-            self.saber.draw(self.screen)
+            self.update()
+            self.draw()
+#            self.saber.update(self.screen_rect)
+#            self.screen.fill(Control.BACKGROUND_COLOR)
+#            self.saber.draw(self.screen)
             pg.display.update()
             self.clock.tick(self.fps)
 
