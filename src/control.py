@@ -27,7 +27,9 @@ class Control(object):
         self.obstacles = self.make_obstacles()
 
     def make_obstacles(self):
-        walls = [block.Block(pg.Color("darkgreen"), (100, 0, 20, 1000))]
+        walls = [block.Block(pg.Color("darkgreen"), (0, self.screen_rect.bottom - 20, self.screen_rect.width, 20)),
+                block.Block(pg.Color("darkblue"), (0, 0, 20, self.screen_rect.height)),
+                block.Block(pg.Color("darkred"), (self.screen_rect.width - 20, 0, 20, self.screen_rect.height))]
         return pg.sprite.Group(walls)
 
     def event_loop(self):
