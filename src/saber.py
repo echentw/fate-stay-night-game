@@ -53,6 +53,7 @@ class Saber(physics.Physics, pg.sprite.Sprite):
 
   # Calculate Saber's position in this frame
   def get_position(self, obstacles):
+    self.check_falling(obstacles)
     self.physics_update()
     if self.y_vel:
       self.rect.y += self.y_vel
@@ -63,15 +64,16 @@ class Saber(physics.Physics, pg.sprite.Sprite):
       self.slash_left_rect.x = self.rect.x - 36
       self.slash_right_rect.x = self.rect.x
       self.x_vel = 0
-    self.check_falling(obstacles)
 
   # Check if Saber is making contact with something below
   def check_falling(self, obstacles):
     self.rect.move_ip((0, 1))
-    is_collide = pg.sprite.spritecollide(self, obstacles, False)
+    is_collide_below = pg.sprite.spritecollide(self, obstacles, False)
     self.rect.move_ip((0, -1))
-    if is_collide:
-      self.fall = False
+    if is_collide_below:
+      self.y_vel = min(self.y_vel, 0)
+      if self.y_vel == 0:
+        self.fall = False
     else:
       self.fall = True
 
