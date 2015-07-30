@@ -71,6 +71,8 @@ class Saber(physics.Physics, pg.sprite.Sprite):
     self.rect.move_ip((0, -1))
     if is_collide:
       self.fall = False
+    else:
+      self.fall = True
 
   # Handle keypresses
   def handle_keydown(self, key):

@@ -19,8 +19,8 @@ class Control(object):
         self.done = False
         self.keys = pg.key.get_pressed()
 
-        x = self.screen_rect.center[0]
-        y = self.screen_rect.center[1]
+        x = self.screen_rect.center[0] - 40
+        y = self.screen_rect.center[1] + 40
         self.saber = sab.Saber("assets/saber_walk.png", (x,y,38,54),
                                "assets/saber_slash.png", (x,y,73,48), 3)
 
@@ -30,7 +30,9 @@ class Control(object):
         walls = [block.Block(pg.Color("darkgreen"), (0, self.screen_rect.bottom - 20, self.screen_rect.width, 20)),
                  block.Block(pg.Color("darkblue"), (0, 0, 20, self.screen_rect.height)),
                  block.Block(pg.Color("darkred"), (self.screen_rect.width - 20, 0, 20, self.screen_rect.height))]
-        return pg.sprite.Group(walls)
+
+        static = [block.Block(pg.Color("blue"), (0, self.screen_rect.bottom - 60, self.screen_rect.width / 2, 20))]
+        return pg.sprite.Group(walls, static)
 
     def event_loop(self):
         """Add/pop directions from player's direction stack as necessary."""

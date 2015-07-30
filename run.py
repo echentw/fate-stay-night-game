@@ -5,7 +5,7 @@ import pygame as pg
 from src import control as ctrl
 
 CAPTION = "My Game"
-SCREEN_SIZE = (200, 200)
+SCREEN_SIZE = (200, 500)
 
 
 if __name__ == "__main__":
