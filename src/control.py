@@ -41,7 +41,7 @@ class Control(object):
             if event.type == pg.QUIT or self.keys[pg.K_ESCAPE]:
                 self.done = True
             elif event.type == pg.KEYDOWN:
-                self.saber.handle_keydown(event.key)
+                self.saber.handle_keydown(event.key, self.obstacles)
             elif event.type == pg.KEYUP:
                 self.saber.handle_keyup(event.key)
 

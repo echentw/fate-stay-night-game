@@ -15,6 +15,7 @@ class Saber(physics.Physics, pg.sprite.Sprite):
     physics.Physics.__init__(self)
     pg.sprite.Sprite.__init__(self)
 
+    self.jump_power = -9.0            # initial jumping speed
     self.speed = speed                # the speed Saber moves at
     self.curr_frames = []             # the current set of frames to flip thru
     self.image = None                 # the current image of saber to display
@@ -52,7 +53,6 @@ class Saber(physics.Physics, pg.sprite.Sprite):
 
   # Calculate Saber's position in this frame
   def get_position(self, obstacles):
-    self.check_falling(obstacles)
     self.physics_update()
     if self.y_vel:
       self.rect.y += self.y_vel
@@ -63,6 +63,7 @@ class Saber(physics.Physics, pg.sprite.Sprite):
       self.slash_left_rect.x = self.rect.x - 36
       self.slash_right_rect.x = self.rect.x
       self.x_vel = 0
+    self.check_falling(obstacles)
 
   # Check if Saber is making contact with something below
   def check_falling(self, obstacles):
@@ -75,7 +76,7 @@ class Saber(physics.Physics, pg.sprite.Sprite):
       self.fall = True
 
   # Handle keypresses
-  def handle_keydown(self, key):
+  def handle_keydown(self, key, obstacles):
     if key in Saber.DIRECT_DICT:
       if key in self.direction_stack:
         self.direction_stack.remove(key)
@@ -83,6 +84,10 @@ class Saber(physics.Physics, pg.sprite.Sprite):
       self.direction = key
     elif key == pg.K_e:
       self.slashing = True
+    elif key == pg.K_UP:
+      if not self.fall:
+        self.y_vel = self.jump_power
+        self.fall = True
 
   # Handle key releases
   def handle_keyup(self, key):
