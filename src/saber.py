@@ -47,7 +47,7 @@ class Saber(physics.Physics, pg.sprite.Sprite):
     # handle jumping frames
     self.jump1_rect = pg.Rect(jump1_rect)
     self.jump2_rect = pg.Rect(jump2_rect)
-    self.jump_frames = self.get_jump_frames(
+    self.jump_frames1, self.jump_frames2 = self.get_jump_frames(
         jump1_im, [[0,0]], self.jump1_rect,
         jump2_im, [[0,0]], self.jump2_rect)
 
@@ -154,7 +154,10 @@ class Saber(physics.Physics, pg.sprite.Sprite):
       self.old_direction = self.direction
       self.redraw = True
     if self.fall:
-      self.curr_frames = self.jump_frames[self.direction]
+      if self.y_vel > 0:
+        self.curr_frames = self.jump_frames2[self.direction]
+      else:
+        self.curr_frames = self.jump_frames1[self.direction]
       self.redraw = True
     else:
       if self.slashing:
@@ -167,10 +170,10 @@ class Saber(physics.Physics, pg.sprite.Sprite):
     now = pg.time.get_ticks()
     if self.redraw or now - self.animate_timer > 1000 / self.animate_fps:
       if self.fall:
-        self.curr_frames = self.jump_frames[self.direction]
         self.frame_id = 0
       else:
-        if self.curr_frames == self.jump_frames[self.direction]:
+        if self.curr_frames == self.jump_frames1[self.direction] or \
+           self.curr_frames == self.jump_frames2[self.direction]:
           self.curr_frames = self.walk_frames[self.direction]
           self.frame_id = 2
         if self.direction_stack or self.slashing:
@@ -200,12 +203,11 @@ class Saber(physics.Physics, pg.sprite.Sprite):
     sheet2.set_colorkey(Saber.COLOR_KEY)
     frames1 = get_images(sheet1, indices1, rect1.size)
     frames2 = get_images(sheet2, indices2, rect2.size)
-#    frame_dict = {pg.K_LEFT : [frames1[0], frames2[0]],
-#                  pg.K_RIGHT: [pg.transform.flip(frames1[0], True, False),
-#                               pg.transform.flip(frames2[0], True, False)]}
-    frame_dict = {pg.K_LEFT : [pg.transform.flip(frames1[0], True, False)],
-                  pg.K_RIGHT: [frames1[0]]}
-    return frame_dict
+    frame1_dict = {pg.K_LEFT : [pg.transform.flip(frames1[0], True, False)],
+                   pg.K_RIGHT: [frames1[0]]}
+    frame2_dict = {pg.K_LEFT : [pg.transform.flip(frames2[0], True, False)],
+                   pg.K_RIGHT: [frames2[0]]}
+    return frame1_dict, frame2_dict
 
   # Helper method to load slash frames
   def get_slash_frames(self, slash_im, indices, rect):
