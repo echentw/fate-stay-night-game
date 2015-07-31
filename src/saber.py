@@ -62,8 +62,9 @@ class Saber(physics.Physics, pg.sprite.Sprite):
     self.adjust_images()
 
     # handle sound effects
-#    self.sound_swoosh = pg.mixer.Sound("assets/soundfx/sword_swipe.wav");
-    self.sound_swoosh = pg.mixer.Sound("assets/soundfx/knife_stab.wav");
+#    self.sound_swoosh = pg.mixer.Sound("assets/soundfx/sword_swipe.wav")
+    self.sound_swoosh = pg.mixer.Sound("assets/soundfx/knife_stab.wav")
+    self.sound_land = pg.mixer.Sound("assets/soundfx/thud.wav")
 
 
   # Calculate Saber's position in this frame
@@ -84,6 +85,8 @@ class Saber(physics.Physics, pg.sprite.Sprite):
     if is_collide_below:
       self.y_vel = min(self.y_vel, 0)
       if self.y_vel == 0:
+        if self.fall:
+          self.sound_land.play()
         self.fall = False
     else:
       self.fall = True
