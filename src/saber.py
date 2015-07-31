@@ -11,7 +11,10 @@ class Saber(physics.Physics, pg.sprite.Sprite):
                  pg.K_RIGHT : ( 1, 0)}
   COLOR_KEY = (255, 0, 255)
 
-  def __init__(self, walk_im, rect, slash_im, slash_rect, speed):
+  def __init__(self, speed, walk_im, rect,
+                            slash_im, slash_rect,
+                            jump1_im, jump1_rect,
+                            jump2_im, jump2_rect):
     physics.Physics.__init__(self)
     pg.sprite.Sprite.__init__(self)
 
@@ -40,6 +43,13 @@ class Saber(physics.Physics, pg.sprite.Sprite):
     self.rect = pg.Rect(rect)
     self.walk_frames = self.get_walk_frames(
         walk_im, [[i, 1] for i in xrange(6)], self.rect)
+
+    # handle jumping frames
+    self.jump1_rect = pg.Rect(jump1_rect)
+    self.jump2_rect = pg.Rect(jump2_rect)
+    self.jump_frames = self.get_jump_frames(
+        jump1_im, [[0,0]], self.jump1_rect,
+        jump2_im, [[0,0]], self.jump2_rect)
 
     # handle slashing frames
     self.slash_left_rect = pg.Rect(slash_rect)
@@ -139,19 +149,31 @@ class Saber(physics.Physics, pg.sprite.Sprite):
 
   # Helper method for update()
   def adjust_images(self):
-    if self.slashing:
-      self.curr_frames = self.slash_frames[self.direction]
-      self.redraw = True
-    elif self.direction != self.old_direction:
+    if self.old_direction is None:
       self.curr_frames = self.walk_frames[self.direction]
       self.old_direction = self.direction
       self.redraw = True
+    if self.fall:
+      self.curr_frames = self.jump_frames[self.direction]
+      self.redraw = True
+    else:
+      if self.slashing:
+        self.curr_frames = self.slash_frames[self.direction]
+        self.redraw = True
+      elif self.direction != self.old_direction:
+        self.curr_frames = self.walk_frames[self.direction]
+        self.old_direction = self.direction
+        self.redraw = True
     now = pg.time.get_ticks()
     if self.redraw or now - self.animate_timer > 1000 / self.animate_fps:
       if self.direction_stack or self.slashing:
         self.frame_id = (self.frame_id + 1) % len(self.curr_frames)
       else:
-        self.curr_frames = self.walk_frames[self.direction]
+        if self.fall:
+          self.frame_id = 0
+          self.curr_frames = self.jump_frames[self.direction]
+        else:
+          self.curr_frames = self.walk_frames[self.direction]
       self.image = self.curr_frames[self.frame_id]
       self.animate_timer = now
       self.redraw = False
@@ -164,6 +186,22 @@ class Saber(physics.Physics, pg.sprite.Sprite):
     frame_dict = {pg.K_LEFT : [frames[i] for i in xrange(6)],
                   pg.K_RIGHT: [pg.transform.flip(frames[i], True, False) \
                       for i in xrange(6)]}
+    return frame_dict
+
+  # Helper method to load jump frames
+  def get_jump_frames(self, jump1_im, indices1, rect1,
+                            jump2_im, indices2, rect2):
+    sheet1 = pg.image.load(jump1_im).convert()
+    sheet1.set_colorkey(Saber.COLOR_KEY)
+    sheet2 = pg.image.load(jump2_im).convert()
+    sheet2.set_colorkey(Saber.COLOR_KEY)
+    frames1 = get_images(sheet1, indices1, rect1.size)
+    frames2 = get_images(sheet2, indices2, rect2.size)
+#    frame_dict = {pg.K_LEFT : [frames1[0], frames2[0]],
+#                  pg.K_RIGHT: [pg.transform.flip(frames1[0], True, False),
+#                               pg.transform.flip(frames2[0], True, False)]}
+    frame_dict = {pg.K_LEFT : [pg.transform.flip(frames1[0], True, False)],
+                  pg.K_RIGHT: [frames1[0]]}
     return frame_dict
 
   # Helper method to load slash frames
