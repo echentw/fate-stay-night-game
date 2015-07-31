@@ -56,13 +56,9 @@ class Saber(physics.Physics, pg.sprite.Sprite):
     self.check_falling(obstacles)
     self.physics_update()
     if self.y_vel:
-      self.rect.y += self.y_vel
-      self.slash_left_rect.y = self.rect.y
-      self.slash_right_rect.y = self.rect.y
+      self.check_collisions(self.y_vel, 1, obstacles)
     if self.x_vel:
-      self.rect.x += self.x_vel
-      self.slash_left_rect.x = self.rect.x - 36
-      self.slash_right_rect.x = self.rect.x
+      self.check_collisions(self.x_vel, 0, obstacles)
       self.x_vel = 0
 
   # Check if Saber is making contact with something below
@@ -76,6 +72,23 @@ class Saber(physics.Physics, pg.sprite.Sprite):
         self.fall = False
     else:
       self.fall = True
+
+  def check_collisions(self, velocity, dir_id, obstacles):
+    unaltered = True
+    self.rect[dir_id] += velocity
+    self.slash_left_rect[dir_id] += velocity
+    self.slash_right_rect[dir_id] += velocity
+    while pg.sprite.spritecollideany(self, obstacles):
+      if velocity < 0:
+        self.rect[dir_id] += 1
+        self.slash_left_rect[dir_id] += 1
+        self.slash_right_rect[dir_id] += 1
+      else:
+        self.rect[dir_id] -= 1
+        self.slash_left_rect[dir_id] -= 1
+        self.slash_right_rect[dir_id] -= 1
+      unaltered = False
+    return unaltered
 
   # Handle keypresses
   def handle_keydown(self, key, obstacles):
