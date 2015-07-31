@@ -21,10 +21,10 @@ class Control(object):
 
     x = self.screen_rect.center[0] - 40
     y = self.screen_rect.center[1] + 40
-    self.saber = sab.Saber(3, "assets/saber_walk.png", (x,y,38,54),
-                              "assets/saber_slash.png", (x,y,73,48),
-                              "assets/saber_jump1.png", (x,y,38,58),
-                              "assets/saber_jump2.png", (x,y,41,63))
+    self.saber = sab.Saber(3, "assets/sprites/saber_walk.png", (x,y,38,54),
+                              "assets/sprites/saber_slash.png", (x,y,73,48),
+                              "assets/sprites/saber_jump1.png", (x,y,38,58),
+                              "assets/sprites/saber_jump2.png", (x,y,41,63))
 
     self.obstacles = self.make_obstacles()
 
@@ -60,7 +60,12 @@ class Control(object):
   def main_loop(self):
     """Our main game loop; I bet you'd never have guessed."""
     pg.display.set_caption(Control.CAPTION)
+    pg.mixer.music.load("assets/music/disillusion-8bit.mp3")
+    pg.mixer.music.play()
+
     while not self.done:
+      if not pg.mixer.music.get_busy():
+        pg.mixer.music.play()
       self.event_loop()
       self.update()
       self.draw()

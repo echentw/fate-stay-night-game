@@ -61,6 +61,11 @@ class Saber(physics.Physics, pg.sprite.Sprite):
     # initialize the first image
     self.adjust_images()
 
+    # handle sound effects
+#    self.sound_swoosh = pg.mixer.Sound("assets/soundfx/sword_swipe.wav");
+    self.sound_swoosh = pg.mixer.Sound("assets/soundfx/knife_stab.wav");
+
+
   # Calculate Saber's position in this frame
   def get_position(self, obstacles):
     self.check_falling(obstacles)
@@ -112,6 +117,7 @@ class Saber(physics.Physics, pg.sprite.Sprite):
     elif key == pg.K_e:
       if not self.fall:
         self.slashing = True
+        self.sound_swoosh.play()
     elif key == pg.K_UP:
       if not self.fall:
         self.y_vel = self.jump_power
