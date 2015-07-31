@@ -15,7 +15,7 @@ class Saber(physics.Physics, pg.sprite.Sprite):
     physics.Physics.__init__(self)
     pg.sprite.Sprite.__init__(self)
 
-    self.jump_power = -9.0            # initial jumping speed
+    self.jump_power = -12.0            # initial jumping speed
     self.speed = speed                # the speed Saber moves at
     self.curr_frames = []             # the current set of frames to flip thru
     self.image = None                 # the current image of saber to display
@@ -83,6 +83,8 @@ class Saber(physics.Physics, pg.sprite.Sprite):
         self.rect[dir_id] += 1
         self.slash_left_rect[dir_id] += 1
         self.slash_right_rect[dir_id] += 1
+        if dir_id == 1:
+          self.y_vel = 0
       else:
         self.rect[dir_id] -= 1
         self.slash_left_rect[dir_id] -= 1

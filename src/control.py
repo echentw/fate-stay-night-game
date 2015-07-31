@@ -31,7 +31,9 @@ class Control(object):
                  block.Block(pg.Color("darkblue"), (0, 0, 20, self.screen_rect.height)),
                  block.Block(pg.Color("darkred"), (self.screen_rect.width - 20, 0, 20, self.screen_rect.height))]
 
-        static = [block.Block(pg.Color("blue"), (0, self.screen_rect.bottom - 60, self.screen_rect.width / 2, 20))]
+        static = [block.Block(pg.Color("blue"), (0, self.screen_rect.bottom - 60, self.screen_rect.width / 2, 20)),
+                  block.Block(pg.Color("green"), (0, self.screen_rect.bottom - 150, self.screen_rect.width / 2, 20))]
+
         return pg.sprite.Group(walls, static)
 
     def event_loop(self):
