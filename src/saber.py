@@ -166,12 +166,15 @@ class Saber(physics.Physics, pg.sprite.Sprite):
         self.redraw = True
     now = pg.time.get_ticks()
     if self.redraw or now - self.animate_timer > 1000 / self.animate_fps:
-      if self.direction_stack or self.slashing:
-        self.frame_id = (self.frame_id + 1) % len(self.curr_frames)
+      if self.fall:
+        self.curr_frames = self.jump_frames[self.direction]
+        self.frame_id = 0
       else:
-        if self.fall:
-          self.frame_id = 0
-          self.curr_frames = self.jump_frames[self.direction]
+        if self.curr_frames == self.jump_frames[self.direction]:
+          self.curr_frames = self.walk_frames[self.direction]
+          self.frame_id = 2
+        if self.direction_stack or self.slashing:
+          self.frame_id = (self.frame_id + 1) % len(self.curr_frames)
         else:
           self.curr_frames = self.walk_frames[self.direction]
       self.image = self.curr_frames[self.frame_id]
