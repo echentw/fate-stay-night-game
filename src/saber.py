@@ -117,7 +117,7 @@ class Saber(physics.Physics, pg.sprite.Sprite):
         self.direction_stack.remove(key)
       self.direction_stack.append(key)
       self.direction = key
-    elif key == pg.K_e:
+    elif key == pg.K_DOWN:
       if not self.fall:
         self.slashing = True
         self.sound_swoosh.play()
