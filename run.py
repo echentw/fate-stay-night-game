@@ -9,14 +9,15 @@ SCREEN_SIZE = (200, 500)
 
 
 if __name__ == "__main__":
-    os.environ['SDL_VIDEO_CENTERED'] = '1'
-  
-    pg.init()
-    pg.display.set_caption(CAPTION)
-    pg.display.set_mode(SCREEN_SIZE)
-  
-    run_it = ctrl.Control()
-    run_it.main_loop()
-  
-    pg.quit()
-    sys.exit()
+  os.environ['SDL_VIDEO_CENTERED'] = '1'
+
+  pg.init()
+  pg.display.set_caption(CAPTION)
+  pg.display.set_mode(SCREEN_SIZE)
+
+  run_it = ctrl.Control()
+  run_it.main_loop()
+
+  pg.quit()
+  sys.exit()
+
