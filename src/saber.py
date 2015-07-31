@@ -100,7 +100,8 @@ class Saber(physics.Physics, pg.sprite.Sprite):
       self.direction_stack.append(key)
       self.direction = key
     elif key == pg.K_e:
-      self.slashing = True
+      if not self.fall:
+        self.slashing = True
     elif key == pg.K_UP:
       if not self.fall:
         self.y_vel = self.jump_power
