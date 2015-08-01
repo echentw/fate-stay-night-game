@@ -15,7 +15,7 @@ if __name__ == "__main__":
   pg.display.set_caption(CAPTION)
   pg.display.set_mode(SCREEN_SIZE)
 
-  run_it = ctrl.Control()
+  run_it = ctrl.Control(SCREEN_SIZE)
   run_it.main_loop()
 
   pg.quit()

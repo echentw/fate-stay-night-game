@@ -11,8 +11,11 @@ class Control(object):
   BACKGROUND_COLOR = (100, 100, 100)
 
   """Being controlling is our job."""
-  def __init__(self):
+  def __init__(self, level_size):
     """Initialize standard attributes, standardly."""
+    self.level = pg.Surface((level_size[0], level_size[1])).convert()
+    self.level_rect = self.level.get_rect()
+
     self.screen = pg.display.get_surface()
     self.screen_rect = self.screen.get_rect()
     self.clock  = pg.time.Clock()
@@ -76,18 +79,12 @@ class Control(object):
     self.screen_rect.center = ((self.saber.rect.center[0] + self.archer.rect.center[0]) / 2.0, (self.saber.rect.center[1] + self.archer.rect.center[1]) / 2.0)
 
   def draw(self):
-    level = pg.Surface((1000,1000)).convert()
-    level.fill(Control.BACKGROUND_COLOR)
-    level_rect = level.get_rect()
-    self.screen_rect.clamp_ip(level_rect)
-    self.obstacles.draw(level)
-    self.saber.draw(level)
-    self.archer.draw(level)
-    self.screen.blit(level, (0, 0), self.screen_rect)
-
-#    self.screen.fill(Control.BACKGROUND_COLOR)
-#    self.obstacles.draw(self.screen)
-#    self.saber.draw(self.screen)
+    self.level.fill(Control.BACKGROUND_COLOR)
+    self.screen_rect.clamp_ip(self.level_rect)
+    self.obstacles.draw(self.level)
+    self.saber.draw(self.level)
+    self.archer.draw(self.level)
+    self.screen.blit(self.level, (0, 0), self.screen_rect)
 
   def main_loop(self):
     """Our main game loop; I bet you'd never have guessed."""
