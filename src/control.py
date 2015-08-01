@@ -22,14 +22,16 @@ class Control(object):
 
     x = self.screen_rect.center[0] - 40
     y = self.screen_rect.center[1] + 40
-    self.saber = sab.Saber(3, "assets/sprites/saber_walk.png", (x,y,38,54),
-                              "assets/sprites/saber_slash.png", (x,y,73,48),
-                              "assets/sprites/saber_jump1.png", (x,y,38,58),
-                              "assets/sprites/saber_jump2.png", (x,y,41,63))
-    self.archer = arc.Archer(3, "assets/sprites/archer_walk.png", (x,y,33,60),
-                                "assets/sprites/archer_slash.png", (x,y,90,66),
-                                "assets/sprites/archer_jump1.png", (x,y,52,59),
-                                "assets/sprites/archer_jump2.png", (x,y,52,59))
+    self.saber = sab.Saber(4.0,
+                           "assets/sprites/saber_walk.png", (x,y,38,54),
+                           "assets/sprites/saber_slash.png", (x,y,73,48),
+                           "assets/sprites/saber_jump1.png", (x,y,38,58),
+                           "assets/sprites/saber_jump2.png", (x,y,41,63))
+    self.archer = arc.Archer(5.0,
+                             "assets/sprites/archer_walk.png", (x,y,33,60),
+                             "assets/sprites/archer_slash.png", (x,y,90,66),
+                             "assets/sprites/archer_jump1.png", (x,y,52,59),
+                             "assets/sprites/archer_jump2.png", (x,y,52,59))
     self.obstacles = self.make_obstacles()
 
   def make_obstacles(self):
