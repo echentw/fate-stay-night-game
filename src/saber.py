@@ -13,6 +13,7 @@ class Saber(player.Player):
                                   jump1_im, jump1_rect,
                                   jump2_im, jump2_rect):
 
+    # sound files
     sound_swoosh_file = "assets/soundfx/knife_stab.wav"
     sound_land_file = "assets/soundfx/thud.wav"
 
@@ -27,7 +28,7 @@ class Saber(player.Player):
     self.rect = pg.Rect(rect)
     self.walk_frames = self.get_walk_frames(
         walk_im, [[i, 1] for i in xrange(6)], self.rect)
-    
+
     # handle jumping frames
     self.jump1_rect = pg.Rect(jump1_rect)
     self.jump2_rect = pg.Rect(jump2_rect)
@@ -65,10 +66,14 @@ class Saber(player.Player):
     sheet2.set_colorkey(Saber.COLOR_KEY)
     frames1 = get_images(sheet1, indices1, rect1.size)
     frames2 = get_images(sheet2, indices2, rect2.size)
-    frame1_dict = {self.LEFT_KEY : [pg.transform.flip(frames1[0], True, False)],
-                   self.RIGHT_KEY: [frames1[0]]}
-    frame2_dict = {self.LEFT_KEY : [pg.transform.flip(frames2[0], True, False)],
-                   self.RIGHT_KEY: [frames2[0]]}
+    frame1_dict = {
+      self.LEFT_KEY : [pg.transform.flip(frames1[0], True, False)],
+      self.RIGHT_KEY: [frames1[0]]
+    }
+    frame2_dict = {
+      self.LEFT_KEY : [pg.transform.flip(frames2[0], True, False)],
+      self.RIGHT_KEY: [frames2[0]]
+    }
     return frame1_dict, frame2_dict
 
   # Helper method to load slash frames
