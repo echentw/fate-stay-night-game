@@ -82,7 +82,7 @@ class Control(object):
     """Our main game loop; I bet you'd never have guessed."""
     pg.display.set_caption(Control.CAPTION)
 #    pg.display.toggle_fullscreen()
-    pg.mixer.music.load("assets/music/disillusion-8bit.mp3")
+    pg.mixer.music.load("assets/music/oath-sign-orchestra.mp3")
     pg.mixer.music.play()
 
     while not self.done:
