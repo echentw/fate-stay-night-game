@@ -54,7 +54,8 @@ class Archer(physics.Physics, pg.sprite.Sprite):
     # handle slashing frames
     self.slash_left_rect = pg.Rect(slash_rect)
     self.slash_right_rect = pg.Rect(slash_rect)
-    self.slash_left_rect.x = self.rect.x - 36
+    self.slash_left_rect.x = self.rect.x - 28
+    self.slash_right_rect.x = self.rect.x - 30
     self.slash_frames = self.get_slash_frames(
         slash_im, [[0,0]], self.slash_right_rect)
 
@@ -212,8 +213,8 @@ class Archer(physics.Physics, pg.sprite.Sprite):
     sheet2.set_colorkey(Archer.COLOR_KEY)
     frames1 = get_images(sheet1, indices1, rect1.size)
     frames2 = get_images(sheet2, indices2, rect2.size)
-    frame1_dict = {pg.K_LEFT : [pg.transform.flip(frames1[0], True, False)],
-                   pg.K_RIGHT: [frames1[0]]}
+    frame1_dict = {pg.K_LEFT : [frames1[0]],
+                   pg.K_RIGHT: [pg.transform.flip(frames1[0], True, False)]}
     frame2_dict = {pg.K_LEFT : [pg.transform.flip(frames2[0], True, False)],
                    pg.K_RIGHT: [frames2[0]]}
     return frame1_dict, frame2_dict
@@ -223,8 +224,8 @@ class Archer(physics.Physics, pg.sprite.Sprite):
     sheet = pg.image.load(slash_im).convert()
     sheet.set_colorkey(Archer.COLOR_KEY)
     frames = get_images(sheet, indices, rect.size)
-    frame_dict = {pg.K_LEFT : [frames[0]],
-                  pg.K_RIGHT: [pg.transform.flip(frames[0], True, False)]}
+    frame_dict = {pg.K_LEFT : [pg.transform.flip(frames[0], True, False)],
+                  pg.K_RIGHT: [frames[0]]}
     return frame_dict
 
 
