@@ -30,12 +30,17 @@ class Control(object):
                            "assets/sprites/saber_slash.png", (x,y,73,48),
                            "assets/sprites/saber_jump1.png", (x,y,38,58),
                            "assets/sprites/saber_jump2.png", (x,y,41,63))
+    y -= 100
     self.archer = arc.Archer(5.0,
                              "assets/sprites/archer_walk.png", (x,y,33,60),
                              "assets/sprites/archer_slash.png", (x,y,90,66),
                              "assets/sprites/archer_jump1.png", (x,y,52,59),
                              "assets/sprites/archer_jump2.png", (x,y,52,59))
     self.obstacles = self.make_obstacles()
+    self.saber_obstacles = pg.sprite.Group(self.archer)
+    self.saber_obstacles.add(self.obstacles)
+    self.archer_obstacles = pg.sprite.Group(self.saber)
+    self.archer_obstacles.add(self.obstacles)
 
   def make_obstacles(self):
 #    walls = [block.Block(pg.Color("darkgreen"), (0, self.screen_rect.bottom - 20, self.screen_rect.width, 20)),
@@ -67,15 +72,15 @@ class Control(object):
       if event.type == pg.QUIT or self.keys[pg.K_ESCAPE]:
         self.done = True
       elif event.type == pg.KEYDOWN:
-        self.saber.handle_keydown(event.key, self.obstacles)
-        self.archer.handle_keydown(event.key, self.obstacles)
+        self.saber.handle_keydown(event.key, self.saber_obstacles)
+        self.archer.handle_keydown(event.key, self.archer_obstacles)
       elif event.type == pg.KEYUP:
         self.saber.handle_keyup(event.key)
         self.archer.handle_keyup(event.key)
 
   def update(self):
-    self.saber.update(self.screen_rect, self.obstacles)
-    self.archer.update(self.screen_rect, self.obstacles)
+    self.saber.update(self.screen_rect, self.saber_obstacles)
+    self.archer.update(self.screen_rect, self.archer_obstacles)
     self.screen_rect.center = ((self.saber.rect.center[0] + self.archer.rect.center[0]) / 2.0, (self.saber.rect.center[1] + self.archer.rect.center[1]) / 2.0)
 
   def draw(self):
