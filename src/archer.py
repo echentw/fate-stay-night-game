@@ -7,8 +7,8 @@ import physics
 
 
 class Archer(physics.Physics, pg.sprite.Sprite):
-  DIRECT_DICT = {pg.K_LEFT  : (-1, 0),
-                 pg.K_RIGHT : ( 1, 0)}
+  DIRECT_DICT = {pg.K_a  : (-1, 0),
+                 pg.K_d : ( 1, 0)}
   COLOR_KEY = (255, 0, 255)
 
   def __init__(self, speed, walk_im, rect,
@@ -32,7 +32,7 @@ class Archer(physics.Physics, pg.sprite.Sprite):
     self.slashing = False
 
     # handle directions
-    self.direction = pg.K_RIGHT       # the direction Archer is facing
+    self.direction = pg.K_d       # the direction Archer is facing
     self.old_direction = None         # the previous direction
     self.direction_stack = []
 
@@ -118,11 +118,11 @@ class Archer(physics.Physics, pg.sprite.Sprite):
         self.direction_stack.remove(key)
       self.direction_stack.append(key)
       self.direction = key
-    elif key == pg.K_DOWN:
+    elif key == pg.K_s:
       if not self.fall:
         self.slashing = True
         self.sound_swoosh.play()
-    elif key == pg.K_UP:
+    elif key == pg.K_w:
       if not self.fall:
         self.y_vel = self.jump_power
         self.fall = True
@@ -140,16 +140,16 @@ class Archer(physics.Physics, pg.sprite.Sprite):
     self.adjust_images()
     if self.direction_stack:
       direction_vector = Archer.DIRECT_DICT[self.direction]
-      if self.direction == pg.K_LEFT:
+      if self.direction == pg.K_a:
         self.x_vel -= self.speed
-      elif self.direction == pg.K_RIGHT:
+      elif self.direction == pg.K_d:
         self.x_vel += self.speed
     self.get_position(obstacles)
 
   # Draw the image to the screen
   def draw(self, surface):
     if self.image == self.slash_frames[self.direction][0]:
-      if self.direction == pg.K_LEFT:
+      if self.direction == pg.K_a:
         surface.blit(self.image, self.slash_left_rect)
       else:
         surface.blit(self.image, self.slash_right_rect)
@@ -199,8 +199,8 @@ class Archer(physics.Physics, pg.sprite.Sprite):
     sheet = pg.image.load(walk_im).convert()
     sheet.set_colorkey(Archer.COLOR_KEY)
     frames = get_images(sheet, indices, rect.size)
-    frame_dict = {pg.K_LEFT : [frames[i] for i in xrange(6)],
-                  pg.K_RIGHT: [pg.transform.flip(frames[i], True, False) \
+    frame_dict = {pg.K_a : [frames[i] for i in xrange(6)],
+                  pg.K_d: [pg.transform.flip(frames[i], True, False) \
                       for i in xrange(6)]}
     return frame_dict
 
@@ -213,10 +213,10 @@ class Archer(physics.Physics, pg.sprite.Sprite):
     sheet2.set_colorkey(Archer.COLOR_KEY)
     frames1 = get_images(sheet1, indices1, rect1.size)
     frames2 = get_images(sheet2, indices2, rect2.size)
-    frame1_dict = {pg.K_LEFT : [frames1[0]],
-                   pg.K_RIGHT: [pg.transform.flip(frames1[0], True, False)]}
-    frame2_dict = {pg.K_LEFT : [pg.transform.flip(frames2[0], True, False)],
-                   pg.K_RIGHT: [frames2[0]]}
+    frame1_dict = {pg.K_a : [frames1[0]],
+                   pg.K_d: [pg.transform.flip(frames1[0], True, False)]}
+    frame2_dict = {pg.K_a : [pg.transform.flip(frames2[0], True, False)],
+                   pg.K_d: [frames2[0]]}
     return frame1_dict, frame2_dict
 
   # Helper method to load slash frames
@@ -224,8 +224,8 @@ class Archer(physics.Physics, pg.sprite.Sprite):
     sheet = pg.image.load(slash_im).convert()
     sheet.set_colorkey(Archer.COLOR_KEY)
     frames = get_images(sheet, indices, rect.size)
-    frame_dict = {pg.K_LEFT : [pg.transform.flip(frames[0], True, False)],
-                  pg.K_RIGHT: [frames[0]]}
+    frame_dict = {pg.K_a : [pg.transform.flip(frames[0], True, False)],
+                  pg.K_d: [frames[0]]}
     return frame_dict
 
 

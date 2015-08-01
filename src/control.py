@@ -2,7 +2,7 @@ import os
 import sys
 import pygame as pg
 
-import archer as arch
+import archer as arc
 import saber as sab
 import block
 
@@ -22,11 +22,11 @@ class Control(object):
 
     x = self.screen_rect.center[0] - 40
     y = self.screen_rect.center[1] + 40
-#    self.saber = sab.Saber(3, "assets/sprites/saber_walk.png", (x,y,38,54),
-#                              "assets/sprites/saber_slash.png", (x,y,73,48),
-#                              "assets/sprites/saber_jump1.png", (x,y,38,58),
-#                              "assets/sprites/saber_jump2.png", (x,y,41,63))
-    self.saber = arch.Archer(3, "assets/sprites/archer_walk.png", (x,y,33,60),
+    self.saber = sab.Saber(3, "assets/sprites/saber_walk.png", (x,y,38,54),
+                              "assets/sprites/saber_slash.png", (x,y,73,48),
+                              "assets/sprites/saber_jump1.png", (x,y,38,58),
+                              "assets/sprites/saber_jump2.png", (x,y,41,63))
+    self.archer = arc.Archer(3, "assets/sprites/archer_walk.png", (x,y,33,60),
                                 "assets/sprites/archer_slash.png", (x,y,90,66),
                                 "assets/sprites/archer_jump1.png", (x,y,52,59),
                                 "assets/sprites/archer_jump2.png", (x,y,52,59))
@@ -63,12 +63,15 @@ class Control(object):
         self.done = True
       elif event.type == pg.KEYDOWN:
         self.saber.handle_keydown(event.key, self.obstacles)
+        self.archer.handle_keydown(event.key, self.obstacles)
       elif event.type == pg.KEYUP:
         self.saber.handle_keyup(event.key)
+        self.archer.handle_keyup(event.key)
 
   def update(self):
     self.saber.update(self.screen_rect, self.obstacles)
-    self.screen_rect.center = self.saber.rect.center
+    self.archer.update(self.screen_rect, self.obstacles)
+    self.screen_rect.center = ((self.saber.rect.center[0] + self.archer.rect.center[0]) / 2.0, (self.saber.rect.center[1] + self.archer.rect.center[1]) / 2.0)
 
   def draw(self):
     level = pg.Surface((1000,1000)).convert()
@@ -77,6 +80,7 @@ class Control(object):
     self.screen_rect.clamp_ip(level_rect)
     self.obstacles.draw(level)
     self.saber.draw(level)
+    self.archer.draw(level)
     self.screen.blit(level, (0, 0), self.screen_rect)
 
 #    self.screen.fill(Control.BACKGROUND_COLOR)
