@@ -59,7 +59,7 @@ class Control(object):
               block.Block(pg.Color("darkgreen"), (950,400,30,20)),
               block.Block(pg.Color("darkgreen"), (20,630,50,20)),
               block.Block(pg.Color("darkgreen"), (80,530,50,20)),
-              block.Block(pg.Color("darkgreen"), (130,470,200,215)),
+              block.Block(pg.Color("darkgreen"), (130,470,200,210)),
               block.Block(pg.Color("darkgreen"), (20,760,30,20)),
               block.Block(pg.Color("darkgreen"), (400,740,30,40))]
 
