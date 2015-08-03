@@ -9,7 +9,7 @@ import player
 
 class Archer(player.Player):
   def __init__(self, speed, keys, walk_im, rect,
-                                  slash_im, slash_rect,
+                                  attack_im, attack_rect,
                                   jump1_im, jump1_rect,
                                   jump2_im, jump2_rect):
 
@@ -19,7 +19,7 @@ class Archer(player.Player):
 
     player.Player.__init__(self, speed, keys,
                                  walk_im, rect,
-                                 slash_im, slash_rect,
+                                 attack_im, attack_rect,
                                  jump1_im, jump1_rect,
                                  jump2_im, jump2_rect,
                                  sound_swoosh_file, sound_land_file)
@@ -36,15 +36,15 @@ class Archer(player.Player):
         jump1_im, [[0,0]], self.jump1_rect,
         jump2_im, [[0,0]], self.jump2_rect)
 
-    # handle slashing frames
-    self.slash_left_rect = pg.Rect(slash_rect)
-    self.slash_right_rect = pg.Rect(slash_rect)
-    self.slash_left_rect.x = self.rect.x - 28
-    self.slash_right_rect.x = self.rect.x - 30
-    self.slash_left_rect.y = self.rect.y - 10
-    self.slash_right_rect.y = self.rect.y - 10
-    self.slash_frames = self.get_slash_frames(
-        slash_im, [[0,i] for i in xrange(4)], self.slash_right_rect)
+    # handle attacking frames
+    self.attack_left_rect = pg.Rect(attack_rect)
+    self.attack_right_rect = pg.Rect(attack_rect)
+    self.attack_left_rect.x = self.rect.x - 28
+    self.attack_right_rect.x = self.rect.x - 30
+    self.attack_left_rect.y = self.rect.y - 10
+    self.attack_right_rect.y = self.rect.y - 10
+    self.attack_frames = self.get_attack_frames(
+        attack_im, [[0,i] for i in xrange(4)], self.attack_right_rect)
 
     # initialize the first image
     self.adjust_images()
@@ -79,9 +79,9 @@ class Archer(player.Player):
     }
     return frame1_dict, frame2_dict
 
-  # Helper method to load slash frames
-  def get_slash_frames(self, slash_im, indices, rect):
-    sheet = pg.image.load(slash_im).convert()
+  # Helper method to load attack frames
+  def get_attack_frames(self, attack_im, indices, rect):
+    sheet = pg.image.load(attack_im).convert()
     sheet.set_colorkey(Archer.COLOR_KEY)
     frames = get_images(sheet, indices, rect.size)
     frame_dict = {self.LEFT_KEY : [frames[i] for i in xrange(4)],

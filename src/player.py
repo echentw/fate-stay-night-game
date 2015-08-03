@@ -10,7 +10,7 @@ class Player(physics.Physics, pg.sprite.Sprite):
   COLOR_KEY = (255, 0, 255)
 
   def __init__(self, speed, keys, walk_im, rect,
-                                  slash_im, slash_rect,
+                                  attack_im, attack_rect,
                                   jump1_im, jump1_rect,
                                   jump2_im, jump2_rect,
                                   sound_swoosh_file, sound_land_file):
@@ -51,13 +51,13 @@ class Player(physics.Physics, pg.sprite.Sprite):
     self.jump2_rect = None
     self.jump_frames1, self.jump_frames2 = None, None
 
-    # handle slashing frames
-    self.slash_left_rect = None
-    self.slash_right_rect = None
-    self.slash_frames = None
-    self.slashing = False
-    self.old_slashing = False
-    self.slash_counter = 0
+    # handle attacking frames
+    self.attack_left_rect = None
+    self.attack_right_rect = None
+    self.attack_frames = None
+    self.attacking = False
+    self.old_attacking = False
+    self.attack_counter = 0
 
     # handle sound effects
     self.sound_swoosh = pg.mixer.Sound(sound_swoosh_file)
@@ -91,19 +91,19 @@ class Player(physics.Physics, pg.sprite.Sprite):
   def check_collisions(self, velocity, dir_id, obstacles):
     unaltered = True
     self.rect[dir_id] += velocity
-    self.slash_left_rect[dir_id] += velocity
-    self.slash_right_rect[dir_id] += velocity
+    self.attack_left_rect[dir_id] += velocity
+    self.attack_right_rect[dir_id] += velocity
     while pg.sprite.spritecollideany(self, obstacles):
       if velocity < 0:
         self.rect[dir_id] += 1
-        self.slash_left_rect[dir_id] += 1
-        self.slash_right_rect[dir_id] += 1
+        self.attack_left_rect[dir_id] += 1
+        self.attack_right_rect[dir_id] += 1
         if dir_id == 1:
           self.y_vel = 0
       else:
         self.rect[dir_id] -= 1
-        self.slash_left_rect[dir_id] -= 1
-        self.slash_right_rect[dir_id] -= 1
+        self.attack_left_rect[dir_id] -= 1
+        self.attack_right_rect[dir_id] -= 1
       unaltered = False
     return unaltered
 
@@ -116,7 +116,7 @@ class Player(physics.Physics, pg.sprite.Sprite):
       self.direction = key
     elif key == self.DOWN_KEY:
       if not self.fall:
-        self.slashing = True
+        self.attacking = True
         self.sound_swoosh.play()
     elif key == self.UP_KEY:
       if not self.fall:
@@ -144,11 +144,11 @@ class Player(physics.Physics, pg.sprite.Sprite):
 
   # Draw the image to the screen
   def draw(self, surface):
-    if self.old_slashing:
+    if self.old_attacking:
       if self.direction == self.LEFT_KEY:
-        surface.blit(self.image, self.slash_left_rect)
+        surface.blit(self.image, self.attack_left_rect)
       else:
-        surface.blit(self.image, self.slash_right_rect)
+        surface.blit(self.image, self.attack_right_rect)
     else:
       surface.blit(self.image, self.rect)
 
@@ -160,13 +160,13 @@ class Player(physics.Physics, pg.sprite.Sprite):
       self.redraw = True
 
     # set the current frames
-    # states: direction, falling, slashing
-    if self.slashing != self.old_slashing:
-      self.old_slashing = self.slashing
+    # states: direction, falling, attacking
+    if self.attacking != self.old_attacking:
+      self.old_attacking = self.attacking
       self.redraw = True
       self.frame_id = -1
-      if self.slashing:
-        self.curr_frames = self.slash_frames[self.direction]
+      if self.attacking:
+        self.curr_frames = self.attack_frames[self.direction]
       else:
         self.curr_frames = self.walk_frames[self.direction]
     elif self.fall != self.old_fall:
@@ -184,8 +184,8 @@ class Player(physics.Physics, pg.sprite.Sprite):
       self.old_direction = self.direction
       self.redraw = True
       self.frame_id = -1
-      if self.slashing:
-        self.curr_frames = self.slash_frames[self.direction]
+      if self.attacking:
+        self.curr_frames = self.attack_frames[self.direction]
       elif self.fall:
         if self.y_vel > 0:
           self.curr_frames = self.jump_frames2[self.direction]
@@ -202,13 +202,13 @@ class Player(physics.Physics, pg.sprite.Sprite):
     # set the frame id
     now = pg.time.get_ticks()
     if self.redraw or now - self.animate_timer > 1000 / self.animate_fps:
-      if self.direction_stack or self.slashing or self.fall:
+      if self.direction_stack or self.attacking or self.fall:
         self.frame_id = (self.frame_id + 1) % len(self.curr_frames)
-      if self.slashing:
-        self.slash_counter += 1
-        if self.slash_counter == len(self.slash_frames[self.direction]):
-          self.slashing = False
-          self.slash_counter = 0
+      if self.attacking:
+        self.attack_counter += 1
+        if self.attack_counter == len(self.attack_frames[self.direction]):
+          self.attacking = False
+          self.attack_counter = 0
       self.image = self.curr_frames[self.frame_id]
       self.animate_timer = now
       self.redraw = False
@@ -222,8 +222,8 @@ class Player(physics.Physics, pg.sprite.Sprite):
                             jump2_im, indices2, rect2):
     pass
 
-  # Helper method to load slash frames
-  def get_slash_frames(self, slash_im, indices, rect):
+  # Helper method to load attack frames
+  def get_attack_frames(self, attack_im, indices, rect):
     pass
 
 
