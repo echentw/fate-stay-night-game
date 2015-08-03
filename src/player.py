@@ -28,9 +28,6 @@ class Player(physics.Physics, pg.sprite.Sprite):
     self.animate_timer = 0.0
     self.animate_fps = 10.0
 
-    # handle the state of Player
-    self.slashing = False
-
     # handle directions
     self.UP_KEY    = keys[0]
     self.DOWN_KEY  = keys[1]
@@ -58,6 +55,8 @@ class Player(physics.Physics, pg.sprite.Sprite):
     self.slash_left_rect = None
     self.slash_right_rect = None
     self.slash_frames = None
+    self.slashing = False
+    self.old_slashing = False
 
     # handle sound effects
     self.sound_swoosh = pg.mixer.Sound(sound_swoosh_file)
@@ -159,33 +158,52 @@ class Player(physics.Physics, pg.sprite.Sprite):
       self.curr_frames = self.walk_frames[self.direction]
       self.old_direction = self.direction
       self.redraw = True
-    if self.fall:
-      if self.y_vel > 0:
-        self.curr_frames = self.jump_frames2[self.direction]
-      else:
-        self.curr_frames = self.jump_frames1[self.direction]
+
+    # set the current frames
+    # states: direction, falling, slashing
+    if self.slashing != self.old_slashing:
+      self.old_slashing = self.slashing
       self.redraw = True
-    else:
+      self.frame_id = -1
       if self.slashing:
         self.curr_frames = self.slash_frames[self.direction]
-        self.redraw = True
-      elif self.direction != self.old_direction:
+      else:
         self.curr_frames = self.walk_frames[self.direction]
-        self.old_direction = self.direction
+    elif self.fall != self.old_fall:
+      self.old_fall = self.fall
+      self.redraw = True
+      self.frame_id = -1
+      if self.fall:
+        if self.y_vel > 0:
+          self.curr_frames = self.jump_frames2[self.direction]
+        else:
+          self.curr_frames = self.jump_frames1[self.direction]
+      else:
+        self.curr_frames = self.walk_frames[self.direction]
+    elif self.direction != self.old_direction:
+      self.old_direction = self.direction
+      self.redraw = True
+      self.frame_id = -1
+      if self.slashing:
+        self.curr_frames = self.slash_frames[self.direction]
+      elif self.fall:
+        if self.y_vel > 0:
+          self.curr_frames = self.jump_frames2[self.direction]
+        else:
+          self.curr_frames = self.jump_frames1[self.direction]
+      else:
+        self.curr_frames = self.walk_frames[self.direction]
+    elif self.fall:
+      if self.old_y_vel <= 0 and self.y_vel > 0:
         self.redraw = True
+        self.frame_id = -1
+        self.curr_frames = self.jump_frames2[self.direction]
+
+    # set the frame id
     now = pg.time.get_ticks()
     if self.redraw or now - self.animate_timer > 1000 / self.animate_fps:
-      if self.fall:
-        self.frame_id = 0
-      else:
-        if self.curr_frames == self.jump_frames1[self.direction] or \
-           self.curr_frames == self.jump_frames2[self.direction]:
-          self.curr_frames = self.walk_frames[self.direction]
-          self.frame_id = 2
-        if self.direction_stack or self.slashing:
-          self.frame_id = (self.frame_id + 1) % len(self.curr_frames)
-        else:
-          self.curr_frames = self.walk_frames[self.direction]
+      if self.direction_stack or self.slashing or self.fall:
+        self.frame_id = (self.frame_id + 1) % len(self.curr_frames)
       self.image = self.curr_frames[self.frame_id]
       self.animate_timer = now
       self.redraw = False
