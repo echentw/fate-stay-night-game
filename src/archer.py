@@ -41,8 +41,10 @@ class Archer(player.Player):
     self.slash_right_rect = pg.Rect(slash_rect)
     self.slash_left_rect.x = self.rect.x - 28
     self.slash_right_rect.x = self.rect.x - 30
+    self.slash_left_rect.y = self.rect.y - 10
+    self.slash_right_rect.y = self.rect.y - 10
     self.slash_frames = self.get_slash_frames(
-        slash_im, [[0,0]], self.slash_right_rect)
+        slash_im, [[0,i] for i in xrange(4)], self.slash_right_rect)
 
     # initialize the first image
     self.adjust_images()
@@ -82,8 +84,9 @@ class Archer(player.Player):
     sheet = pg.image.load(slash_im).convert()
     sheet.set_colorkey(Archer.COLOR_KEY)
     frames = get_images(sheet, indices, rect.size)
-    frame_dict = {self.LEFT_KEY : [pg.transform.flip(frames[0], True, False)],
-                  self.RIGHT_KEY: [frames[0]]}
+    frame_dict = {self.LEFT_KEY : [frames[i] for i in xrange(4)],
+                  self.RIGHT_KEY: [pg.transform.flip(frames[i], True, False) \
+                      for i in xrange(4)]}
     return frame_dict
 
 

@@ -33,7 +33,7 @@ class Control(object):
     y -= 100
     self.archer = arc.Archer(5, (pg.K_w, pg.K_s, pg.K_a, pg.K_d),
                              "assets/sprites/archer_walk.png", (x,y,33,60),
-                             "assets/sprites/archer_slash.png", (x,y,90,66),
+                             "assets/sprites/archer_slash.png", (x,y,90,70),
                              "assets/sprites/archer_jump1.png", (x,y,52,59),
                              "assets/sprites/archer_jump2.png", (x,y,52,59))
     self.obstacles = self.make_obstacles()
