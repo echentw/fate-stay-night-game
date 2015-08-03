@@ -32,6 +32,8 @@ class Caster(player.Player):
     # handle jumping frames
     self.jump1_rect = pg.Rect(jump1_rect)
     self.jump2_rect = pg.Rect(jump2_rect)
+    self.jump1_rect.x = self.rect.x - 12
+    self.jump2_rect.x = self.rect.x - 10
     self.jump_frames1, self.jump_frames2 = self.get_jump_frames(
         jump1_im, [[0,0]], self.jump1_rect,
         jump2_im, [[0,0]], self.jump2_rect)
@@ -39,7 +41,8 @@ class Caster(player.Player):
     # handle attacking frames
     self.attack_left_rect = pg.Rect(attack_rect)
     self.attack_right_rect = pg.Rect(attack_rect)
-    self.attack_left_rect.x = self.rect.x - 36
+    self.attack_left_rect.x = self.rect.x - 50
+    self.attack_right_rect.x = self.rect.x - 14
     self.attack_frames = self.get_attack_frames(
         attack_im, [[0,i] for i in xrange(4)], self.attack_right_rect)
 

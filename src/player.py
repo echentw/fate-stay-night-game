@@ -93,17 +93,23 @@ class Player(physics.Physics, pg.sprite.Sprite):
     self.rect[dir_id] += velocity
     self.attack_left_rect[dir_id] += velocity
     self.attack_right_rect[dir_id] += velocity
+    self.jump1_rect[dir_id] += velocity
+    self.jump2_rect[dir_id] += velocity
     while pg.sprite.spritecollideany(self, obstacles):
       if velocity < 0:
         self.rect[dir_id] += 1
         self.attack_left_rect[dir_id] += 1
         self.attack_right_rect[dir_id] += 1
+        self.jump1_rect[dir_id] += 1
+        self.jump2_rect[dir_id] += 1
         if dir_id == 1:
           self.y_vel = 0
       else:
         self.rect[dir_id] -= 1
         self.attack_left_rect[dir_id] -= 1
         self.attack_right_rect[dir_id] -= 1
+        self.jump1_rect[dir_id] -= 1
+        self.jump2_rect[dir_id] -= 1
       unaltered = False
     return unaltered
 
@@ -149,6 +155,11 @@ class Player(physics.Physics, pg.sprite.Sprite):
         surface.blit(self.image, self.attack_left_rect)
       else:
         surface.blit(self.image, self.attack_right_rect)
+    elif self.old_fall:
+      if self.y_vel > 0:
+        surface.blit(self.image, self.jump1_rect)
+      else:
+        surface.blit(self.image, self.jump2_rect)
     else:
       surface.blit(self.image, self.rect)
 
