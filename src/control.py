@@ -4,6 +4,7 @@ import pygame as pg
 
 import archer as arc
 import saber as sab
+import caster as cast
 import block
 
 class Control(object):
@@ -25,31 +26,29 @@ class Control(object):
 
     x = self.screen_rect.center[0] - 40
     y = self.screen_rect.center[1] + 40
-    self.saber = sab.Saber(4, (pg.K_UP, pg.K_DOWN, pg.K_LEFT, pg.K_RIGHT),
-                           "assets/sprites/saber_walk.png", (x,y,38,54),
-                           "assets/sprites/saber_slash.png", (x,y,74,54),
-                           "assets/sprites/saber_jump1.png", (x,y,38,58),
-                           "assets/sprites/saber_jump2.png", (x,y,41,63))
+    self.player1 = sab.Saber(4, (pg.K_UP, pg.K_DOWN, pg.K_LEFT, pg.K_RIGHT),
+                             "assets/sprites/saber_walk.png", (x,y,38,54),
+                             "assets/sprites/saber_slash.png", (x,y,74,54),
+                             "assets/sprites/saber_jump1.png", (x,y,38,58),
+                             "assets/sprites/saber_jump2.png", (x,y,41,63))
     y -= 100
-    self.archer = arc.Archer(5, (pg.K_w, pg.K_s, pg.K_a, pg.K_d),
-                             "assets/sprites/archer_walk.png", (x,y,33,60),
-                             "assets/sprites/archer_slash.png", (x,y,90,70),
-                             "assets/sprites/archer_jump1.png", (x,y,52,59),
-                             "assets/sprites/archer_jump2.png", (x,y,52,59))
+#    self.player2 = arc.Archer(5, (pg.K_w, pg.K_s, pg.K_a, pg.K_d),
+#                              "assets/sprites/archer_walk.png", (x,y,33,60),
+#                              "assets/sprites/archer_slash.png", (x,y,90,70),
+#                              "assets/sprites/archer_jump1.png", (x,y,52,59),
+#                              "assets/sprites/archer_jump2.png", (x,y,52,59))
+    self.player2 = cast.Caster(5, (pg.K_w, pg.K_s, pg.K_a, pg.K_d),
+                               "assets/sprites/caster_walk.png", (x,y,32,62),
+                               "assets/sprites/caster_attack.png", (x,y,95,61),
+                               "assets/sprites/caster_jump1.png", (x,y,62,65),
+                               "assets/sprites/caster_jump2.png", (x,y,62,65))
     self.obstacles = self.make_obstacles()
-    self.saber_obstacles = pg.sprite.Group(self.archer)
-    self.saber_obstacles.add(self.obstacles)
-    self.archer_obstacles = pg.sprite.Group(self.saber)
-    self.archer_obstacles.add(self.obstacles)
+    self.player1_obstacles = pg.sprite.Group(self.player2)
+    self.player1_obstacles.add(self.obstacles)
+    self.player2_obstacles = pg.sprite.Group(self.player1)
+    self.player2_obstacles.add(self.obstacles)
 
   def make_obstacles(self):
-#    walls = [block.Block(pg.Color("darkgreen"), (0, self.screen_rect.bottom - 20, self.screen_rect.width, 20)),
-#             block.Block(pg.Color("darkblue"), (0, 0, 20, self.screen_rect.height)),
-#             block.Block(pg.Color("darkred"), (self.screen_rect.width - 20, 0, 20, self.screen_rect.height))]
-#
-#    static = [block.Block(pg.Color("blue"), (0, self.screen_rect.bottom - 60, self.screen_rect.width / 2, 20)),
-#              block.Block(pg.Color("green"), (0, self.screen_rect.bottom - 150, self.screen_rect.width / 2, 20))]
-
     walls = [block.Block(pg.Color("chocolate"), (0,980,1000,20)),
              block.Block(pg.Color("chocolate"), (0,0,20,1000)),
              block.Block(pg.Color("chocolate"), (980,0,20,1000))]
@@ -72,23 +71,25 @@ class Control(object):
       if event.type == pg.QUIT or self.keys[pg.K_ESCAPE]:
         self.done = True
       elif event.type == pg.KEYDOWN:
-        self.saber.handle_keydown(event.key, self.saber_obstacles)
-        self.archer.handle_keydown(event.key, self.archer_obstacles)
+        self.player1.handle_keydown(event.key, self.player1_obstacles)
+        self.player2.handle_keydown(event.key, self.player2_obstacles)
       elif event.type == pg.KEYUP:
-        self.saber.handle_keyup(event.key)
-        self.archer.handle_keyup(event.key)
+        self.player1.handle_keyup(event.key)
+        self.player2.handle_keyup(event.key)
 
   def update(self):
-    self.saber.update(self.screen_rect, self.saber_obstacles)
-    self.archer.update(self.screen_rect, self.archer_obstacles)
-    self.screen_rect.center = ((self.saber.rect.center[0] + self.archer.rect.center[0]) / 2.0, (self.saber.rect.center[1] + self.archer.rect.center[1]) / 2.0)
+    self.player1.update(self.screen_rect, self.player1_obstacles)
+    self.player2.update(self.screen_rect, self.player2_obstacles)
+    self.screen_rect.center = \
+        ((self.player1.rect.center[0] + self.player2.rect.center[0]) / 2.0,
+         (self.player1.rect.center[1] + self.player2.rect.center[1]) / 2.0)
 
   def draw(self):
     self.level.fill(Control.BACKGROUND_COLOR)
     self.screen_rect.clamp_ip(self.level_rect)
     self.obstacles.draw(self.level)
-    self.saber.draw(self.level)
-    self.archer.draw(self.level)
+    self.player1.draw(self.level)
+    self.player2.draw(self.level)
     self.screen.blit(self.level, (0, 0), self.screen_rect)
 
   def main_loop(self):
