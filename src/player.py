@@ -57,6 +57,7 @@ class Player(physics.Physics, pg.sprite.Sprite):
     self.slash_frames = None
     self.slashing = False
     self.old_slashing = False
+    self.slash_counter = 0
 
     # handle sound effects
     self.sound_swoosh = pg.mixer.Sound(sound_swoosh_file)
@@ -143,12 +144,11 @@ class Player(physics.Physics, pg.sprite.Sprite):
 
   # Draw the image to the screen
   def draw(self, surface):
-    if self.image == self.slash_frames[self.direction][0]:
+    if self.old_slashing:
       if self.direction == self.LEFT_KEY:
         surface.blit(self.image, self.slash_left_rect)
       else:
         surface.blit(self.image, self.slash_right_rect)
-      self.slashing = False
     else:
       surface.blit(self.image, self.rect)
 
@@ -204,6 +204,11 @@ class Player(physics.Physics, pg.sprite.Sprite):
     if self.redraw or now - self.animate_timer > 1000 / self.animate_fps:
       if self.direction_stack or self.slashing or self.fall:
         self.frame_id = (self.frame_id + 1) % len(self.curr_frames)
+      if self.slashing:
+        self.slash_counter += 1
+        if self.slash_counter == len(self.slash_frames[self.direction]):
+          self.slashing = False
+          self.slash_counter = 0
       self.image = self.curr_frames[self.frame_id]
       self.animate_timer = now
       self.redraw = False

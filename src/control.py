@@ -27,7 +27,7 @@ class Control(object):
     y = self.screen_rect.center[1] + 40
     self.saber = sab.Saber(4, (pg.K_UP, pg.K_DOWN, pg.K_LEFT, pg.K_RIGHT),
                            "assets/sprites/saber_walk.png", (x,y,38,54),
-                           "assets/sprites/saber_slash.png", (x,y,73,48),
+                           "assets/sprites/saber_slash.png", (x,y,74,54),
                            "assets/sprites/saber_jump1.png", (x,y,38,58),
                            "assets/sprites/saber_jump2.png", (x,y,41,63))
     y -= 100
