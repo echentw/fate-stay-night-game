@@ -10,8 +10,8 @@ import player
 class Archer(player.Player):
   def __init__(self, speed, keys, walk_im, rect,
                                   attack_im, attack_rect,
-                                  jump1_im, jump1_rect,
-                                  jump2_im, jump2_rect):
+                                  jump_up_im, jump_up_rect,
+                                  jump_down_im, jump_down_rect):
 
     # sound files
     sound_attack_file = "assets/soundfx/knife_stab.wav"
@@ -20,8 +20,8 @@ class Archer(player.Player):
     player.Player.__init__(self, speed, keys,
                                  walk_im, rect,
                                  attack_im, attack_rect,
-                                 jump1_im, jump1_rect,
-                                 jump2_im, jump2_rect,
+                                 jump_up_im, jump_up_rect,
+                                 jump_down_im, jump_down_rect,
                                  sound_attack_file, sound_land_file)
 
     # handle walking frames
@@ -30,11 +30,11 @@ class Archer(player.Player):
         walk_im, [[i, 0] for i in xrange(6)], self.rect)
 
     # handle jumping frames
-    self.jump1_rect = pg.Rect(jump1_rect)
-    self.jump2_rect = pg.Rect(jump2_rect)
-    self.jump_frames1, self.jump_frames2 = self.get_jump_frames(
-        jump1_im, [[0,0]], self.jump1_rect,
-        jump2_im, [[0,0]], self.jump2_rect)
+    self.jump_up_rect = pg.Rect(jump_up_rect)
+    self.jump_down_rect = pg.Rect(jump_down_rect)
+    self.jump_up_frames, self.jump_down_frames = self.get_jump_frames(
+        jump_up_im, [[0,0]], self.jump_up_rect,
+        jump_down_im, [[0,0]], self.jump_down_rect)
 
     # handle attacking frames
     self.attack_left_rect = pg.Rect(attack_rect)

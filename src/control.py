@@ -31,12 +31,12 @@ class Control(object):
                              "assets/sprites/saber_slash.png", (x,y,74,54),
                              "assets/sprites/saber_jump1.png", (x,y,38,58),
                              "assets/sprites/saber_jump2.png", (x,y,41,63))
-    y -= 100
-#    self.player2 = arc.Archer(5, (pg.K_w, pg.K_s, pg.K_a, pg.K_d),
+#    self.player1 = arc.Archer(5, (pg.K_UP, pg.K_DOWN, pg.K_LEFT, pg.K_RIGHT),
 #                              "assets/sprites/archer_walk.png", (x,y,33,60),
 #                              "assets/sprites/archer_slash.png", (x,y,90,70),
 #                              "assets/sprites/archer_jump1.png", (x,y,52,59),
 #                              "assets/sprites/archer_jump2.png", (x,y,52,59))
+    y -= 100
     self.player2 = cast.Caster(5, (pg.K_w, pg.K_s, pg.K_a, pg.K_d),
                                "assets/sprites/caster_walk.png", (x,y,32,62),
                                "assets/sprites/caster_attack.png", (x,y,95,61),
@@ -96,12 +96,12 @@ class Control(object):
     """Our main game loop; I bet you'd never have guessed."""
     pg.display.set_caption(Control.CAPTION)
 #    pg.display.toggle_fullscreen()
-    pg.mixer.music.load("assets/music/oath-sign-orchestra.mp3")
-    pg.mixer.music.play()
+#    pg.mixer.music.load("assets/music/oath-sign-orchestra.mp3")
+#    pg.mixer.music.play()
 
     while not self.done:
-      if not pg.mixer.music.get_busy():
-        pg.mixer.music.play()
+#      if not pg.mixer.music.get_busy():
+#        pg.mixer.music.play()
       self.event_loop()
       self.update()
       self.draw()

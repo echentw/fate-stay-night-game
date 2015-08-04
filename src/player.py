@@ -11,8 +11,8 @@ class Player(physics.Physics, pg.sprite.Sprite):
 
   def __init__(self, speed, keys, walk_im, rect,
                                   attack_im, attack_rect,
-                                  jump1_im, jump1_rect,
-                                  jump2_im, jump2_rect,
+                                  jump_up_im, jump_up_rect,
+                                  jump_down_im, jump_down_rect,
                                   sound_attack_file, sound_land_file):
     physics.Physics.__init__(self)
     pg.sprite.Sprite.__init__(self)
@@ -47,9 +47,9 @@ class Player(physics.Physics, pg.sprite.Sprite):
     self.walk_frames = None
 
     # handle jumping frames
-    self.jump1_rect = None
-    self.jump2_rect = None
-    self.jump_frames1, self.jump_frames2 = None, None
+    self.jump_up_rect = None
+    self.jump_down_rect = None
+    self.jump_up_frames, self.jump_down_frames = None, None
 
     # handle attacking frames
     self.attack_left_rect = None
@@ -93,23 +93,23 @@ class Player(physics.Physics, pg.sprite.Sprite):
     self.rect[dir_id] += velocity
     self.attack_left_rect[dir_id] += velocity
     self.attack_right_rect[dir_id] += velocity
-    self.jump1_rect[dir_id] += velocity
-    self.jump2_rect[dir_id] += velocity
+    self.jump_up_rect[dir_id] += velocity
+    self.jump_down_rect[dir_id] += velocity
     while pg.sprite.spritecollideany(self, obstacles):
       if velocity < 0:
         self.rect[dir_id] += 1
         self.attack_left_rect[dir_id] += 1
         self.attack_right_rect[dir_id] += 1
-        self.jump1_rect[dir_id] += 1
-        self.jump2_rect[dir_id] += 1
+        self.jump_up_rect[dir_id] += 1
+        self.jump_down_rect[dir_id] += 1
         if dir_id == 1:
           self.y_vel = 0
       else:
         self.rect[dir_id] -= 1
         self.attack_left_rect[dir_id] -= 1
         self.attack_right_rect[dir_id] -= 1
-        self.jump1_rect[dir_id] -= 1
-        self.jump2_rect[dir_id] -= 1
+        self.jump_up_rect[dir_id] -= 1
+        self.jump_down_rect[dir_id] -= 1
       unaltered = False
     return unaltered
 
@@ -157,9 +157,9 @@ class Player(physics.Physics, pg.sprite.Sprite):
         surface.blit(self.image, self.attack_right_rect)
     elif self.old_fall:
       if self.y_vel > 0:
-        surface.blit(self.image, self.jump1_rect)
+        surface.blit(self.image, self.jump_up_rect)
       else:
-        surface.blit(self.image, self.jump2_rect)
+        surface.blit(self.image, self.jump_down_rect)
     else:
       surface.blit(self.image, self.rect)
 
@@ -178,9 +178,9 @@ class Player(physics.Physics, pg.sprite.Sprite):
       self.frame_id = -1
       if self.fall:
         if self.y_vel > 0:
-          self.curr_frames = self.jump_frames2[self.direction]
+          self.curr_frames = self.jump_down_frames[self.direction]
         else:
-          self.curr_frames = self.jump_frames1[self.direction]
+          self.curr_frames = self.jump_up_frames[self.direction]
       else:
         self.curr_frames = self.walk_frames[self.direction]
       self.attacking = False
@@ -202,16 +202,16 @@ class Player(physics.Physics, pg.sprite.Sprite):
         self.curr_frames = self.attack_frames[self.direction]
       elif self.fall:
         if self.y_vel > 0:
-          self.curr_frames = self.jump_frames2[self.direction]
+          self.curr_frames = self.jump_down_frames[self.direction]
         else:
-          self.curr_frames = self.jump_frames1[self.direction]
+          self.curr_frames = self.jump_up_frames[self.direction]
       else:
         self.curr_frames = self.walk_frames[self.direction]
     elif self.fall:
       if self.old_y_vel <= 0 and self.y_vel > 0:
         self.redraw = True
         self.frame_id = -1
-        self.curr_frames = self.jump_frames2[self.direction]
+        self.curr_frames = self.jump_down_frames[self.direction]
 
     # set the frame id
     now = pg.time.get_ticks()
@@ -232,8 +232,8 @@ class Player(physics.Physics, pg.sprite.Sprite):
     pass
 
   # Helper method to load jump frames
-  def get_jump_frames(self, jump1_im, indices1, rect1,
-                            jump2_im, indices2, rect2):
+  def get_jump_frames(self, jump_up_im, indices1, rect1,
+                            jump_down_im, indices2, rect2):
     pass
 
   # Helper method to load attack frames
