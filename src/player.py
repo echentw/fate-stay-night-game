@@ -172,15 +172,7 @@ class Player(physics.Physics, pg.sprite.Sprite):
 
     # set the current frames
     # states: direction, falling, attacking
-    if self.attacking != self.old_attacking:
-      self.old_attacking = self.attacking
-      self.redraw = True
-      self.frame_id = -1
-      if self.attacking:
-        self.curr_frames = self.attack_frames[self.direction]
-      else:
-        self.curr_frames = self.walk_frames[self.direction]
-    elif self.fall != self.old_fall:
+    if self.fall != self.old_fall:
       self.old_fall = self.fall
       self.redraw = True
       self.frame_id = -1
@@ -189,6 +181,17 @@ class Player(physics.Physics, pg.sprite.Sprite):
           self.curr_frames = self.jump_frames2[self.direction]
         else:
           self.curr_frames = self.jump_frames1[self.direction]
+      else:
+        self.curr_frames = self.walk_frames[self.direction]
+      self.attacking = False
+      self.old_attacking = False
+      self.attack_counter = 0
+    elif self.attacking != self.old_attacking:
+      self.old_attacking = self.attacking
+      self.redraw = True
+      self.frame_id = -1
+      if self.attacking:
+        self.curr_frames = self.attack_frames[self.direction]
       else:
         self.curr_frames = self.walk_frames[self.direction]
     elif self.direction != self.old_direction:
