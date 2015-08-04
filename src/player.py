@@ -47,8 +47,8 @@ class Player(physics.Physics, pg.sprite.Sprite):
     self.walk_frames = None
 
     # handle jumping frames
-    self.jump_up_rect = None
-    self.jump_down_rect = None
+    self.jump_up_left_rect, self.jump_up_right_rect = None, None
+    self.jump_down_left_rect, self.jump_down_right_rect = None, None
     self.jump_up_frames, self.jump_down_frames = None, None
 
     # handle attacking frames
@@ -93,23 +93,29 @@ class Player(physics.Physics, pg.sprite.Sprite):
     self.rect[dir_id] += velocity
     self.attack_left_rect[dir_id] += velocity
     self.attack_right_rect[dir_id] += velocity
-    self.jump_up_rect[dir_id] += velocity
-    self.jump_down_rect[dir_id] += velocity
+    self.jump_up_left_rect[dir_id] += velocity
+    self.jump_up_right_rect[dir_id] += velocity
+    self.jump_down_left_rect[dir_id] += velocity
+    self.jump_down_right_rect[dir_id] += velocity
     while pg.sprite.spritecollideany(self, obstacles):
       if velocity < 0:
         self.rect[dir_id] += 1
         self.attack_left_rect[dir_id] += 1
         self.attack_right_rect[dir_id] += 1
-        self.jump_up_rect[dir_id] += 1
-        self.jump_down_rect[dir_id] += 1
+        self.jump_up_left_rect[dir_id] += 1
+        self.jump_up_right_rect[dir_id] += 1
+        self.jump_down_left_rect[dir_id] += 1
+        self.jump_down_right_rect[dir_id] += 1
         if dir_id == 1:
           self.y_vel = 0
       else:
         self.rect[dir_id] -= 1
         self.attack_left_rect[dir_id] -= 1
         self.attack_right_rect[dir_id] -= 1
-        self.jump_up_rect[dir_id] -= 1
-        self.jump_down_rect[dir_id] -= 1
+        self.jump_up_left_rect[dir_id] -= 1
+        self.jump_up_right_rect[dir_id] -= 1
+        self.jump_down_left_rect[dir_id] -= 1
+        self.jump_down_right_rect[dir_id] -= 1
       unaltered = False
     return unaltered
 
@@ -157,9 +163,15 @@ class Player(physics.Physics, pg.sprite.Sprite):
         surface.blit(self.image, self.attack_right_rect)
     elif self.old_fall:
       if self.y_vel > 0:
-        surface.blit(self.image, self.jump_up_rect)
+        if self.direction == self.LEFT_KEY:
+          surface.blit(self.image, self.jump_up_left_rect)
+        else:
+          surface.blit(self.image, self.jump_up_right_rect)
       else:
-        surface.blit(self.image, self.jump_down_rect)
+        if self.direction == self.LEFT_KEY:
+          surface.blit(self.image, self.jump_down_left_rect)
+        else:
+          surface.blit(self.image, self.jump_down_right_rect)
     else:
       surface.blit(self.image, self.rect)
 

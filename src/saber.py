@@ -30,11 +30,13 @@ class Saber(player.Player):
         walk_im, [[i, 1] for i in xrange(6)], self.rect)
 
     # handle jumping frames
-    self.jump_up_rect = pg.Rect(jump_up_rect)
-    self.jump_down_rect = pg.Rect(jump_down_rect)
+    self.jump_up_left_rect = pg.Rect(jump_up_rect)
+    self.jump_up_right_rect = pg.Rect(jump_up_rect)
+    self.jump_down_left_rect = pg.Rect(jump_down_rect)
+    self.jump_down_right_rect = pg.Rect(jump_down_rect)
     self.jump_up_frames, self.jump_down_frames = self.get_jump_frames(
-        jump_up_im, [[0,0]], self.jump_up_rect,
-        jump_down_im, [[0,0]], self.jump_down_rect)
+        jump_up_im, [[0,0]], self.jump_up_left_rect,
+        jump_down_im, [[0,0]], self.jump_down_left_rect)
 
     # handle attacking frames
     self.attack_left_rect = pg.Rect(attack_rect)
