@@ -14,7 +14,7 @@ class Saber(player.Player):
                                   jump2_im, jump2_rect):
 
     # sound files
-    sound_swoosh_file = "assets/soundfx/knife_stab.wav"
+    sound_attack_file = "assets/soundfx/knife_stab.wav"
     sound_land_file = "assets/soundfx/thud.wav"
 
     player.Player.__init__(self, speed, keys,
@@ -22,7 +22,7 @@ class Saber(player.Player):
                                  attack_im, attack_rect,
                                  jump1_im, jump1_rect,
                                  jump2_im, jump2_rect,
-                                 sound_swoosh_file, sound_land_file)
+                                 sound_attack_file, sound_land_file)
 
     # handle walking frames
     self.rect = pg.Rect(rect)

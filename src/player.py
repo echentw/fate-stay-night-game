@@ -13,7 +13,7 @@ class Player(physics.Physics, pg.sprite.Sprite):
                                   attack_im, attack_rect,
                                   jump1_im, jump1_rect,
                                   jump2_im, jump2_rect,
-                                  sound_swoosh_file, sound_land_file):
+                                  sound_attack_file, sound_land_file):
     physics.Physics.__init__(self)
     pg.sprite.Sprite.__init__(self)
 
@@ -60,7 +60,7 @@ class Player(physics.Physics, pg.sprite.Sprite):
     self.attack_counter = 0
 
     # handle sound effects
-    self.sound_swoosh = pg.mixer.Sound(sound_swoosh_file)
+    self.sound_attack = pg.mixer.Sound(sound_attack_file)
     self.sound_land = pg.mixer.Sound(sound_land_file)
 
 
@@ -123,7 +123,7 @@ class Player(physics.Physics, pg.sprite.Sprite):
     elif key == self.DOWN_KEY:
       if not self.fall:
         self.attacking = True
-        self.sound_swoosh.play()
+        self.sound_attack.play()
     elif key == self.UP_KEY:
       if not self.fall:
         self.y_vel = self.jump_power
