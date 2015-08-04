@@ -30,17 +30,11 @@ class Caster(player.Player):
         walk_im, [[i, 0] for i in xrange(6)], self.rect)
 
     # handle jumping frames
-    self.jump_up_left_rect = pg.Rect(jump_up_rect)
-    self.jump_up_right_rect = pg.Rect(jump_up_rect)
-    self.jump_down_left_rect = pg.Rect(jump_down_rect)
-    self.jump_down_right_rect = pg.Rect(jump_down_rect)
-    self.jump_up_left_rect.x = self.rect.x - 10
-    self.jump_up_right_rect.x = self.rect.x - 20
-    self.jump_down_left_rect.x = self.rect.x - 10
-    self.jump_down_right_rect.x = self.rect.x - 20
+    self.jump_up_rects, self.jump_down_rects = \
+        self.get_jump_rects(jump_up_rect, jump_down_rect)
     self.jump_up_frames, self.jump_down_frames = self.get_jump_frames(
-        jump_up_im, [[0,0]], self.jump_up_left_rect,
-        jump_down_im, [[0,0]], self.jump_down_left_rect)
+        jump_up_im, [[0,0]], pg.Rect(jump_up_rect),
+        jump_down_im, [[0,0]], pg.Rect(jump_down_rect))
 
     # handle attacking frames
     self.attack_left_rect = pg.Rect(attack_rect)
@@ -63,6 +57,28 @@ class Caster(player.Player):
                   self.RIGHT_KEY: [pg.transform.flip(frames[i], True, False) \
                       for i in xrange(6)]}
     return frame_dict
+
+  # Helper method to get jump bounding boxes
+  def get_jump_rects(self, jump_up_rect, jump_down_rect):
+    jump_up_left_rect = pg.Rect(jump_up_rect)
+    jump_up_right_rect = pg.Rect(jump_up_rect)
+    jump_down_left_rect = pg.Rect(jump_down_rect)
+    jump_down_right_rect = pg.Rect(jump_down_rect)
+
+    jump_up_left_rect.x = self.rect.x - 10
+    jump_up_right_rect.x = self.rect.x - 20
+    jump_down_left_rect.x = self.rect.x - 10
+    jump_down_right_rect.x = self.rect.x - 20
+
+    jump_up_rects = {
+      self.LEFT_KEY: jump_up_left_rect,
+      self.RIGHT_KEY: jump_up_right_rect
+    }
+    jump_down_rects = {
+      self.LEFT_KEY: jump_down_left_rect,
+      self.RIGHT_KEY: jump_down_right_rect
+    }
+    return jump_up_rects, jump_down_rects
 
   # Helper method to load jump frames
   def get_jump_frames(self, jump1_im, indices1, rect1,
