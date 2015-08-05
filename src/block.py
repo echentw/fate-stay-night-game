@@ -3,11 +3,10 @@ import math
 import random
 
 class Block(pg.sprite.Sprite):
-  def __init__(self, color, rect):
+  def __init__(self, rect):
     pg.sprite.Sprite.__init__(self)
     self.rect = pg.Rect(rect)
     self.image = pg.Surface(self.rect.size).convert()
-    self.image.fill(color)
     
     brick_img = pg.image.load("assets/sprites/brick3.png").convert_alpha()
     brick2_img = pg.image.load("assets/sprites/brick2.png").convert_alpha()

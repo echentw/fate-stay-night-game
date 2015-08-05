@@ -20,7 +20,7 @@ class Player(physics.Physics, pg.sprite.Sprite):
 
     self.name = None
     self.health = 10
-    self.jump_power = -13.0           # initial jumping speed
+    self.jump_power = -12.0           # initial jumping speed
     self.speed = speed                # the speed Player moves at
     self.curr_frames = []             # the current set of frames to flip thru
     self.image = None                 # the current image of Player to display

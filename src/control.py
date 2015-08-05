@@ -47,20 +47,33 @@ class Control(object):
     self.player2_obstacles.add(self.obstacles)
 
   def make_obstacles(self):
-    walls = [block.Block(pg.Color("chocolate"), (0,980,1000,20)),
-             block.Block(pg.Color("chocolate"), (0,0,20,1000)),
-             block.Block(pg.Color("chocolate"), (980,0,20,1000))]
-    static = [block.Block(pg.Color("darkgreen"), (250,780,200,100)),
-              block.Block(pg.Color("darkgreen"), (600,880,200,100)),
-              block.Block(pg.Color("darkgreen"), (20,360,880,40)),
-              block.Block(pg.Color("darkgreen"), (950,400,30,20)),
-              block.Block(pg.Color("darkgreen"), (20,630,50,20)),
-              block.Block(pg.Color("darkgreen"), (80,530,50,20)),
-              block.Block(pg.Color("darkgreen"), (130,470,200,210)),
-              block.Block(pg.Color("darkgreen"), (20,760,30,20)),
-              block.Block(pg.Color("darkgreen"), (400,740,30,40))]
+    size = 20
 
-    return pg.sprite.Group(walls, static)
+    walls = [block.Block((0 * size, 48 * size, 50 * size, 2 * size)),
+             block.Block((0 * size, 0 * size, 50 * size, 1 * size)),
+             block.Block((0 * size, 0 * size, 1 * size, 50 * size)),
+             block.Block((49 * size, 0 * size, 1 * size, 50 * size))]
+
+    ground = [block.Block((1 * size, 42 * size, 32 * size, 6 * size)),
+              block.Block((1 * size, 36 * size, 17 * size, 6 * size))]
+
+    big = [block.Block((5 * size, 18 * size, 9 * size, 13 * size)),
+           block.Block((4 * size, 23 * size, 1 * size, 1 * size)),
+           block.Block((4 * size, 30 * size, 1 * size, 1 * size)),
+           block.Block((14 * size, 23 * size, 1 * size, 1 * size)),
+           block.Block((14 * size, 30 * size, 1 * size, 1 * size))]
+
+    floating = [block.Block((20 * size, 21 * size, 9 * size, 2 * size)),
+                block.Block((23 * size, 31 * size, 15 * size, 1 * size)),
+                block.Block((33 * size, 19 * size, 1 * size, 1 * size)),
+                block.Block((37 * size, 16 * size, 7 * size, 2 * size))]
+
+    high = [block.Block((6 * size, 9 * size, 3 * size, 2 * size)),
+            block.Block((15 * size, 9 * size, 3 * size, 2 * size)),
+            block.Block((24 * size, 9 * size, 3 * size, 2 * size)),
+            block.Block((33 * size, 9 * size, 3 * size, 2 * size))]
+
+    return pg.sprite.Group(walls, ground, big, floating, high)
 
   def event_loop(self):
     for event in pg.event.get():
