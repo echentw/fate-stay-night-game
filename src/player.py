@@ -17,7 +17,6 @@ class Player(physics.Physics, pg.sprite.Sprite):
     physics.Physics.__init__(self)
     pg.sprite.Sprite.__init__(self)
 
-
     self.name = None
     self.health = 10
     self.jump_power = -12.0           # initial jumping speed
@@ -64,6 +63,7 @@ class Player(physics.Physics, pg.sprite.Sprite):
     self.sound_attack = pg.mixer.Sound(sound_attack_file)
     self.sound_land = pg.mixer.Sound(sound_land_file)
 
+  # Handle getting hit
   def receive_attack(self, attack_rect):
     if pg.Rect.colliderect(self.rect, attack_rect):
       self.health -= 1
@@ -92,36 +92,29 @@ class Player(physics.Physics, pg.sprite.Sprite):
     else:
       self.fall = True
 
+  # Move up until a collision would happen
   def check_collisions(self, velocity, dir_id, obstacles):
     unaltered = True
-    self.rect[dir_id] += velocity
-    self.attack_left_rect[dir_id] += velocity
-    self.attack_right_rect[dir_id] += velocity
-    self.jump_up_rects[self.LEFT_KEY][dir_id] += velocity
-    self.jump_up_rects[self.RIGHT_KEY][dir_id] += velocity
-    self.jump_down_rects[self.LEFT_KEY][dir_id] += velocity
-    self.jump_down_rects[self.RIGHT_KEY][dir_id] += velocity
+    self.move_rects(dir_id, velocity)
     while pg.sprite.spritecollideany(self, obstacles):
       if velocity < 0:
-        self.rect[dir_id] += 1
-        self.attack_left_rect[dir_id] += 1
-        self.attack_right_rect[dir_id] += 1
-        self.jump_up_rects[self.LEFT_KEY][dir_id] += 1
-        self.jump_up_rects[self.RIGHT_KEY][dir_id] += 1
-        self.jump_down_rects[self.LEFT_KEY][dir_id] += 1
-        self.jump_down_rects[self.RIGHT_KEY][dir_id] += 1
+        self.move_rects(dir_id, 1)
         if dir_id == 1:
           self.y_vel = 0
       else:
-        self.rect[dir_id] -= 1
-        self.attack_left_rect[dir_id] -= 1
-        self.attack_right_rect[dir_id] -= 1
-        self.jump_up_rects[self.LEFT_KEY][dir_id] -= 1
-        self.jump_up_rects[self.RIGHT_KEY][dir_id] -= 1
-        self.jump_down_rects[self.LEFT_KEY][dir_id] -= 1
-        self.jump_down_rects[self.RIGHT_KEY][dir_id] -= 1
+        self.move_rects(dir_id, -1)
       unaltered = False
     return unaltered
+
+  # Helper method for self.check_collisions()
+  def move_rects(self, dir_id, displacement):
+    self.rect[dir_id] += displacement
+    self.attack_left_rect[dir_id] += displacement
+    self.attack_right_rect[dir_id] += displacement
+    self.jump_up_rects[self.LEFT_KEY][dir_id] += displacement
+    self.jump_up_rects[self.RIGHT_KEY][dir_id] += displacement
+    self.jump_down_rects[self.LEFT_KEY][dir_id] += displacement
+    self.jump_down_rects[self.RIGHT_KEY][dir_id] += displacement
 
   # Handle keypresses
   def handle_keydown(self, key, obstacles):

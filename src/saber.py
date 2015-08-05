@@ -51,7 +51,7 @@ class Saber(player.Player):
   def get_walk_frames(self, walk_im, indices, rect):
     sheet = pg.image.load(walk_im).convert()
     sheet.set_colorkey(Saber.COLOR_KEY)
-    frames = get_images(sheet, indices, rect.size)
+    frames = player.get_images(sheet, indices, rect.size)
     frame_dict = {self.LEFT_KEY : [frames[i] for i in xrange(6)],
                   self.RIGHT_KEY: [pg.transform.flip(frames[i], True, False) \
                       for i in xrange(6)]}
@@ -82,8 +82,8 @@ class Saber(player.Player):
     sheet1.set_colorkey(Saber.COLOR_KEY)
     sheet2 = pg.image.load(jump2_im).convert()
     sheet2.set_colorkey(Saber.COLOR_KEY)
-    frames1 = get_images(sheet1, indices1, rect1.size)
-    frames2 = get_images(sheet2, indices2, rect2.size)
+    frames1 = player.get_images(sheet1, indices1, rect1.size)
+    frames2 = player.get_images(sheet2, indices2, rect2.size)
     frame1_dict = {
       self.LEFT_KEY : [pg.transform.flip(frames1[0], True, False)],
       self.RIGHT_KEY: [frames1[0]]
@@ -98,18 +98,9 @@ class Saber(player.Player):
   def get_attack_frames(self, attack_im, indices, rect):
     sheet = pg.image.load(attack_im).convert()
     sheet.set_colorkey(Saber.COLOR_KEY)
-    frames = get_images(sheet, indices, rect.size)
+    frames = player.get_images(sheet, indices, rect.size)
     frame_dict = {self.LEFT_KEY : [frames[i] for i in xrange(4)],
                   self.RIGHT_KEY: [pg.transform.flip(frames[i], True, False)
                       for i in xrange(4)]}
     return frame_dict
-
-
-# Helper method
-def get_images(sheet, frame_indices, size):
-  frames = []
-  for cell in frame_indices:
-    frame_rect = ((size[0] * cell[0], size[1] * cell[1]), size)
-    frames.append(sheet.subsurface(frame_rect))
-  return frames
 

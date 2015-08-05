@@ -123,12 +123,12 @@ class Control(object):
     self.screen.blit(self.level, (0, 0), self.screen_rect)
 
     font = pg.font.Font(None, 28)
-    text1 = font.render(self.player1.name + " health: " + self.get_health_bar(self.player1), 1, (10, 10, 10))
+    text1 = font.render(self.player1.name + " health: " + self.get_health_bar(self.player1), 1, (200, 200, 200))
     textpos1 = text1.get_rect()
     textpos1.topleft = self.screen.get_rect().topleft
     self.screen.blit(text1, textpos1)
 
-    text2 = font.render(self.player2.name + " health: " + self.get_health_bar(self.player2), 2, (10, 10, 10))
+    text2 = font.render(self.player2.name + " health: " + self.get_health_bar(self.player2), 2, (200, 200, 200))
     textpos2 = text2.get_rect()
     textpos2.top = self.screen.get_rect().top
     textpos2.left = self.screen.get_rect().centerx
@@ -144,11 +144,11 @@ class Control(object):
     pg.display.set_caption(Control.CAPTION)
 #    pg.display.toggle_fullscreen()
     pg.mixer.music.load("assets/music/oath-sign-orchestra.mp3")
-    pg.mixer.music.play()
+#    pg.mixer.music.play()
 
     while not self.done:
-      if not pg.mixer.music.get_busy():
-        pg.mixer.music.play()
+#      if not pg.mixer.music.get_busy():
+#        pg.mixer.music.play()
       self.event_loop()
       self.update()
       self.draw()
