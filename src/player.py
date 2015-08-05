@@ -18,6 +18,7 @@ class Player(physics.Physics, pg.sprite.Sprite):
     pg.sprite.Sprite.__init__(self)
 
 
+    self.name = None
     self.jump_power = -13.0           # initial jumping speed
     self.speed = speed                # the speed Player moves at
     self.curr_frames = []             # the current set of frames to flip thru
@@ -62,6 +63,9 @@ class Player(physics.Physics, pg.sprite.Sprite):
     self.sound_attack = pg.mixer.Sound(sound_attack_file)
     self.sound_land = pg.mixer.Sound(sound_land_file)
 
+  def receive_attack(self, attack_rect):
+    if pg.Rect.colliderect(self.rect, attack_rect):
+      print self.name + ' received an attack!'
 
   # Calculate Player's position in this frame
   def get_position(self, obstacles):

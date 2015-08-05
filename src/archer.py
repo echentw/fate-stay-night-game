@@ -12,7 +12,6 @@ class Archer(player.Player):
                                   attack_im, attack_rect,
                                   jump_up_im, jump_up_rect,
                                   jump_down_im, jump_down_rect):
-
     # sound files
     sound_attack_file = "assets/soundfx/knife_stab.wav"
     sound_land_file = "assets/soundfx/thud.wav"
@@ -23,6 +22,7 @@ class Archer(player.Player):
                                  jump_up_im, jump_up_rect,
                                  jump_down_im, jump_down_rect,
                                  sound_attack_file, sound_land_file)
+    self.name = 'Archer'
 
     # handle walking frames
     self.rect = pg.Rect(rect)
