@@ -144,11 +144,11 @@ class Control(object):
     pg.display.set_caption(Control.CAPTION)
 #    pg.display.toggle_fullscreen()
     pg.mixer.music.load("assets/music/oath-sign-orchestra.mp3")
-#    pg.mixer.music.play()
+    pg.mixer.music.play()
 
     while not self.done:
-#      if not pg.mixer.music.get_busy():
-#        pg.mixer.music.play()
+      if not pg.mixer.music.get_busy():
+        pg.mixer.music.play()
       self.event_loop()
       self.update()
       self.draw()
