@@ -75,15 +75,17 @@ class Control(object):
         self.player2.handle_keydown(event.key, self.player2_obstacles)
 
         if event.key == self.player1.DOWN_KEY:
-          if self.player1.direction == self.player1.LEFT_KEY:
-            self.player2.receive_attack(self.player1.attack_left_rect)
-          else:
-            self.player2.receive_attack(self.player1.attack_right_rect)
+          if not self.player1.fall:
+            if self.player1.direction == self.player1.LEFT_KEY:
+              self.player2.receive_attack(self.player1.attack_left_rect)
+            else:
+              self.player2.receive_attack(self.player1.attack_right_rect)
         elif event.key == self.player2.DOWN_KEY:
-          if self.player2.direction == self.player2.LEFT_KEY:
-            self.player1.receive_attack(self.player2.attack_left_rect)
-          else:
-            self.player1.receive_attack(self.player2.attack_right_rect)
+          if not self.player2.fall:
+            if self.player2.direction == self.player2.LEFT_KEY:
+              self.player1.receive_attack(self.player2.attack_left_rect)
+            else:
+              self.player1.receive_attack(self.player2.attack_right_rect)
 
       elif event.type == pg.KEYUP:
         self.player1.handle_keyup(event.key)
