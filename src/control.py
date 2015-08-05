@@ -22,8 +22,8 @@ class Control(object):
     self.done = False
     self.keys = pg.key.get_pressed()
 
-    x = self.screen_rect.center[0] - 40
-    y = self.screen_rect.center[1] + 40
+    x = self.level_rect.center[0] - 40
+    y = self.level_rect.center[1] + 40
     self.player1 = sab.Saber(4, (pg.K_UP, pg.K_DOWN, pg.K_LEFT, pg.K_RIGHT),
                              "assets/sprites/saber_walk.png", (x,y,38,54),
                              "assets/sprites/saber_slash.png", (x,y,74,54),
