@@ -90,6 +90,12 @@ class Control(object):
         self.player2.handle_keyup(event.key)
 
   def update(self):
+    if self.player1.health == 0:
+      print self.player2.name + " wins!"
+      self.done = True
+    elif self.player2.health == 0:
+      print self.player1.name + " wins!"
+      self.done = True
     self.player1.update(self.screen_rect, self.player1_obstacles)
     self.player2.update(self.screen_rect, self.player2_obstacles)
     self.screen_rect.center = \
