@@ -144,16 +144,24 @@ class Control(object):
 
   def game_over_loop(self):
     font = pg.font.Font(None, 48)
-    text = font.render(self.winner.name + " wins!", 1, (230, 230, 230))
-    textpos = text.get_rect()
-    textpos.centerx = self.screen.get_rect().centerx
-    textpos.centery = self.screen.get_rect().centery
+    text1 = font.render(self.winner.name + " wins!", 1, (230, 230, 230))
+    textpos1 = text1.get_rect()
+    textpos1.centerx = self.screen.get_rect().centerx
+    textpos1.centery = self.screen.get_rect().centery
+
+    font = pg.font.Font(None, 24)
+    text2 = font.render("Press any key to quit", 1, (230, 230, 230))
+    textpos2 = text2.get_rect()
+    textpos2.centerx = self.screen.get_rect().centerx
+    textpos2.centery = self.screen.get_rect().centery + 40
+
     self.screen.fill(Control.BACKGROUND_COLOR)
-    self.screen.blit(text, textpos)
+    self.screen.blit(text1, textpos1)
+    self.screen.blit(text2, textpos2)
 
     for event in pg.event.get():
       self.keys = pg.key.get_pressed()
-      if event.type == pg.QUIT or self.keys[pg.K_ESCAPE]:
+      if not all(k == 0 for k in self.keys):
         self.done = True
 
   def main_loop(self):
