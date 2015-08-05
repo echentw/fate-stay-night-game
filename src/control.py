@@ -109,17 +109,23 @@ class Control(object):
     self.player2.draw(self.level)
     self.screen.blit(self.level, (0, 0), self.screen_rect)
 
-    font = pg.font.Font(None, 36)
-    text1 = font.render(self.player1.name + " health: " + str(self.player1.health), 1, (10, 10, 10))
+    font = pg.font.Font(None, 28)
+    text1 = font.render(self.player1.name + " health: " + self.get_health_bar(self.player1), 1, (10, 10, 10))
     textpos1 = text1.get_rect()
     textpos1.topleft = self.screen.get_rect().topleft
     self.screen.blit(text1, textpos1)
 
-    text2 = font.render(self.player2.name + " health: " + str(self.player2.health), 2, (10, 10, 10))
+    text2 = font.render(self.player2.name + " health: " + self.get_health_bar(self.player2), 2, (10, 10, 10))
     textpos2 = text2.get_rect()
-    textpos2.topright = self.screen.get_rect().topright
+    textpos2.top = self.screen.get_rect().top
+    textpos2.left = self.screen.get_rect().centerx
     self.screen.blit(text2, textpos2)
 
+  def get_health_bar(self, player):
+    output = ''
+    for i in xrange(player.health):
+      output += '-'
+    return output
 
   def main_loop(self):
     pg.display.set_caption(Control.CAPTION)
