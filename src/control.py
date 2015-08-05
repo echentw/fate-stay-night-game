@@ -11,9 +11,7 @@ class Control(object):
   CAPTION = "My Game"
   BACKGROUND_COLOR = (100, 100, 100)
 
-  """Being controlling is our job."""
   def __init__(self, level_size):
-    """Initialize standard attributes, standardly."""
     self.level = pg.Surface((level_size[0], level_size[1])).convert()
     self.level_rect = self.level.get_rect()
 
@@ -65,7 +63,6 @@ class Control(object):
     return pg.sprite.Group(walls, static)
 
   def event_loop(self):
-    """Add/pop directions from player's direction stack as necessary."""
     for event in pg.event.get():
       self.keys = pg.key.get_pressed()
       if event.type == pg.QUIT or self.keys[pg.K_ESCAPE]:
@@ -112,8 +109,19 @@ class Control(object):
     self.player2.draw(self.level)
     self.screen.blit(self.level, (0, 0), self.screen_rect)
 
+    font = pg.font.Font(None, 36)
+    text1 = font.render(self.player1.name + " health: " + str(self.player1.health), 1, (10, 10, 10))
+    textpos1 = text1.get_rect()
+    textpos1.topleft = self.screen.get_rect().topleft
+    self.screen.blit(text1, textpos1)
+
+    text2 = font.render(self.player2.name + " health: " + str(self.player2.health), 2, (10, 10, 10))
+    textpos2 = text2.get_rect()
+    textpos2.topright = self.screen.get_rect().topright
+    self.screen.blit(text2, textpos2)
+
+
   def main_loop(self):
-    """Our main game loop; I bet you'd never have guessed."""
     pg.display.set_caption(Control.CAPTION)
 #    pg.display.toggle_fullscreen()
     pg.mixer.music.load("assets/music/oath-sign-orchestra.mp3")
