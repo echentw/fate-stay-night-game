@@ -12,6 +12,8 @@ class Control(object):
   BACKGROUND_COLOR = (100, 100, 100)
 
   def __init__(self, level_size):
+    self.winner = None
+
     self.level = pg.Surface((level_size[0], level_size[1])).convert()
     self.level_rect = self.level.get_rect()
 
@@ -34,7 +36,7 @@ class Control(object):
 #                              "assets/sprites/archer_slash.png", (x,y,90,70),
 #                              "assets/sprites/archer_jump1.png", (x,y,52,59),
 #                              "assets/sprites/archer_jump2.png", (x,y,52,59))
-    y -= 100
+    x -= 100
     self.player2 = cast.Caster(5, (pg.K_w, pg.K_s, pg.K_a, pg.K_d),
                                "assets/sprites/caster_walk.png", (x,y,32,62),
                                "assets/sprites/caster_attack.png", (x,y,95,61),
@@ -103,10 +105,10 @@ class Control(object):
 
   def update(self):
     if self.player1.health == 0:
-      print self.player2.name + " wins!"
+      self.winner = self.player2
       self.done = True
     elif self.player2.health == 0:
-      print self.player1.name + " wins!"
+      self.winner = self.player1
       self.done = True
     self.player1.update(self.screen_rect, self.player1_obstacles)
     self.player2.update(self.screen_rect, self.player2_obstacles)
@@ -140,6 +142,20 @@ class Control(object):
       output += '-'
     return output
 
+  def game_over_loop(self):
+    font = pg.font.Font(None, 48)
+    text = font.render(self.winner.name + " wins!", 1, (230, 230, 230))
+    textpos = text.get_rect()
+    textpos.centerx = self.screen.get_rect().centerx
+    textpos.centery = self.screen.get_rect().centery
+    self.screen.fill(Control.BACKGROUND_COLOR)
+    self.screen.blit(text, textpos)
+
+    for event in pg.event.get():
+      self.keys = pg.key.get_pressed()
+      if event.type == pg.QUIT or self.keys[pg.K_ESCAPE]:
+        self.done = True
+
   def main_loop(self):
     pg.display.set_caption(Control.CAPTION)
 #    pg.display.toggle_fullscreen()
@@ -154,4 +170,9 @@ class Control(object):
       self.draw()
       pg.display.update()
       self.clock.tick(self.fps)
+
+    self.done = False
+    while not self.done:
+      self.game_over_loop()
+      pg.display.update()
 
