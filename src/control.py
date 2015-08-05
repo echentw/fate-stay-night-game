@@ -179,6 +179,8 @@ class Control(object):
       pg.display.update()
       self.clock.tick(self.fps)
 
+    pg.mixer.music.stop()
+
     self.done = False
     while not self.done:
       self.game_over_loop()
