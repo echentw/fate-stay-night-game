@@ -180,7 +180,7 @@ class Control(object):
   def main_loop(self):
     pg.display.set_caption(Control.CAPTION)
 #    pg.display.toggle_fullscreen()
-    pg.mixer.music.load("assets/music/oath-sign-orchestra.mp3")
+    pg.mixer.music.load("assets/music/oath-sign-orchestra.wav")
     pg.mixer.music.play()
 
     while not self.done:
