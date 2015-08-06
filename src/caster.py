@@ -15,7 +15,7 @@ class Caster(player.Player):
     # sound files
     sound_attack_file = "assets/soundfx/beam.wav"
     sound_land_file = "assets/soundfx/thud.wav"
-    face_im = "assets/sprites/not-used/caster_face.png"
+    face_im = "assets/sprites/caster_face.png"
 
     player.Player.__init__(self, speed, keys,
                                  walk_im, rect,

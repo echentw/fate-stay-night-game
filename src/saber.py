@@ -15,7 +15,7 @@ class Saber(player.Player):
     # sound files
     sound_attack_file = "assets/soundfx/knife_stab.wav"
     sound_land_file = "assets/soundfx/thud.wav"
-    face_im = "assets/sprites/not-used/saber_face.png"
+    face_im = "assets/sprites/saber_face.png"
 
     player.Player.__init__(self, speed, keys,
                                  walk_im, rect,
