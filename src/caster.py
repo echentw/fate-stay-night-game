@@ -15,14 +15,19 @@ class Caster(player.Player):
     # sound files
     sound_attack_file = "assets/soundfx/beam.wav"
     sound_land_file = "assets/soundfx/thud.wav"
+    face_im = "assets/sprites/not-used/caster_face.png"
 
     player.Player.__init__(self, speed, keys,
                                  walk_im, rect,
                                  attack_im, attack_rect,
                                  jump_up_im, jump_up_rect,
                                  jump_down_im, jump_down_rect,
+                                 face_im,
                                  sound_attack_file, sound_land_file)
     self.name = 'Caster'
+
+    # handle face image
+    self.face_im = self.get_face_image(face_im, (180, 200))
 
     # handle walking frames
     self.rect = pg.Rect(rect)
@@ -47,6 +52,12 @@ class Caster(player.Player):
     # initialize the first image
     self.adjust_images()
 
+  # Helper method to load face images
+  def get_face_image(self, face_im, size):
+    sheet = pg.image.load(face_im).convert()
+    sheet.set_colorkey(Caster.COLOR_KEY)
+    frames = player.get_images(sheet, [[0, 0]], size)
+    return frames[0]
 
   # Helper method to load walk frames
   def get_walk_frames(self, walk_im, indices, rect):

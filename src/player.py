@@ -13,6 +13,7 @@ class Player(physics.Physics, pg.sprite.Sprite):
                                   attack_im, attack_rect,
                                   jump_up_im, jump_up_rect,
                                   jump_down_im, jump_down_rect,
+                                  face_im,
                                   sound_attack_file, sound_land_file):
     physics.Physics.__init__(self)
     pg.sprite.Sprite.__init__(self)
@@ -23,6 +24,9 @@ class Player(physics.Physics, pg.sprite.Sprite):
     self.speed = speed                # the speed Player moves at
     self.curr_frames = []             # the current set of frames to flip thru
     self.image = None                 # the current image of Player to display
+
+    # handle the face image (beside the health bar)
+    self.face_im = None
 
     # handle when to update the frames
     self.redraw = False

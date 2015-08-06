@@ -2,6 +2,7 @@ import os
 import sys
 import pygame as pg
 
+import player
 import archer as arc
 import saber as sab
 import caster as cast
@@ -31,12 +32,12 @@ class Control(object):
                              "assets/sprites/saber_slash.png", (x,y,74,54),
                              "assets/sprites/saber_jump1.png", (x,y,38,58),
                              "assets/sprites/saber_jump2.png", (x,y,41,63))
-#    self.player1 = arc.Archer(5, (pg.K_UP, pg.K_DOWN, pg.K_LEFT, pg.K_RIGHT),
-#                              "assets/sprites/archer_walk.png", (x,y,33,60),
-#                              "assets/sprites/archer_slash.png", (x,y,90,70),
-#                              "assets/sprites/archer_jump1.png", (x,y,52,59),
-#                              "assets/sprites/archer_jump2.png", (x,y,52,59))
     x -= 100
+    self.player2 = arc.Archer(5, (pg.K_w, pg.K_s, pg.K_a, pg.K_d),
+                              "assets/sprites/archer_walk.png", (x,y,33,60),
+                              "assets/sprites/archer_slash.png", (x,y,90,70),
+                              "assets/sprites/archer_jump1.png", (x,y,52,59),
+                              "assets/sprites/archer_jump2.png", (x,y,52,59))
     self.player2 = cast.Caster(5, (pg.K_w, pg.K_s, pg.K_a, pg.K_d),
                                "assets/sprites/caster_walk.png", (x,y,32,62),
                                "assets/sprites/caster_attack.png", (x,y,95,61),
@@ -47,6 +48,10 @@ class Control(object):
     self.player1_obstacles.add(self.obstacles)
     self.player2_obstacles = pg.sprite.Group(self.player1)
     self.player2_obstacles.add(self.obstacles)
+
+    self.player1_face_rect = self.player1.face_im.get_rect()
+    self.player2_face_rect = self.player2.face_im.get_rect()
+    self.player2_face_rect.right = self.screen_rect.width
 
   def make_obstacles(self):
     size = 20
@@ -124,22 +129,30 @@ class Control(object):
     self.player2.draw(self.level)
     self.screen.blit(self.level, (0, 0), self.screen_rect)
 
-    font = pg.font.Font(None, 28)
-    text1 = font.render(self.player1.name + " health: " + self.get_health_bar(self.player1), 1, (200, 200, 200))
-    textpos1 = text1.get_rect()
-    textpos1.topleft = self.screen.get_rect().topleft
-    self.screen.blit(text1, textpos1)
+    self.screen.blit(self.player1.face_im, (0, 0))
+    self.screen.blit(self.player2.face_im, self.player2_face_rect)
 
-    text2 = font.render(self.player2.name + " health: " + self.get_health_bar(self.player2), 2, (200, 200, 200))
-    textpos2 = text2.get_rect()
-    textpos2.top = self.screen.get_rect().top
-    textpos2.left = self.screen.get_rect().centerx
-    self.screen.blit(text2, textpos2)
+    font = pg.font.Font(None, 28)
+    name1 = font.render(self.player1.name, 1, (200, 200, 200))
+    health1 = font.render(self.get_health_bar(self.player1), 1, (200, 200, 200))
+    textpos1 = name1.get_rect()
+    textpos1.topleft = self.player1.face_im.get_rect().topleft
+    self.screen.blit(name1, textpos1)
+    textpos1.y = textpos1.y + 12
+    self.screen.blit(health1, textpos1)
+
+    name2 = font.render(self.player2.name, 2, (200, 200, 200))
+    health2 = font.render(self.get_health_bar(self.player2), 1, (200, 200, 200))
+    textpos2 = name2.get_rect()
+    textpos2.topleft = self.player2_face_rect.topleft
+    self.screen.blit(name2, textpos2)
+    textpos2.y = textpos2.y + 12
+    self.screen.blit(health2, textpos2)
 
   def get_health_bar(self, player):
     output = ''
     for i in xrange(player.health):
-      output += '-'
+      output += '--'
     return output
 
   def game_over_loop(self):
