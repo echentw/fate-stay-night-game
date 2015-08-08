@@ -71,6 +71,8 @@ class Player(physics.Physics, pg.sprite.Sprite):
   def receive_attack(self, attack_rect):
     if pg.Rect.colliderect(self.rect, attack_rect):
       self.health -= 1
+      return True
+    return False
 
   # Calculate Player's position in this frame
   def get_position(self, obstacles):

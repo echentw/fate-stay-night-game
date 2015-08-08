@@ -25,6 +25,8 @@ class Control(object):
     self.done = False
     self.keys = pg.key.get_pressed()
 
+    self.sound_impact = pg.mixer.Sound("assets/soundfx/sword_impact.wav")
+
     x = self.level_rect.center[0] - 40
     y = self.level_rect.center[1] + 40
     self.player1 = sab.Saber(4, (pg.K_UP, pg.K_DOWN, pg.K_LEFT, pg.K_RIGHT),
@@ -94,15 +96,19 @@ class Control(object):
         if event.key == self.player1.DOWN_KEY:
           if not self.player1.fall:
             if self.player1.direction == self.player1.LEFT_KEY:
-              self.player2.receive_attack(self.player1.attack_left_rect)
+              if self.player2.receive_attack(self.player1.attack_left_rect):
+                self.sound_impact.play()
             else:
-              self.player2.receive_attack(self.player1.attack_right_rect)
+              if self.player2.receive_attack(self.player1.attack_right_rect):
+                self.sound_impact.play()
         elif event.key == self.player2.DOWN_KEY:
           if not self.player2.fall:
             if self.player2.direction == self.player2.LEFT_KEY:
-              self.player1.receive_attack(self.player2.attack_left_rect)
+              if self.player1.receive_attack(self.player2.attack_left_rect):
+                self.sound_impact.play()
             else:
-              self.player1.receive_attack(self.player2.attack_right_rect)
+              if self.player1.receive_attack(self.player2.attack_right_rect):
+                self.sound_impact.play()
 
       elif event.type == pg.KEYUP:
         self.player1.handle_keyup(event.key)
