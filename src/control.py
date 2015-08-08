@@ -65,9 +65,9 @@ class Control(object):
     size = 20
 
     walls = [block.Block((0 * size, 48 * size, 50 * size, 2 * size)),
-             block.Block((0 * size, 0 * size, 50 * size, 1 * size)),
-             block.Block((0 * size, 0 * size, 1 * size, 50 * size)),
-             block.Block((49 * size, 0 * size, 1 * size, 50 * size))]
+             block.Block((0 * size, 0 * size, 50 * size, 2 * size)),
+             block.Block((0 * size, 0 * size, 3 * size, 50 * size)),
+             block.Block((47 * size, 0 * size, 3 * size, 50 * size))]
 
     ground = [block.Block((1 * size, 42 * size, 32 * size, 6 * size)),
               block.Block((1 * size, 36 * size, 17 * size, 6 * size))]
