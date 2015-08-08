@@ -8,13 +8,17 @@ import player
 
 
 class Saber(player.Player):
-  def __init__(self, speed, keys, walk_im, rect,
-                                  attack_im, attack_rect,
-                                  jump_up_im, jump_up_rect,
-                                  jump_down_im, jump_down_rect):
-    player.Player.__init__(self, speed, keys)
+  def __init__(self, keys, walk_im, rect,
+                           attack_im, attack_rect,
+                           jump_up_im, jump_up_rect,
+                           jump_down_im, jump_down_rect):
+    player.Player.__init__(self, keys)
 
+    # qualities
     self.name = 'Saber'
+    self.health = 4
+    self.speed = 4
+    self.jump_power = -12.0
 
     # handle sound effects
     self.sound_attack = pg.mixer.Sound("assets/soundfx/knife_stab.wav")

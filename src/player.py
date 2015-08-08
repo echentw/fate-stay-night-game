@@ -9,14 +9,14 @@ import physics
 class Player(physics.Physics, pg.sprite.Sprite):
   COLOR_KEY = (255, 0, 255)
 
-  def __init__(self, speed, keys):
+  def __init__(self, keys):
     physics.Physics.__init__(self)
     pg.sprite.Sprite.__init__(self)
 
-    self.name = None
-    self.health = 5
-    self.jump_power = -12.0           # initial jumping speed
-    self.speed = speed                # the speed Player moves at
+    self.name = ''                    # name (default value)
+    self.health = 5                   # health (default value)
+    self.jump_power = -12.0           # jumping power (default value)
+    self.speed = 3                    # moving speed (default value)
     self.curr_frames = []             # the current set of frames to flip thru
     self.image = None                 # the current image of Player to display
 

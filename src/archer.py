@@ -8,13 +8,18 @@ import player
 
 
 class Archer(player.Player):
-  def __init__(self, speed, keys, walk_im, rect,
-                                  attack_im, attack_rect,
-                                  jump_up_im, jump_up_rect,
-                                  jump_down_im, jump_down_rect):
-    player.Player.__init__(self, speed, keys)
+  def __init__(self, keys, walk_im, rect,
+                           attack_im, attack_rect,
+                           jump_up_im, jump_up_rect,
+                           jump_down_im, jump_down_rect):
+    player.Player.__init__(self, keys)
 
+    # qualities
     self.name = 'Archer'
+    self.health = 3
+    self.speed = 5
+    self.jump_power = -12.0
+
 
     # handle sound effects
     self.sound_attack = pg.mixer.Sound("assets/soundfx/knife_stab.wav")

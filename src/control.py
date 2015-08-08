@@ -29,18 +29,18 @@ class Control(object):
 
     x = self.level_rect.center[0] - 40
     y = self.level_rect.center[1] + 40
-    self.player1 = sab.Saber(4, (pg.K_UP, pg.K_DOWN, pg.K_LEFT, pg.K_RIGHT),
+    self.player1 = sab.Saber((pg.K_UP, pg.K_DOWN, pg.K_LEFT, pg.K_RIGHT),
                              "assets/sprites/saber_walk.png", (x,y,38,54),
                              "assets/sprites/saber_slash.png", (x,y,74,54),
                              "assets/sprites/saber_jump1.png", (x,y,38,58),
                              "assets/sprites/saber_jump2.png", (x,y,41,63))
     x -= 100
-#    self.player2 = arc.Archer(5, (pg.K_w, pg.K_s, pg.K_a, pg.K_d),
+#    self.player2 = arc.Archer((pg.K_w, pg.K_s, pg.K_a, pg.K_d),
 #                              "assets/sprites/archer_walk.png", (x,y,33,60),
 #                              "assets/sprites/archer_slash.png", (x,y,90,70),
 #                              "assets/sprites/archer_jump1.png", (x,y,52,59),
 #                              "assets/sprites/archer_jump2.png", (x,y,52,59))
-    self.player2 = cast.Caster(5, (pg.K_w, pg.K_s, pg.K_a, pg.K_d),
+    self.player2 = cast.Caster((pg.K_w, pg.K_s, pg.K_a, pg.K_d),
                                "assets/sprites/caster_walk.png", (x,y,32,62),
                                "assets/sprites/caster_attack.png", (x,y,95,61),
                                "assets/sprites/caster_jump1.png", (x,y,62,65),
@@ -91,6 +91,7 @@ class Control(object):
       if event.type == pg.QUIT or self.keys[pg.K_ESCAPE]:
         self.done = True
 
+      # someone is attacking
       elif event.type == pg.KEYDOWN:
         if event.key == self.player1.DOWN_KEY:
           if not self.player1.fall and not self.player1.attacking:
@@ -141,7 +142,7 @@ class Control(object):
 
     font = pg.font.Font(None, 28)
     name1 = font.render(self.player1.name, 1, (200, 200, 200))
-    health1 = font.render(self.get_health_bar(self.player1), 1, (200, 200, 200))
+    health1 = font.render(get_health_bar(self.player1), 1, (200, 200, 200))
     textpos1 = name1.get_rect()
     textpos1.topleft = self.player1.face_im.get_rect().topleft
     self.screen.blit(name1, textpos1)
@@ -149,25 +150,19 @@ class Control(object):
     self.screen.blit(health1, textpos1)
 
     name2 = font.render(self.player2.name, 2, (200, 200, 200))
-    health2 = font.render(self.get_health_bar(self.player2), 1, (200, 200, 200))
+    health2 = font.render(get_health_bar(self.player2), 1, (200, 200, 200))
     textpos2 = name2.get_rect()
     textpos2.topleft = self.player2_face_rect.topleft
     self.screen.blit(name2, textpos2)
     textpos2.y = textpos2.y + 12
     self.screen.blit(health2, textpos2)
 
-  def get_health_bar(self, player):
-    output = ''
-    for i in xrange(player.health):
-      output += '--'
-    return output
 
   def main_loop(self):
     pg.display.set_caption(Control.CAPTION)
 #    pg.display.toggle_fullscreen()
     pg.mixer.music.load("assets/music/oath-sign-orchestra.wav")
     pg.mixer.music.play()
-
     while not self.done:
       if not pg.mixer.music.get_busy():
         pg.mixer.music.play()
@@ -176,7 +171,6 @@ class Control(object):
       self.draw()
       pg.display.update()
       self.clock.tick(self.fps)
-
     self.game_over_loop()
 
   def game_over_loop(self):
@@ -205,4 +199,11 @@ class Control(object):
         self.keys = pg.key.get_pressed()
         if event.type == pg.QUIT or self.keys[pg.K_ESCAPE]:
           self.done = True
+
+
+def get_health_bar(player):
+  output = ''
+  for i in xrange(player.health):
+    output += '--'
+  return output
 
