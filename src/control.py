@@ -13,11 +13,14 @@ class Control(object):
   BACKGROUND_COLOR = (100, 100, 100)
 
   def __init__(self, level_size):
+    # winner is set when one player's health hits 0
     self.winner = None
 
+    # the entire map
     self.level = pg.Surface((level_size[0], level_size[1])).convert()
     self.level_rect = self.level.get_rect()
 
+    # handles the display
     self.screen = pg.display.get_surface()
     self.screen_rect = self.screen.get_rect()
     self.clock  = pg.time.Clock()
@@ -25,11 +28,14 @@ class Control(object):
     self.done = False
     self.keys = pg.key.get_pressed()
 
+    # sound when an attack hits
     self.sound_impact = pg.mixer.Sound("assets/soundfx/sword_impact.wav")
 
+    # controls for the players
     player1_keys = (pg.K_UP, pg.K_DOWN, pg.K_LEFT, pg.K_RIGHT)
     player2_keys = (pg.K_w, pg.K_s, pg.K_a, pg.K_d)
 
+    # initialize Saber
     x = 500
     y = 500
     saber = sab.Saber(player2_keys,
@@ -38,6 +44,7 @@ class Control(object):
                       "assets/sprites/saber_jump1.png", (x,y,38,58),
                       "assets/sprites/saber_jump2.png", (x,y,41,63))
 
+    # intiialize Archer
     x = 800
     y = 200
     archer = arc.Archer(player2_keys,
@@ -46,6 +53,7 @@ class Control(object):
                         "assets/sprites/archer_jump1.png", (x,y,52,59),
                         "assets/sprites/archer_jump2.png", (x,y,52,59))
 
+    # initialize Caster
     x = 200
     y = 200
     caster = cast.Caster(player1_keys,
@@ -54,19 +62,24 @@ class Control(object):
                          "assets/sprites/caster_jump1.png", (x,y,62,65),
                          "assets/sprites/caster_jump2.png", (x,y,62,65))
 
+    # initialize the players
     self.player1 = caster
     self.player2 = saber
 
+    # initialize the obstacles of the game
     self.obstacles = self.make_obstacles()
     self.player1_obstacles = pg.sprite.Group(self.player2)
     self.player1_obstacles.add(self.obstacles)
     self.player2_obstacles = pg.sprite.Group(self.player1)
     self.player2_obstacles.add(self.obstacles)
 
+    # initialize the face images of the characters
     self.player1_face_rect = self.player1.face_im.get_rect()
     self.player2_face_rect = self.player2.face_im.get_rect()
     self.player2_face_rect.right = self.screen_rect.width
 
+
+  # helper method to create the platforms in the game
   def make_obstacles(self):
     size = 20
 
@@ -96,6 +109,7 @@ class Control(object):
 
     return pg.sprite.Group(walls, ground, big, floating, high)
 
+  # check for key presses and releases
   def event_loop(self):
     for event in pg.event.get():
       self.keys = pg.key.get_pressed()
@@ -128,6 +142,7 @@ class Control(object):
         self.player1.handle_keyup(event.key)
         self.player2.handle_keyup(event.key)
 
+  # check for winner, update player position
   def update(self):
     if self.player1.health == 0:
       self.winner = self.player2
@@ -141,6 +156,7 @@ class Control(object):
         ((self.player1.rect.center[0] + self.player2.rect.center[0]) / 2.0,
          (self.player1.rect.center[1] + self.player2.rect.center[1]) / 2.0)
 
+  # draw things onto the screen
   def draw(self):
     self.level.fill(Control.BACKGROUND_COLOR)
     self.screen_rect.clamp_ip(self.level_rect)
@@ -170,9 +186,9 @@ class Control(object):
     self.screen.blit(health2, textpos2)
 
 
+  # main loop of the game
   def main_loop(self):
     pg.display.set_caption(Control.CAPTION)
-#    pg.display.toggle_fullscreen()
     pg.mixer.music.load("assets/music/oath-sign-orchestra.wav")
     pg.mixer.music.play()
     while not self.done:
@@ -185,6 +201,7 @@ class Control(object):
       self.clock.tick(self.fps)
     self.game_over_loop()
 
+  # game over screen
   def game_over_loop(self):
     self.done = False
 
@@ -213,6 +230,7 @@ class Control(object):
           self.done = True
 
 
+# Hacky way to show the health bar
 def get_health_bar(player):
   output = ''
   for i in xrange(player.health):
