@@ -24,6 +24,7 @@ class Archer(player.Player):
     attack_im    = "assets/sprites/archer_slash.png"
     jump_up_im   = "assets/sprites/archer_jump1.png"
     jump_down_im = "assets/sprites/archer_jump2.png"
+    hurt_im      = "assets/sprites/archer_hurt.png"
     attack_sound = "assets/soundfx/knife_stab.wav"
     land_sound   = "assets/soundfx/thud.wav"
 
@@ -32,6 +33,7 @@ class Archer(player.Player):
     attack_rect    = (start_location[0], start_location[1], 90, 70)
     jump_up_rect   = (start_location[0], start_location[1], 52, 59)
     jump_down_rect = (start_location[0], start_location[1], 52, 59)
+    hurt_rect      = (start_location[0], start_location[1], 45, 60)
 
     # handle sound effects
     self.sound_attack = pg.mixer.Sound(attack_sound)
@@ -45,13 +47,6 @@ class Archer(player.Player):
     self.walk_frames = self.get_walk_frames(
         walk_im, [[i, 0] for i in xrange(6)], self.rect)
 
-    # handle jumping frames
-    self.jump_up_rects, self.jump_down_rects = \
-        self.get_jump_rects(jump_up_rect, jump_down_rect)
-    self.jump_up_frames, self.jump_down_frames = self.get_jump_frames(
-        jump_up_im, [[0,0]], pg.Rect(jump_up_rect),
-        jump_down_im, [[0,0]], pg.Rect(jump_down_rect))
-
     # handle attacking frames
     self.attack_left_rect = pg.Rect(attack_rect)
     self.attack_right_rect = pg.Rect(attack_rect)
@@ -61,6 +56,17 @@ class Archer(player.Player):
     self.attack_right_rect.y = self.rect.y - 10
     self.attack_frames = self.get_attack_frames(
         attack_im, [[0,i] for i in xrange(4)], self.attack_right_rect)
+
+    # handle jumping frames
+    self.jump_up_rects, self.jump_down_rects = \
+        self.get_jump_rects(jump_up_rect, jump_down_rect)
+    self.jump_up_frames, self.jump_down_frames = self.get_jump_frames(
+        jump_up_im, [[0,0]], pg.Rect(jump_up_rect),
+        jump_down_im, [[0,0]], pg.Rect(jump_down_rect))
+
+    # handle hurt frames
+    self.hurt_rect = pg.Rect(hurt_rect)
+    self.hurt_frames = self.get_hurt_frames(hurt_im, [[0, 0]], self.hurt_rect)
 
     # initialize the first image
     self.adjust_images()
@@ -127,5 +133,16 @@ class Archer(player.Player):
     frame_dict = {self.LEFT_KEY : [frames[i] for i in xrange(4)],
                   self.RIGHT_KEY: [pg.transform.flip(frames[i], True, False) \
                       for i in xrange(4)]}
+    return frame_dict
+
+  # Helper method to load hurt frames
+  def get_hurt_frames(self, hurt_im, indices, rect):
+    sheet = pg.image.load(hurt_im).convert()
+    sheet.set_colorkey(Archer.COLOR_KEY)
+    frames = player.get_images(sheet, indices, rect.size)
+    frame_dict = {
+      self.LEFT_KEY : [frames[0]],
+      self.RIGHT_KEY: [pg.transform.flip(frames[0], True, False)]
+    }
     return frame_dict
 
