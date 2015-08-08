@@ -9,17 +9,12 @@ import physics
 class Player(physics.Physics, pg.sprite.Sprite):
   COLOR_KEY = (255, 0, 255)
 
-  def __init__(self, speed, keys, walk_im, rect,
-                                  attack_im, attack_rect,
-                                  jump_up_im, jump_up_rect,
-                                  jump_down_im, jump_down_rect,
-                                  face_im,
-                                  sound_attack_file, sound_land_file):
+  def __init__(self, speed, keys):
     physics.Physics.__init__(self)
     pg.sprite.Sprite.__init__(self)
 
     self.name = None
-    self.health = 10
+    self.health = 5
     self.jump_power = -12.0           # initial jumping speed
     self.speed = speed                # the speed Player moves at
     self.curr_frames = []             # the current set of frames to flip thru
@@ -64,8 +59,8 @@ class Player(physics.Physics, pg.sprite.Sprite):
     self.attack_counter = 0
 
     # handle sound effects
-    self.sound_attack = pg.mixer.Sound(sound_attack_file)
-    self.sound_land = pg.mixer.Sound(sound_land_file)
+    self.sound_attack = None
+    self.sound_land = None
 
   # Handle getting hit
   def receive_attack(self, attack_rect):

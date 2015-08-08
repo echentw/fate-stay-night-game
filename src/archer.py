@@ -12,22 +12,17 @@ class Archer(player.Player):
                                   attack_im, attack_rect,
                                   jump_up_im, jump_up_rect,
                                   jump_down_im, jump_down_rect):
-    # sound files
-    sound_attack_file = "assets/soundfx/knife_stab.wav"
-    sound_land_file = "assets/soundfx/thud.wav"
-    face_im = "assets/sprites/archer_face.png"
+    player.Player.__init__(self, speed, keys)
 
-    player.Player.__init__(self, speed, keys,
-                                 walk_im, rect,
-                                 attack_im, attack_rect,
-                                 jump_up_im, jump_up_rect,
-                                 jump_down_im, jump_down_rect,
-                                 face_im,
-                                 sound_attack_file, sound_land_file)
     self.name = 'Archer'
 
+    # handle sound effects
+    self.sound_attack = pg.mixer.Sound("assets/soundfx/knife_stab.wav")
+    self.sound_land = pg.mixer.Sound("assets/soundfx/thud.wav")
+
     # handle the face image
-    self.face_im = self.get_face_image(face_im, (180, 200))
+    self.face_im = self.get_face_image("assets/sprites/archer_face.png",
+                                       (180, 200))
 
     # handle walking frames
     self.rect = pg.Rect(rect)
