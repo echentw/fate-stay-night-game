@@ -15,7 +15,7 @@ class Saber(player.Player):
     self.name = 'Saber'
     self.health = 4
     self.speed = 4
-    self.jump_power = -12.0
+    self.jump_power = 12.0
 
     # files used
     face_im      = "assets/sprites/saber_face.png"

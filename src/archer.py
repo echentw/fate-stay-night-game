@@ -15,7 +15,7 @@ class Archer(player.Player):
     self.name = 'Archer'
     self.health = 3
     self.speed = 5
-    self.jump_power = -12.0
+    self.jump_power = 12.0
 
     # files used
     face_im      = "assets/sprites/archer_face.png"

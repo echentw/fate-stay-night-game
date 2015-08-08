@@ -15,7 +15,7 @@ class Caster(player.Player):
     self.name = 'Caster'
     self.health = 3
     self.speed = 4
-    self.jump_power = -13.0
+    self.jump_power = 13.0
 
     # files used
     face_im      = "assets/sprites/caster_face.png"

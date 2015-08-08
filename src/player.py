@@ -15,7 +15,7 @@ class Player(physics.Physics, pg.sprite.Sprite):
 
     self.name = ''                    # name (default value)
     self.health = 5                   # health (default value)
-    self.jump_power = -12.0           # jumping power (default value)
+    self.jump_power = 12.0            # jumping power (default value)
     self.speed = 3                    # moving speed (default value)
     self.curr_frames = []             # the current set of frames to flip thru
     self.image = None                 # the current image of Player to display
@@ -130,7 +130,7 @@ class Player(physics.Physics, pg.sprite.Sprite):
         self.sound_attack.play()
     elif key == self.UP_KEY:
       if not self.fall:
-        self.y_vel = self.jump_power
+        self.y_vel = -self.jump_power
         self.fall = True
 
   # Handle key releases
