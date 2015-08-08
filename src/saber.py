@@ -72,6 +72,7 @@ class Saber(player.Player):
   def get_face_image(self, face_im, size):
     sheet = pg.image.load(face_im).convert()
     sheet.set_colorkey(Saber.COLOR_KEY)
+    sheet.set_alpha(150)
     frames = player.get_images(sheet, [[0, 0]], size)
     return frames[0]
 
