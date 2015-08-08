@@ -23,7 +23,6 @@ class Physics():
     if abs(self.x_vel) < self.air_resistance:
       self.x_vel = 0.0
     else:
-      print self.x_vel
       if self.x_vel > 0:
         self.x_vel -= self.air_resistance
       else:
