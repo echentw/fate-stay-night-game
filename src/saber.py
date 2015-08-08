@@ -8,10 +8,7 @@ import player
 
 
 class Saber(player.Player):
-  def __init__(self, keys, walk_im, rect,
-                           attack_im, attack_rect,
-                           jump_up_im, jump_up_rect,
-                           jump_down_im, jump_down_rect):
+  def __init__(self, keys, start_location):
     player.Player.__init__(self, keys)
 
     # qualities
@@ -20,14 +17,27 @@ class Saber(player.Player):
     self.speed = 4
     self.jump_power = -12.0
 
-    # handle sound effects
-    self.sound_attack = pg.mixer.Sound("assets/soundfx/knife_stab.wav")
-    self.sound_land = pg.mixer.Sound("assets/soundfx/thud.wav")
+    # files used
+    face_im      = "assets/sprites/saber_face.png"
+    walk_im      = "assets/sprites/saber_walk.png"
+    attack_im    = "assets/sprites/saber_slash.png"
+    jump_up_im   = "assets/sprites/saber_jump1.png"
+    jump_down_im = "assets/sprites/saber_jump2.png"
+    attack_sound = "assets/soundfx/knife_stab.wav"
+    land_sound   = "assets/soundfx/thud.wav"
 
+    # bounding boxes for each image
+    rect           = (start_location[0], start_location[1], 38, 54)
+    attack_rect    = (start_location[0], start_location[1], 74, 54)
+    jump_up_rect   = (start_location[0], start_location[1], 38, 58)
+    jump_down_rect = (start_location[0], start_location[1], 41, 63)
+
+    # handle sound effects
+    self.sound_attack = pg.mixer.Sound(attack_sound)
+    self.sound_land = pg.mixer.Sound(land_sound)
 
     # handle the face image (beside the health bar)
-    self.face_im = self.get_face_image("assets/sprites/saber_face.png",
-                                       (180, 200))
+    self.face_im = self.get_face_image(face_im, (180, 200))
 
     # handle walking frames
     self.rect = pg.Rect(rect)

@@ -8,10 +8,7 @@ import player
 
 
 class Caster(player.Player):
-  def __init__(self, keys, walk_im, rect,
-                           attack_im, attack_rect,
-                           jump_up_im, jump_up_rect,
-                           jump_down_im, jump_down_rect):
+  def __init__(self, keys, start_location):
     player.Player.__init__(self, keys)
 
     # qualities
@@ -20,14 +17,27 @@ class Caster(player.Player):
     self.speed = 4
     self.jump_power = -13.0
 
+    # files used
+    face_im      = "assets/sprites/caster_face.png"
+    walk_im      = "assets/sprites/caster_walk.png"
+    attack_im    = "assets/sprites/caster_attack.png"
+    jump_up_im   = "assets/sprites/caster_jump1.png"
+    jump_down_im = "assets/sprites/caster_jump2.png"
+    attack_sound = "assets/soundfx/beam.wav"
+    land_sound   = "assets/soundfx/thud.wav"
+
+    # bounding boxes for each image
+    rect           = (start_location[0], start_location[1], 32, 62)
+    attack_rect    = (start_location[0], start_location[1], 95, 61)
+    jump_up_rect   = (start_location[0], start_location[1], 62, 65)
+    jump_down_rect = (start_location[0], start_location[1], 62, 65)
 
     # handle sound effects
-    self.sound_attack = pg.mixer.Sound("assets/soundfx/beam.wav")
-    self.sound_land = pg.mixer.Sound("assets/soundfx/thud.wav")
+    self.sound_attack = pg.mixer.Sound(attack_sound)
+    self.sound_land = pg.mixer.Sound(land_sound)
 
     # handle face image
-    self.face_im = self.get_face_image("assets/sprites/caster_face.png",
-                                       (180, 200))
+    self.face_im = self.get_face_image(face_im, (180, 200))
 
     # handle walking frames
     self.rect = pg.Rect(rect)

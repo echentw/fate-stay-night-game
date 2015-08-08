@@ -8,10 +8,7 @@ import player
 
 
 class Archer(player.Player):
-  def __init__(self, keys, walk_im, rect,
-                           attack_im, attack_rect,
-                           jump_up_im, jump_up_rect,
-                           jump_down_im, jump_down_rect):
+  def __init__(self, keys, start_location):
     player.Player.__init__(self, keys)
 
     # qualities
@@ -20,14 +17,27 @@ class Archer(player.Player):
     self.speed = 5
     self.jump_power = -12.0
 
+    # files used
+    face_im      = "assets/sprites/archer_face.png"
+    walk_im      = "assets/sprites/archer_walk.png"
+    attack_im    = "assets/sprites/archer_slash.png"
+    jump_up_im   = "assets/sprites/archer_jump1.png"
+    jump_down_im = "assets/sprites/archer_jump2.png"
+    attack_sound = "assets/soundfx/knife_stab.wav"
+    land_sound   = "assets/soundfx/thud.wav"
+
+    # bounding boxes for each image
+    rect           = (start_location[0], start_location[1], 33, 60)
+    attack_rect    = (start_location[0], start_location[1], 90, 70)
+    jump_up_rect   = (start_location[0], start_location[1], 52, 59)
+    jump_down_rect = (start_location[0], start_location[1], 52, 59)
 
     # handle sound effects
-    self.sound_attack = pg.mixer.Sound("assets/soundfx/knife_stab.wav")
-    self.sound_land = pg.mixer.Sound("assets/soundfx/thud.wav")
+    self.sound_attack = pg.mixer.Sound(attack_sound)
+    self.sound_land = pg.mixer.Sound(land_sound)
 
     # handle the face image
-    self.face_im = self.get_face_image("assets/sprites/archer_face.png",
-                                       (180, 200))
+    self.face_im = self.get_face_image(face_im, (180, 200))
 
     # handle walking frames
     self.rect = pg.Rect(rect)

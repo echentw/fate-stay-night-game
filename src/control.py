@@ -35,32 +35,13 @@ class Control(object):
     player1_keys = (pg.K_UP, pg.K_DOWN, pg.K_LEFT, pg.K_RIGHT)
     player2_keys = (pg.K_w, pg.K_s, pg.K_a, pg.K_d)
 
-    # initialize Saber
-    x = 500
-    y = 500
-    saber = sab.Saber(player2_keys,
-                      "assets/sprites/saber_walk.png", (x,y,38,54),
-                      "assets/sprites/saber_slash.png", (x,y,74,54),
-                      "assets/sprites/saber_jump1.png", (x,y,38,58),
-                      "assets/sprites/saber_jump2.png", (x,y,41,63))
-
-    # intiialize Archer
-    x = 800
-    y = 200
-    archer = arc.Archer(player2_keys,
-                        "assets/sprites/archer_walk.png", (x,y,33,60),
-                        "assets/sprites/archer_slash.png", (x,y,90,70),
-                        "assets/sprites/archer_jump1.png", (x,y,52,59),
-                        "assets/sprites/archer_jump2.png", (x,y,52,59))
-
-    # initialize Caster
-    x = 200
-    y = 200
-    caster = cast.Caster(player1_keys,
-                         "assets/sprites/caster_walk.png", (x,y,32,62),
-                         "assets/sprites/caster_attack.png", (x,y,95,61),
-                         "assets/sprites/caster_jump1.png", (x,y,62,65),
-                         "assets/sprites/caster_jump2.png", (x,y,62,65))
+    # initialize characters
+    saber_location = (500, 500)
+    archer_location = (800, 200)
+    caster_location = (200, 200)
+    saber = sab.Saber(player2_keys, saber_location)
+    archer = arc.Archer(player2_keys, archer_location)
+    caster = cast.Caster(player1_keys, caster_location)
 
     # initialize the players
     self.player1 = caster
