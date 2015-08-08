@@ -27,24 +27,36 @@ class Control(object):
 
     self.sound_impact = pg.mixer.Sound("assets/soundfx/sword_impact.wav")
 
-    x = self.level_rect.center[0] - 40
-    y = self.level_rect.center[1] + 40
-    self.player1 = sab.Saber((pg.K_UP, pg.K_DOWN, pg.K_LEFT, pg.K_RIGHT),
-                             "assets/sprites/saber_walk.png", (x,y,38,54),
-                             "assets/sprites/saber_slash.png", (x,y,74,54),
-                             "assets/sprites/saber_jump1.png", (x,y,38,58),
-                             "assets/sprites/saber_jump2.png", (x,y,41,63))
-    x -= 100
-#    self.player2 = arc.Archer((pg.K_w, pg.K_s, pg.K_a, pg.K_d),
-#                              "assets/sprites/archer_walk.png", (x,y,33,60),
-#                              "assets/sprites/archer_slash.png", (x,y,90,70),
-#                              "assets/sprites/archer_jump1.png", (x,y,52,59),
-#                              "assets/sprites/archer_jump2.png", (x,y,52,59))
-    self.player2 = cast.Caster((pg.K_w, pg.K_s, pg.K_a, pg.K_d),
-                               "assets/sprites/caster_walk.png", (x,y,32,62),
-                               "assets/sprites/caster_attack.png", (x,y,95,61),
-                               "assets/sprites/caster_jump1.png", (x,y,62,65),
-                               "assets/sprites/caster_jump2.png", (x,y,62,65))
+    player1_keys = (pg.K_UP, pg.K_DOWN, pg.K_LEFT, pg.K_RIGHT)
+    player2_keys = (pg.K_w, pg.K_s, pg.K_a, pg.K_d)
+
+    x = 500
+    y = 500
+    saber = sab.Saber(player2_keys,
+                      "assets/sprites/saber_walk.png", (x,y,38,54),
+                      "assets/sprites/saber_slash.png", (x,y,74,54),
+                      "assets/sprites/saber_jump1.png", (x,y,38,58),
+                      "assets/sprites/saber_jump2.png", (x,y,41,63))
+
+    x = 800
+    y = 200
+    archer = arc.Archer(player2_keys,
+                        "assets/sprites/archer_walk.png", (x,y,33,60),
+                        "assets/sprites/archer_slash.png", (x,y,90,70),
+                        "assets/sprites/archer_jump1.png", (x,y,52,59),
+                        "assets/sprites/archer_jump2.png", (x,y,52,59))
+
+    x = 200
+    y = 200
+    caster = cast.Caster(player1_keys,
+                         "assets/sprites/caster_walk.png", (x,y,32,62),
+                         "assets/sprites/caster_attack.png", (x,y,95,61),
+                         "assets/sprites/caster_jump1.png", (x,y,62,65),
+                         "assets/sprites/caster_jump2.png", (x,y,62,65))
+
+    self.player1 = caster
+    self.player2 = saber
+
     self.obstacles = self.make_obstacles()
     self.player1_obstacles = pg.sprite.Group(self.player2)
     self.player1_obstacles.add(self.obstacles)
