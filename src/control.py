@@ -33,11 +33,11 @@ class Control(object):
                              "assets/sprites/saber_jump1.png", (x,y,38,58),
                              "assets/sprites/saber_jump2.png", (x,y,41,63))
     x -= 100
-    self.player2 = arc.Archer(5, (pg.K_w, pg.K_s, pg.K_a, pg.K_d),
-                              "assets/sprites/archer_walk.png", (x,y,33,60),
-                              "assets/sprites/archer_slash.png", (x,y,90,70),
-                              "assets/sprites/archer_jump1.png", (x,y,52,59),
-                              "assets/sprites/archer_jump2.png", (x,y,52,59))
+#    self.player2 = arc.Archer(5, (pg.K_w, pg.K_s, pg.K_a, pg.K_d),
+#                              "assets/sprites/archer_walk.png", (x,y,33,60),
+#                              "assets/sprites/archer_slash.png", (x,y,90,70),
+#                              "assets/sprites/archer_jump1.png", (x,y,52,59),
+#                              "assets/sprites/archer_jump2.png", (x,y,52,59))
     self.player2 = cast.Caster(5, (pg.K_w, pg.K_s, pg.K_a, pg.K_d),
                                "assets/sprites/caster_walk.png", (x,y,32,62),
                                "assets/sprites/caster_attack.png", (x,y,95,61),
@@ -155,28 +155,6 @@ class Control(object):
       output += '--'
     return output
 
-  def game_over_loop(self):
-    font = pg.font.Font(None, 48)
-    text1 = font.render(self.winner.name + " wins!", 1, (230, 230, 230))
-    textpos1 = text1.get_rect()
-    textpos1.centerx = self.screen.get_rect().centerx
-    textpos1.centery = self.screen.get_rect().centery
-
-    font = pg.font.Font(None, 24)
-    text2 = font.render("Press any key to quit", 1, (230, 230, 230))
-    textpos2 = text2.get_rect()
-    textpos2.centerx = self.screen.get_rect().centerx
-    textpos2.centery = self.screen.get_rect().centery + 40
-
-    self.screen.fill(Control.BACKGROUND_COLOR)
-    self.screen.blit(text1, textpos1)
-    self.screen.blit(text2, textpos2)
-
-    for event in pg.event.get():
-      self.keys = pg.key.get_pressed()
-      if not all(k == 0 for k in self.keys):
-        self.done = True
-
   def main_loop(self):
     pg.display.set_caption(Control.CAPTION)
 #    pg.display.toggle_fullscreen()
@@ -192,10 +170,32 @@ class Control(object):
       pg.display.update()
       self.clock.tick(self.fps)
 
-    pg.mixer.music.stop()
+    self.game_over_loop()
 
+  def game_over_loop(self):
     self.done = False
+
+    font = pg.font.Font(None, 48)
+    text1 = font.render(self.winner.name + " wins!", 1, (230, 230, 230))
+    textpos1 = text1.get_rect()
+    textpos1.centerx = self.screen.get_rect().centerx
+    textpos1.centery = self.screen.get_rect().centery
+
+    font = pg.font.Font(None, 24)
+    text2 = font.render("Press esc to quit", 1, (230, 230, 230))
+    textpos2 = text2.get_rect()
+    textpos2.centerx = self.screen.get_rect().centerx
+    textpos2.centery = self.screen.get_rect().centery + 40
+
+    self.screen.fill(Control.BACKGROUND_COLOR)
+    self.screen.blit(text1, textpos1)
+    self.screen.blit(text2, textpos2)
+
+    pg.display.update()
+
     while not self.done:
-      self.game_over_loop()
-      pg.display.update()
+      for event in pg.event.get():
+        self.keys = pg.key.get_pressed()
+        if event.type == pg.QUIT or self.keys[pg.K_ESCAPE]:
+          self.done = True
 
