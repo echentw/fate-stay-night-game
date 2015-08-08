@@ -130,7 +130,7 @@ class Player(physics.Physics, pg.sprite.Sprite):
       self.direction_stack.append(key)
       self.direction = key
     elif key == self.DOWN_KEY:
-      if not self.fall:
+      if not self.fall and not self.attacking:
         self.attacking = True
         self.sound_attack.play()
     elif key == self.UP_KEY:

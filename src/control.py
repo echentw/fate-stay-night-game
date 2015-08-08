@@ -87,14 +87,13 @@ class Control(object):
   def event_loop(self):
     for event in pg.event.get():
       self.keys = pg.key.get_pressed()
+
       if event.type == pg.QUIT or self.keys[pg.K_ESCAPE]:
         self.done = True
-      elif event.type == pg.KEYDOWN:
-        self.player1.handle_keydown(event.key, self.player1_obstacles)
-        self.player2.handle_keydown(event.key, self.player2_obstacles)
 
+      elif event.type == pg.KEYDOWN:
         if event.key == self.player1.DOWN_KEY:
-          if not self.player1.fall:
+          if not self.player1.fall and not self.player1.attacking:
             if self.player1.direction == self.player1.LEFT_KEY:
               if self.player2.receive_attack(self.player1.attack_left_rect):
                 self.sound_impact.play()
@@ -102,13 +101,15 @@ class Control(object):
               if self.player2.receive_attack(self.player1.attack_right_rect):
                 self.sound_impact.play()
         elif event.key == self.player2.DOWN_KEY:
-          if not self.player2.fall:
+          if not self.player2.fall and not self.player2.attacking:
             if self.player2.direction == self.player2.LEFT_KEY:
               if self.player1.receive_attack(self.player2.attack_left_rect):
                 self.sound_impact.play()
             else:
               if self.player1.receive_attack(self.player2.attack_right_rect):
                 self.sound_impact.play()
+        self.player1.handle_keydown(event.key, self.player1_obstacles)
+        self.player2.handle_keydown(event.key, self.player2_obstacles)
 
       elif event.type == pg.KEYUP:
         self.player1.handle_keyup(event.key)
