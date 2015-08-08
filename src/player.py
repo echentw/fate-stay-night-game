@@ -151,8 +151,8 @@ class Player(physics.Physics, pg.sprite.Sprite):
         self.x_vel -= self.agility
       elif self.direction == self.RIGHT_KEY:
         self.x_vel += self.agility
-      if abs(self.x_vel) >= self.max_speed:
-        self.x_vel = cmp(self.x_vel, 0) * self.max_speed
+      if abs(self.x_vel) > self.max_speed:
+        self.x_vel -= cmp(self.x_vel, 0) * self.agility
     self.get_position(obstacles)
 
   # Draw the image to the screen

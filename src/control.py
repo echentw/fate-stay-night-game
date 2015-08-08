@@ -39,13 +39,13 @@ class Control(object):
     saber_location = (500, 500)
     archer_location = (800, 200)
     caster_location = (200, 200)
-    saber = sab.Saber(player2_keys, saber_location)
+    saber = sab.Saber(player1_keys, saber_location)
     archer = arc.Archer(player2_keys, archer_location)
-    caster = cast.Caster(player1_keys, caster_location)
+    caster = cast.Caster(player2_keys, caster_location)
 
     # initialize the players
-    self.player1 = caster
-    self.player2 = saber
+    self.player1 = saber
+    self.player2 = caster
 
     # initialize the obstacles of the game
     self.obstacles = self.make_obstacles()
@@ -105,17 +105,21 @@ class Control(object):
             if self.player1.direction == self.player1.LEFT_KEY:
               if self.player2.receive_attack(self.player1.attack_left_rect):
                 self.sound_impact.play()
+                self.player2.x_vel = -10
             else:
               if self.player2.receive_attack(self.player1.attack_right_rect):
                 self.sound_impact.play()
+                self.player2.x_vel = 10
         elif event.key == self.player2.DOWN_KEY:
           if not self.player2.fall and not self.player2.attacking:
             if self.player2.direction == self.player2.LEFT_KEY:
               if self.player1.receive_attack(self.player2.attack_left_rect):
                 self.sound_impact.play()
+                self.player1.x_vel = -10
             else:
               if self.player1.receive_attack(self.player2.attack_right_rect):
                 self.sound_impact.play()
+                self.player1.x_vel = 10
         self.player1.handle_keydown(event.key, self.player1_obstacles)
         self.player2.handle_keydown(event.key, self.player2_obstacles)
 
