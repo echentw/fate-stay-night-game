@@ -14,7 +14,8 @@ class Saber(player.Player):
     # qualities
     self.name = 'Saber'
     self.health = 4
-    self.speed = 4
+    self.max_speed = 5
+    self.agility = 1
     self.jump_power = 12.0
 
     # files used

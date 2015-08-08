@@ -14,7 +14,8 @@ class Caster(player.Player):
     # qualities
     self.name = 'Caster'
     self.health = 3
-    self.speed = 4
+    self.max_speed = 5
+    self.agility = 1
     self.jump_power = 13.0
 
     # files used

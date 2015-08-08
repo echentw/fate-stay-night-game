@@ -14,7 +14,8 @@ class Archer(player.Player):
     # qualities
     self.name = 'Archer'
     self.health = 3
-    self.speed = 5
+    self.max_speed = 6
+    self.agility = 1
     self.jump_power = 12.0
 
     # files used

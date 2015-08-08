@@ -16,7 +16,8 @@ class Player(physics.Physics, pg.sprite.Sprite):
     self.name = ''                    # name (default value)
     self.health = 5                   # health (default value)
     self.jump_power = 12.0            # jumping power (default value)
-    self.speed = 3                    # moving speed (default value)
+    self.max_speed = 3                # max moving speed (default value)
+    self.agility = 1                  # how quickly the player can change dir
     self.curr_frames = []             # the current set of frames to flip thru
     self.image = None                 # the current image of Player to display
 
@@ -77,7 +78,7 @@ class Player(physics.Physics, pg.sprite.Sprite):
       self.check_collisions(self.y_vel, 1, obstacles)
     if self.x_vel:
       self.check_collisions(self.x_vel, 0, obstacles)
-      self.x_vel = 0
+#      self.x_vel = 0
 
   # Check if Player is making contact with something below
   def check_falling(self, obstacles):
@@ -147,9 +148,11 @@ class Player(physics.Physics, pg.sprite.Sprite):
     if self.direction_stack:
       direction_vector = self.direct_dict[self.direction]
       if self.direction == self.LEFT_KEY:
-        self.x_vel -= self.speed
+        self.x_vel -= self.agility
       elif self.direction == self.RIGHT_KEY:
-        self.x_vel += self.speed
+        self.x_vel += self.agility
+      if abs(self.x_vel) >= self.max_speed:
+        self.x_vel = cmp(self.x_vel, 0) * self.max_speed
     self.get_position(obstacles)
 
   # Draw the image to the screen
