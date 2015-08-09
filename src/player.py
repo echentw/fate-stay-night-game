@@ -153,6 +153,10 @@ class Player(physics.Physics, pg.sprite.Sprite):
         self.direction_stack.remove(key)
       if self.direction_stack:
         self.direction = self.direction_stack[-1]
+    if key == self.UP_KEY:
+      if self.fall:
+        if self.y_vel < -3.0:
+          self.y_vel = -3.0
 
   # Update the image and position
   def update(self, screen_rect, obstacles):
