@@ -39,7 +39,7 @@ class Menu(object):
   def event_loop(self):
     for event in pg.event.get():
       self.keys = pg.key.get_pressed()
-      if event.type == pg.QUIT or self.keys[pg.K_ESCAPE]:
+      if event.type == pg.QUIT or self.keys[pg.K_RETURN]:
         self.done = True
 
   # check for winner, update player position
@@ -51,11 +51,19 @@ class Menu(object):
     self.screen.fill(Menu.BACKGROUND_COLOR)
     self.screen.blit(self.screen, (0, 0), self.screen_rect)
 
-    font = pg.font.Font(None, 28)
+    font = pg.font.Font(None, 48)
     text = font.render('Fate/Stay Night Game', 1, (200, 200, 200))
     textpos = text.get_rect()
     textpos.center = self.screen_rect.center
+
+    font2 = pg.font.Font(None, 24)
+    text2 = font2.render('Press Enter to play', 1, (200, 200, 200))
+    textpos2 = text2.get_rect()
+    textpos2.centerx = self.screen_rect.centerx
+    textpos2.centery = self.screen_rect.centery + 50
+
     self.screen.blit(text, textpos)
+    self.screen.blit(text2, textpos2)
 
   # main loop of the game
   def main_loop(self):
