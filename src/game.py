@@ -1,5 +1,4 @@
 import os
-import sys
 import pygame as pg
 
 import control as ctrl

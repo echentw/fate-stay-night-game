@@ -1,11 +1,5 @@
-import os
-import sys
 import pygame as pg
 
-import player
-import archer as arc
-import saber as sab
-import caster as cast
 
 class Menu(object):
   CAPTION = "My Game"

@@ -1,13 +1,10 @@
-import os
-import sys
 import pygame as pg
 
-import player
 import archer as arc
 import saber as sab
 import caster as cast
 import block
-import game_over
+
 
 class Control(object):
   CAPTION = "My Game"
