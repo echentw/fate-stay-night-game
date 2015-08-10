@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 from src import game
 
 my_game = game.Game()
