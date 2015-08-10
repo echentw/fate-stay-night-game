@@ -41,8 +41,8 @@ class Game(object):
 
     # initialize the face images of the characters
     self.player1_face_rect = self.player1.face_im.get_rect()
+    self.player1_face_rect.right = self.screen_rect.width
     self.player2_face_rect = self.player2.face_im.get_rect()
-    self.player2_face_rect.right = self.screen_rect.width
 
 
   def reset(self, player1, player2):
@@ -146,25 +146,25 @@ class Game(object):
     self.player2.draw(self.level)
     self.screen.blit(self.level, (0, 0), self.screen_rect)
 
-    self.screen.blit(self.player1.face_im, (0, 0))
+    self.screen.blit(self.player1.face_im, self.player1_face_rect)
     self.screen.blit(self.player2.face_im, self.player2_face_rect)
 
     font = pg.font.Font(None, 28)
-    name1 = font.render(self.player1.name, 1, (200, 200, 200))
-    health1 = font.render(get_health_bar(self.player1), 1, (200, 200, 200))
-    textpos1 = name1.get_rect()
-    textpos1.topleft = self.player1.face_im.get_rect().topleft
-    self.screen.blit(name1, textpos1)
-    textpos1.y = textpos1.y + 12
-    self.screen.blit(health1, textpos1)
+    name = font.render(self.player1.name, 1, (200, 200, 200))
+    health = font.render(get_health_bar(self.player1), 1, (200, 200, 200))
+    textpos = name.get_rect()
+    textpos.topleft = self.player1_face_rect.topleft
+    self.screen.blit(name, textpos)
+    textpos.y = textpos.y + 12
+    self.screen.blit(health, textpos)
 
-    name2 = font.render(self.player2.name, 2, (200, 200, 200))
-    health2 = font.render(get_health_bar(self.player2), 1, (200, 200, 200))
-    textpos2 = name2.get_rect()
-    textpos2.topleft = self.player2_face_rect.topleft
-    self.screen.blit(name2, textpos2)
-    textpos2.y = textpos2.y + 12
-    self.screen.blit(health2, textpos2)
+    name = font.render(self.player2.name, 2, (200, 200, 200))
+    health = font.render(get_health_bar(self.player2), 1, (200, 200, 200))
+    textpos = name.get_rect()
+    textpos.topleft = self.player2_face_rect.topleft
+    self.screen.blit(name, textpos)
+    textpos.y = textpos.y + 12
+    self.screen.blit(health, textpos)
 
 
   # main loop of the game

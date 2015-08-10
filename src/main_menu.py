@@ -19,8 +19,8 @@ class Menu(object):
     self.quit = False
     self.keys = pg.key.get_pressed()
 
-    self.player1_location = (200, 200)
-    self.player2_location = (800, 200)
+    self.player1_location = (800, 200)
+    self.player2_location = (200, 200)
 
     self.player1_keys = (pg.K_UP, pg.K_DOWN, pg.K_LEFT, pg.K_RIGHT)
     self.player2_keys = (pg.K_w, pg.K_s, pg.K_a, pg.K_d)
