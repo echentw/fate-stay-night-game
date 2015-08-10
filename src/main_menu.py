@@ -39,7 +39,7 @@ class Menu(object):
       if event.type == pg.QUIT or self.keys[pg.K_ESCAPE]:
         self.done = True
         self.quit = True
-      elif self.keys[pg.K_RETURN]:
+      elif self.keys[pg.K_SPACE]:
         self.done = True
         self.quit = False
 
@@ -73,7 +73,6 @@ class Menu(object):
     textpos = text.get_rect()
     textpos.centerx = self.screen_rect.centerx
     textpos.centery = self.screen_rect.centery - 30
-#    textpos.center = self.screen_rect.center
     self.screen.blit(text, textpos)
 
     font = pg.font.Font(None, 24)
@@ -91,7 +90,7 @@ class Menu(object):
     self.screen.blit(text, textpos)
 
     font = pg.font.Font(None, 36)
-    text = font.render('Press Enter to play', 1, (200, 200, 200))
+    text = font.render('Press Space to play', 1, (200, 200, 200))
     textpos = text.get_rect()
     textpos.centerx = self.screen_rect.centerx
     textpos.centery = self.screen_rect.centery + 110
