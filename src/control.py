@@ -7,6 +7,7 @@ import archer as arc
 import saber as sab
 import caster as cast
 import block
+import game_over
 
 class Control(object):
   CAPTION = "My Game"
@@ -25,7 +26,9 @@ class Control(object):
     self.screen_rect = self.screen.get_rect()
     self.clock  = pg.time.Clock()
     self.fps = 60.0
+
     self.done = False
+    self.quit = False
     self.keys = pg.key.get_pressed()
 
     # sound when an attack hits
@@ -59,6 +62,9 @@ class Control(object):
     self.player2_face_rect = self.player2.face_im.get_rect()
     self.player2_face_rect.right = self.screen_rect.width
 
+
+  def reset(self):
+    self.__init__((self.level_rect.width, self.level_rect.height))
 
   # helper method to create the platforms in the game
   def make_obstacles(self):
@@ -97,6 +103,7 @@ class Control(object):
 
       if event.type == pg.QUIT or self.keys[pg.K_ESCAPE]:
         self.done = True
+        self.quit = True
 
       # someone is attacking
       elif event.type == pg.KEYDOWN:
@@ -136,9 +143,11 @@ class Control(object):
     if self.player1.health == 0:
       self.winner = self.player2
       self.done = True
+      self.quit = False
     elif self.player2.health == 0:
       self.winner = self.player1
       self.done = True
+      self.quit = False
     self.player1.update(self.screen_rect, self.player1_obstacles)
     self.player2.update(self.screen_rect, self.player2_obstacles)
     self.screen_rect.center = \
@@ -188,35 +197,7 @@ class Control(object):
       self.draw()
       pg.display.update()
       self.clock.tick(self.fps)
-    self.game_over_loop()
-
-  # game over screen
-  def game_over_loop(self):
-    self.done = False
-
-    font = pg.font.Font(None, 48)
-    text1 = font.render(self.winner.name + " wins!", 1, (230, 230, 230))
-    textpos1 = text1.get_rect()
-    textpos1.centerx = self.screen.get_rect().centerx
-    textpos1.centery = self.screen.get_rect().centery
-
-    font = pg.font.Font(None, 24)
-    text2 = font.render("Press esc to quit", 1, (230, 230, 230))
-    textpos2 = text2.get_rect()
-    textpos2.centerx = self.screen.get_rect().centerx
-    textpos2.centery = self.screen.get_rect().centery + 40
-
-    self.screen.fill(Control.BACKGROUND_COLOR)
-    self.screen.blit(text1, textpos1)
-    self.screen.blit(text2, textpos2)
-
-    pg.display.update()
-
-    while not self.done:
-      for event in pg.event.get():
-        self.keys = pg.key.get_pressed()
-        if event.type == pg.QUIT or self.keys[pg.K_ESCAPE]:
-          self.done = True
+    return self.quit
 
 
 # Hacky way to show the health bar

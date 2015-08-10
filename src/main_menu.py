@@ -16,31 +16,25 @@ class Menu(object):
     self.screen_rect = self.screen.get_rect()
     self.clock = pg.time.Clock()
     self.fps = 60.0
+
     self.done = False
+    self.quit = False
     self.keys = pg.key.get_pressed()
 
-    # controls for the players
-    player1_keys = (pg.K_UP, pg.K_DOWN, pg.K_LEFT, pg.K_RIGHT)
-    player2_keys = (pg.K_w, pg.K_s, pg.K_a, pg.K_d)
 
-    # initialize characters
-    saber_location = (500, 500)
-    archer_location = (800, 200)
-    caster_location = (200, 200)
-    saber = sab.Saber(player1_keys, saber_location)
-    archer = arc.Archer(player2_keys, archer_location)
-    caster = cast.Caster(player2_keys, caster_location)
-
-    # initialize the players
-    self.player1 = None
-    self.player2 = None
+  def reset(self):
+    self.__init__((self.screen_rect.width, self.screen_rect.height))
 
   # check for key presses and releases
   def event_loop(self):
     for event in pg.event.get():
       self.keys = pg.key.get_pressed()
-      if event.type == pg.QUIT or self.keys[pg.K_RETURN]:
+      if event.type == pg.QUIT or self.keys[pg.K_ESCAPE]:
         self.done = True
+        self.quit = True
+      elif self.keys[pg.K_RETURN]:
+        self.done = True
+        self.quit = False
 
   # check for winner, update player position
   def update(self):
@@ -74,4 +68,5 @@ class Menu(object):
       self.draw()
       pg.display.update()
       self.clock.tick(self.fps)
+    return self.quit
 
