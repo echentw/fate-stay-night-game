@@ -1,5 +1,9 @@
 import pygame as pg
 
+import archer as arc
+import saber as sab
+import caster as cast
+
 
 class Menu(object):
   CAPTION = "My Game"
@@ -14,6 +18,15 @@ class Menu(object):
     self.done = False
     self.quit = False
     self.keys = pg.key.get_pressed()
+
+    self.player1_location = (200, 200)
+    self.player2_location = (800, 200)
+
+    self.player1_keys = (pg.K_UP, pg.K_DOWN, pg.K_LEFT, pg.K_RIGHT)
+    self.player2_keys = (pg.K_w, pg.K_s, pg.K_a, pg.K_d)
+
+    self.player1 = sab.Saber(self.player1_keys, self.player1_location)
+    self.player2 = arc.Archer(self.player2_keys, self.player2_location)
 
 
   def reset(self):
@@ -30,7 +43,23 @@ class Menu(object):
         self.done = True
         self.quit = False
 
-  # check for winner, update player position
+      # player 1 selection
+      elif self.keys[pg.K_a]:
+        self.player1 = sab.Saber(self.player1_keys, self.player1_location)
+      elif self.keys[pg.K_s]:
+        self.player1 = arc.Archer(self.player1_keys, self.player1_location)
+      elif self.keys[pg.K_d]:
+        self.player1 = cast.Caster(self.player1_keys, self.player1_location)
+
+      # player 2 selection
+      elif self.keys[pg.K_LEFT]:
+        self.player2 = sab.Saber(self.player2_keys, self.player2_location)
+      elif self.keys[pg.K_DOWN]:
+        self.player2 = arc.Archer(self.player2_keys, self.player2_location)
+      elif self.keys[pg.K_RIGHT]:
+        self.player2 = cast.Caster(self.player2_keys, self.player2_location)
+
+
   def update(self):
     pass
 
@@ -39,19 +68,35 @@ class Menu(object):
     self.screen.fill(Menu.BACKGROUND_COLOR)
     self.screen.blit(self.screen, (0, 0), self.screen_rect)
 
-    font = pg.font.Font(None, 48)
+    font = pg.font.Font(None, 64)
     text = font.render('Fate/Stay Night Game', 1, (200, 200, 200))
     textpos = text.get_rect()
-    textpos.center = self.screen_rect.center
-
-    font2 = pg.font.Font(None, 24)
-    text2 = font2.render('Press Enter to play', 1, (200, 200, 200))
-    textpos2 = text2.get_rect()
-    textpos2.centerx = self.screen_rect.centerx
-    textpos2.centery = self.screen_rect.centery + 50
-
+    textpos.centerx = self.screen_rect.centerx
+    textpos.centery = self.screen_rect.centery - 30
+#    textpos.center = self.screen_rect.center
     self.screen.blit(text, textpos)
-    self.screen.blit(text2, textpos2)
+
+    font = pg.font.Font(None, 24)
+    text = font.render('Player 1 selection: press \'a\' for saber, \'s\' for archer, \'d\' for caster                          (default = Saber)', 1, (200, 200, 200))
+    textpos = text.get_rect()
+    textpos.x = 30
+    textpos.centery = self.screen_rect.centery + 30
+    self.screen.blit(text, textpos)
+
+    font = pg.font.Font(None, 24)
+    text = font.render('Player 2 selection: press LEFT for Saber, DOWN for Archer, RIGHT for Caster (default = Archer)', 1, (200, 200, 200))
+    textpos = text.get_rect()
+    textpos.x = 30
+    textpos.centery = self.screen_rect.centery + 60
+    self.screen.blit(text, textpos)
+
+    font = pg.font.Font(None, 36)
+    text = font.render('Press Enter to play', 1, (200, 200, 200))
+    textpos = text.get_rect()
+    textpos.centerx = self.screen_rect.centerx
+    textpos.centery = self.screen_rect.centery + 110
+    self.screen.blit(text, textpos)
+
 
   # main loop of the game
   def main_loop(self):

@@ -1,8 +1,5 @@
 import pygame as pg
 
-import archer as arc
-import saber as sab
-import caster as cast
 import block
 
 
@@ -10,7 +7,7 @@ class Game(object):
   CAPTION = "My Game"
   BACKGROUND_COLOR = (100, 100, 100)
 
-  def __init__(self, level_size):
+  def __init__(self, level_size, player1, player2):
     # winner is set when one player's health hits 0
     self.winner = None
 
@@ -31,21 +28,9 @@ class Game(object):
     # sound when an attack hits
     self.sound_impact = pg.mixer.Sound("assets/soundfx/sword_impact.wav")
 
-    # controls for the players
-    player1_keys = (pg.K_UP, pg.K_DOWN, pg.K_LEFT, pg.K_RIGHT)
-    player2_keys = (pg.K_w, pg.K_s, pg.K_a, pg.K_d)
-
-    # initialize characters
-    saber_location = (500, 500)
-    archer_location = (800, 200)
-    caster_location = (200, 200)
-    saber = sab.Saber(player1_keys, saber_location)
-    archer = arc.Archer(player2_keys, archer_location)
-    caster = cast.Caster(player2_keys, caster_location)
-
     # initialize the players
-    self.player1 = saber
-    self.player2 = caster
+    self.player1 = player1
+    self.player2 = player2
 
     # initialize the obstacles of the game
     self.obstacles = self.make_obstacles()
@@ -60,8 +45,9 @@ class Game(object):
     self.player2_face_rect.right = self.screen_rect.width
 
 
-  def reset(self):
-    self.__init__((self.level_rect.width, self.level_rect.height))
+  def reset(self, player1, player2):
+    self.__init__((self.level_rect.width, self.level_rect.height),
+                  player1, player2)
 
   # helper method to create the platforms in the game
   def make_obstacles(self):
