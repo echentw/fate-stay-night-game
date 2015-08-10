@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-from src import game
+from src import control
 
-my_game = game.Game()
+my_game = control.Control()
 my_game.start()

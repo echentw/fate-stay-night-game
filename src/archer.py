@@ -1,6 +1,5 @@
 import pygame as pg
 
-import control as ctrl
 import player
 
 
