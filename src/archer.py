@@ -92,6 +92,9 @@ class Archer(player.Player):
     jump_down_left_rect = pg.Rect(jump_down_rect)
     jump_down_right_rect = pg.Rect(jump_down_rect)
 
+    jump_up_right_rect.x = self.rect.x - 18
+    jump_down_right_rect.x = self.rect.x - 18
+
     jump_up_rects = {
       self.LEFT_KEY: jump_up_left_rect,
       self.RIGHT_KEY: jump_up_right_rect
