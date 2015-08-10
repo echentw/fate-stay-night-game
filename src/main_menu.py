@@ -76,14 +76,14 @@ class Menu(object):
     self.screen.blit(text, textpos)
 
     font = pg.font.Font(None, 24)
-    text = font.render('Player 1 selection: press LEFT for Saber, DOWN for Archer, RIGHT for Caster (default = Archer)', 1, (200, 200, 200))
+    text = font.render('Player 1 selection: press LEFT for Saber, DOWN for Archer, RIGHT for Caster (default = Saber)', 1, (200, 200, 200))
     textpos = text.get_rect()
     textpos.x = 30
     textpos.centery = self.screen_rect.centery + 30
     self.screen.blit(text, textpos)
 
     font = pg.font.Font(None, 24)
-    text = font.render('Player 2 selection: press \'a\' for saber, \'s\' for archer, \'d\' for caster                          (default = Saber)', 1, (200, 200, 200))
+    text = font.render('Player 2 selection: press \'a\' for saber, \'s\' for archer, \'d\' for caster                          (default = Archer)', 1, (200, 200, 200))
     textpos = text.get_rect()
     textpos.x = 30
     textpos.centery = self.screen_rect.centery + 60
