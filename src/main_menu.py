@@ -44,19 +44,19 @@ class Menu(object):
         self.quit = False
 
       # player 1 selection
-      elif self.keys[pg.K_a]:
+      elif self.keys[pg.K_LEFT]:
         self.player1 = sab.Saber(self.player1_keys, self.player1_location)
-      elif self.keys[pg.K_s]:
+      elif self.keys[pg.K_DOWN]:
         self.player1 = arc.Archer(self.player1_keys, self.player1_location)
-      elif self.keys[pg.K_d]:
+      elif self.keys[pg.K_RIGHT]:
         self.player1 = cast.Caster(self.player1_keys, self.player1_location)
 
       # player 2 selection
-      elif self.keys[pg.K_LEFT]:
+      elif self.keys[pg.K_a]:
         self.player2 = sab.Saber(self.player2_keys, self.player2_location)
-      elif self.keys[pg.K_DOWN]:
+      elif self.keys[pg.K_s]:
         self.player2 = arc.Archer(self.player2_keys, self.player2_location)
-      elif self.keys[pg.K_RIGHT]:
+      elif self.keys[pg.K_d]:
         self.player2 = cast.Caster(self.player2_keys, self.player2_location)
 
 
@@ -76,14 +76,14 @@ class Menu(object):
     self.screen.blit(text, textpos)
 
     font = pg.font.Font(None, 24)
-    text = font.render('Player 1 selection: press \'a\' for saber, \'s\' for archer, \'d\' for caster                          (default = Saber)', 1, (200, 200, 200))
+    text = font.render('Player 1 selection: press LEFT for Saber, DOWN for Archer, RIGHT for Caster (default = Archer)', 1, (200, 200, 200))
     textpos = text.get_rect()
     textpos.x = 30
     textpos.centery = self.screen_rect.centery + 30
     self.screen.blit(text, textpos)
 
     font = pg.font.Font(None, 24)
-    text = font.render('Player 2 selection: press LEFT for Saber, DOWN for Archer, RIGHT for Caster (default = Archer)', 1, (200, 200, 200))
+    text = font.render('Player 2 selection: press \'a\' for saber, \'s\' for archer, \'d\' for caster                          (default = Saber)', 1, (200, 200, 200))
     textpos = text.get_rect()
     textpos.x = 30
     textpos.centery = self.screen_rect.centery + 60
