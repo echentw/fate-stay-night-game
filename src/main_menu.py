@@ -4,6 +4,21 @@ import archer as arc
 import saber as sab
 import caster as cast
 
+class State:
+  PLAY = 0
+  PLAYER1 = 1
+  PLAYER2 = 2
+
+class Selection:
+  SABER = 0
+  ARCHER = 1
+  CASTER = 2
+  NAME = {
+    0: 'Saber',
+    1: 'Archer',
+    2: 'Caster'
+  }
+
 
 class Menu(object):
   CAPTION = "My Game"
@@ -19,14 +34,22 @@ class Menu(object):
     self.quit = False
     self.keys = pg.key.get_pressed()
 
+    # spawning locations of players
     self.player1_location = (800, 200)
     self.player2_location = (200, 200)
 
+    # key bindings for players
     self.player1_keys = (pg.K_UP, pg.K_DOWN, pg.K_LEFT, pg.K_RIGHT)
     self.player2_keys = (pg.K_w, pg.K_s, pg.K_a, pg.K_d)
 
+    # players
     self.player1 = sab.Saber(self.player1_keys, self.player1_location)
     self.player2 = arc.Archer(self.player2_keys, self.player2_location)
+
+    # control main menu screen navigation
+    self.state = State.PLAY
+    self.player1_selection = Selection.SABER
+    self.player2_selection = Selection.ARCHER
 
 
   def reset(self):
@@ -39,25 +62,21 @@ class Menu(object):
       if event.type == pg.QUIT or self.keys[pg.K_ESCAPE]:
         self.done = True
         self.quit = True
-      elif self.keys[pg.K_SPACE]:
-        self.done = True
-        self.quit = False
 
-      # player 1 selection
-      elif self.keys[pg.K_LEFT]:
-        self.player1 = sab.Saber(self.player1_keys, self.player1_location)
+      elif self.keys[pg.K_UP]:
+        if self.state != State.PLAY:
+          self.state -= 1
       elif self.keys[pg.K_DOWN]:
-        self.player1 = arc.Archer(self.player1_keys, self.player1_location)
-      elif self.keys[pg.K_RIGHT]:
-        self.player1 = cast.Caster(self.player1_keys, self.player1_location)
-
-      # player 2 selection
-      elif self.keys[pg.K_a]:
-        self.player2 = sab.Saber(self.player2_keys, self.player2_location)
-      elif self.keys[pg.K_s]:
-        self.player2 = arc.Archer(self.player2_keys, self.player2_location)
-      elif self.keys[pg.K_d]:
-        self.player2 = cast.Caster(self.player2_keys, self.player2_location)
+        if self.state != State.PLAYER2:
+          self.state += 1
+      elif self.keys[pg.K_RETURN]:
+        if self.state == State.PLAY:
+          self.done = True
+          self.quit = False
+        elif self.state == State.PLAYER1:
+          self.player1_selection = (self.player1_selection + 1) % 3
+        elif self.state == State.PLAYER2:
+          self.player2_selection = (self.player2_selection + 1) % 3
 
 
   def update(self):
@@ -75,26 +94,59 @@ class Menu(object):
     textpos.centery = self.screen_rect.centery - 30
     self.screen.blit(text, textpos)
 
-    font = pg.font.Font(None, 24)
-    text = font.render('Player 1 selection: press LEFT for Saber, DOWN for Archer, RIGHT for Caster (default = Saber)', 1, (200, 200, 200))
+    play_text_color    = (200, 200, 200)
+    player1_text_color = (200, 200, 200)
+    player2_text_color = (200, 200, 200)
+    if self.state == State.PLAY:
+      play_text_color = (0, 200, 0)
+    elif self.state == State.PLAYER1:
+      player1_text_color = (0, 200, 0)
+    elif self.state == State.PLAYER2:
+      player2_text_color = (0, 200, 0)
+
+    font = pg.font.Font(None, 36)
+    text = font.render('Play', 1, play_text_color)
     textpos = text.get_rect()
-    textpos.x = 30
+    textpos.centerx = self.screen_rect.centerx
     textpos.centery = self.screen_rect.centery + 30
     self.screen.blit(text, textpos)
 
-    font = pg.font.Font(None, 24)
-    text = font.render('Player 2 selection: press \'a\' for saber, \'s\' for archer, \'d\' for caster                          (default = Archer)', 1, (200, 200, 200))
+    font = pg.font.Font(None, 36)
+    text = font.render('Player 1 selection: ' + Selection.NAME[self.player1_selection], 1, player1_text_color)
     textpos = text.get_rect()
-    textpos.x = 30
+    textpos.x = 250
     textpos.centery = self.screen_rect.centery + 60
     self.screen.blit(text, textpos)
 
     font = pg.font.Font(None, 36)
-    text = font.render('Press Space to play', 1, (200, 200, 200))
+    text = font.render('Player 2 selection: ' + Selection.NAME[self.player2_selection], 1, player2_text_color)
     textpos = text.get_rect()
-    textpos.centerx = self.screen_rect.centerx
-    textpos.centery = self.screen_rect.centery + 110
+    textpos.x = 250
+    textpos.centery = self.screen_rect.centery + 90
     self.screen.blit(text, textpos)
+
+    font = pg.font.Font(None, 24)
+    text = font.render('UP and DOWN to navigate, ENTER to toggle', 1, (200, 200, 200))
+    textpos = text.get_rect()
+    textpos.bottomright = self.screen_rect.bottomright
+    self.screen.blit(text, textpos)
+
+
+  # pass the resulting selections to initialize the players
+  def initialize_players(self):
+    if self.player1_selection == Selection.SABER:
+      self.player1 = sab.Saber(self.player1_keys, self.player1_location)
+    elif self.player1_selection == Selection.ARCHER:
+      self.player1 = arc.Archer(self.player1_keys, self.player1_location)
+    elif self.player1_selection == Selection.CASTER:
+      self.player1 = cast.Caster(self.player1_keys, self.player1_location)
+
+    if self.player2_selection == Selection.SABER:
+      self.player2 = sab.Saber(self.player2_keys, self.player2_location)
+    elif self.player2_selection == Selection.ARCHER:
+      self.player2 = arc.Archer(self.player2_keys, self.player2_location)
+    elif self.player2_selection == Selection.CASTER:
+      self.player2 = cast.Caster(self.player2_keys, self.player2_location)
 
 
   # main loop of the game
@@ -106,5 +158,6 @@ class Menu(object):
       self.draw()
       pg.display.update()
       self.clock.tick(self.fps)
+    self.initialize_players()
     return self.quit
 
