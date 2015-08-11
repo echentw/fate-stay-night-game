@@ -51,6 +51,8 @@ class Menu(object):
     self.state = State.PLAY
     self.player1_selection = Selection.SABER
     self.player2_selection = Selection.ARCHER
+    self.default_color = (200, 200, 200)
+    self.select_color  = (200, 0, 200)
 
     # decoration
     self.background = pg.image.load("assets/sprites/night.png").convert()
@@ -96,48 +98,49 @@ class Menu(object):
     self.screen.blit(self.background, (0, 0))
     self.screen.blit(self.excalibur_im, (0, 0))
 
-    font = pg.font.Font(None, 100)
-    text = font.render('Fate/Stay Night Game', 1, (150, 150, 150))
+#    font = pg.font.Font(None, 100)
+    font = pg.font.Font('assets/fonts/outline_pixel-7.ttf', 50)
+    text = font.render('Fate/Stay Night Game', 1, (150, 150, 250))
     textpos = text.get_rect()
     textpos.centerx = self.screen_rect.centerx
     textpos.centery = self.screen_rect.centery - 30
     self.screen.blit(text, textpos)
 
-    play_text_color    = (200, 200, 200)
-    player1_text_color = (200, 200, 200)
-    player2_text_color = (200, 200, 200)
-    exit_text_color    = (200, 200, 200)
+    play_text_color    = self.default_color
+    player1_text_color = self.default_color
+    player2_text_color = self.default_color
+    exit_text_color    = self.default_color
     if self.state == State.PLAY:
-      play_text_color = (0, 200, 0)
+      play_text_color = self.select_color
     elif self.state == State.PLAYER1:
-      player1_text_color = (0, 200, 0)
+      player1_text_color = self.select_color
     elif self.state == State.PLAYER2:
-      player2_text_color = (0, 200, 0)
+      player2_text_color = self.select_color
     elif self.state == State.EXIT:
-      exit_text_color = (0, 200, 0)
+      exit_text_color = self.select_color
 
-    font = pg.font.Font(None, 36)
+    font = pg.font.Font('assets/fonts/outline_pixel-7_solid.ttf', 24)
     text = font.render('Play', 1, play_text_color)
     textpos = text.get_rect()
     textpos.centerx = self.screen_rect.centerx
     textpos.centery = self.screen_rect.centery + 30
     self.screen.blit(text, textpos)
 
-    font = pg.font.Font(None, 36)
+    font = pg.font.Font('assets/fonts/outline_pixel-7_solid.ttf', 24)
     text = font.render('Player 1 selection: ' + Selection.NAME[self.player1_selection], 1, player1_text_color)
     textpos = text.get_rect()
-    textpos.x = 300
+    textpos.x = 250
     textpos.centery = self.screen_rect.centery + 60
     self.screen.blit(text, textpos)
 
-    font = pg.font.Font(None, 36)
+    font = pg.font.Font('assets/fonts/outline_pixel-7_solid.ttf', 24)
     text = font.render('Player 2 selection: ' + Selection.NAME[self.player2_selection], 1, player2_text_color)
     textpos = text.get_rect()
-    textpos.x = 300
+    textpos.x = 250
     textpos.centery = self.screen_rect.centery + 90
     self.screen.blit(text, textpos)
 
-    font = pg.font.Font(None, 36)
+    font = pg.font.Font('assets/fonts/outline_pixel-7_solid.ttf', 24)
     text = font.render('Exit', 1, exit_text_color)
     textpos = text.get_rect()
     textpos.centerx = self.screen_rect.centerx
