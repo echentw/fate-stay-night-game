@@ -98,7 +98,6 @@ class Menu(object):
     self.screen.blit(self.background, (0, 0))
     self.screen.blit(self.excalibur_im, (0, 0))
 
-#    font = pg.font.Font(None, 100)
     font = pg.font.Font('assets/fonts/outline_pixel-7.ttf', 50)
     text = font.render('Fate/Stay Night Game', 1, (150, 150, 250))
     textpos = text.get_rect()
@@ -126,21 +125,18 @@ class Menu(object):
     textpos.centery = self.screen_rect.centery + 30
     self.screen.blit(text, textpos)
 
-    font = pg.font.Font('assets/fonts/outline_pixel-7_solid.ttf', 24)
     text = font.render('Player 1 selection: ' + Selection.NAME[self.player1_selection], 1, player1_text_color)
     textpos = text.get_rect()
     textpos.x = 250
     textpos.centery = self.screen_rect.centery + 60
     self.screen.blit(text, textpos)
 
-    font = pg.font.Font('assets/fonts/outline_pixel-7_solid.ttf', 24)
     text = font.render('Player 2 selection: ' + Selection.NAME[self.player2_selection], 1, player2_text_color)
     textpos = text.get_rect()
     textpos.x = 250
     textpos.centery = self.screen_rect.centery + 90
     self.screen.blit(text, textpos)
 
-    font = pg.font.Font('assets/fonts/outline_pixel-7_solid.ttf', 24)
     text = font.render('Exit', 1, exit_text_color)
     textpos = text.get_rect()
     textpos.centerx = self.screen_rect.centerx
@@ -174,7 +170,11 @@ class Menu(object):
   # main loop of the game
   def main_loop(self):
     pg.display.set_caption(Menu.CAPTION)
+    pg.mixer.music.load("assets/music/kodoku-na-junrei.wav")
+    pg.mixer.music.play()
     while not self.done:
+      if not pg.mixer.music.get_busy():
+        pg.mixer.music.play()
       self.event_loop()
       self.update()
       self.draw()
