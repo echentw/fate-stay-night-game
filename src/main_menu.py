@@ -8,6 +8,7 @@ class State:
   PLAY = 0
   PLAYER1 = 1
   PLAYER2 = 2
+  EXIT = 3
 
 class Selection:
   SABER = 0
@@ -67,7 +68,7 @@ class Menu(object):
         if self.state != State.PLAY:
           self.state -= 1
       elif self.keys[pg.K_DOWN]:
-        if self.state != State.PLAYER2:
+        if self.state != State.EXIT:
           self.state += 1
       elif self.keys[pg.K_RETURN]:
         if self.state == State.PLAY:
@@ -77,6 +78,9 @@ class Menu(object):
           self.player1_selection = (self.player1_selection + 1) % 3
         elif self.state == State.PLAYER2:
           self.player2_selection = (self.player2_selection + 1) % 3
+        elif self.state == State.EXIT:
+          self.done = True
+          self.quit = True
 
 
   def update(self):
@@ -97,12 +101,15 @@ class Menu(object):
     play_text_color    = (200, 200, 200)
     player1_text_color = (200, 200, 200)
     player2_text_color = (200, 200, 200)
+    exit_text_color    = (200, 200, 200)
     if self.state == State.PLAY:
       play_text_color = (0, 200, 0)
     elif self.state == State.PLAYER1:
       player1_text_color = (0, 200, 0)
     elif self.state == State.PLAYER2:
       player2_text_color = (0, 200, 0)
+    elif self.state == State.EXIT:
+      exit_text_color = (0, 200, 0)
 
     font = pg.font.Font(None, 36)
     text = font.render('Play', 1, play_text_color)
@@ -123,6 +130,13 @@ class Menu(object):
     textpos = text.get_rect()
     textpos.x = 250
     textpos.centery = self.screen_rect.centery + 90
+    self.screen.blit(text, textpos)
+
+    font = pg.font.Font(None, 36)
+    text = font.render('Exit', 1, exit_text_color)
+    textpos = text.get_rect()
+    textpos.centerx = self.screen_rect.centerx
+    textpos.centery = self.screen_rect.centery + 120
     self.screen.blit(text, textpos)
 
     font = pg.font.Font(None, 24)
