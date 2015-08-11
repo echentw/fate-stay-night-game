@@ -52,6 +52,11 @@ class Menu(object):
     self.player1_selection = Selection.SABER
     self.player2_selection = Selection.ARCHER
 
+    # decoration
+    self.background = pg.image.load("assets/sprites/night.png").convert()
+    self.excalibur_im = pg.image.load("assets/sprites/excalibur.png").convert()
+    self.excalibur_im.set_colorkey((255, 0, 255))
+
 
   def reset(self):
     self.__init__((self.screen_rect.width, self.screen_rect.height))
@@ -88,11 +93,11 @@ class Menu(object):
 
   # draw things onto the screen
   def draw(self):
-    self.screen.fill(Menu.BACKGROUND_COLOR)
-    self.screen.blit(self.screen, (0, 0), self.screen_rect)
+    self.screen.blit(self.background, (0, 0))
+    self.screen.blit(self.excalibur_im, (0, 0))
 
-    font = pg.font.Font(None, 64)
-    text = font.render('Fate/Stay Night Game', 1, (200, 200, 200))
+    font = pg.font.Font(None, 100)
+    text = font.render('Fate/Stay Night Game', 1, (150, 150, 150))
     textpos = text.get_rect()
     textpos.centerx = self.screen_rect.centerx
     textpos.centery = self.screen_rect.centery - 30
@@ -121,14 +126,14 @@ class Menu(object):
     font = pg.font.Font(None, 36)
     text = font.render('Player 1 selection: ' + Selection.NAME[self.player1_selection], 1, player1_text_color)
     textpos = text.get_rect()
-    textpos.x = 250
+    textpos.x = 300
     textpos.centery = self.screen_rect.centery + 60
     self.screen.blit(text, textpos)
 
     font = pg.font.Font(None, 36)
     text = font.render('Player 2 selection: ' + Selection.NAME[self.player2_selection], 1, player2_text_color)
     textpos = text.get_rect()
-    textpos.x = 250
+    textpos.x = 300
     textpos.centery = self.screen_rect.centery + 90
     self.screen.blit(text, textpos)
 

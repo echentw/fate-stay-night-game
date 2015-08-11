@@ -8,7 +8,7 @@ import game_over
 
 class Control:
   CAPTION = "My Game"
-  SCREEN_SIZE = (800, 800)
+  SCREEN_SIZE = (900, 700)
 
   def __init__(self):
     os.environ['SDL_VIDEO_CENTERED'] = '1'
