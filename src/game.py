@@ -1,6 +1,6 @@
 import pygame as pg
 
-import block
+import obstacles as ob
 
 
 class Game(object):
@@ -33,7 +33,7 @@ class Game(object):
     self.player2 = player2
 
     # initialize the obstacles of the game
-    self.obstacles = self.make_obstacles()
+    self.obstacles, self.fake_obstacles = self.make_obstacles()
     self.player1_obstacles = pg.sprite.Group(self.player2)
     self.player1_obstacles.add(self.obstacles)
     self.player2_obstacles = pg.sprite.Group(self.player1)
@@ -53,31 +53,41 @@ class Game(object):
   def make_obstacles(self):
     size = 20
 
-    walls = [block.Block((0 * size, 48 * size, 50 * size, 2 * size)),
-             block.Block((0 * size, 0 * size, 50 * size, 2 * size)),
-             block.Block((0 * size, 0 * size, 3 * size, 50 * size)),
-             block.Block((47 * size, 0 * size, 3 * size, 50 * size))]
+    walls = [ob.Brick((0 * size, 48 * size, 50 * size, 2 * size)),
+             ob.Brick((0 * size, 0 * size, 50 * size, 2 * size)),
+             ob.Brick((0 * size, 0 * size, 3 * size, 50 * size)),
+             ob.Brick((47 * size, 0 * size, 3 * size, 50 * size))]
 
-    ground = [block.Block((1 * size, 42 * size, 32 * size, 6 * size)),
-              block.Block((1 * size, 36 * size, 17 * size, 6 * size))]
+    ground = [ob.Brick((1 * size, 42 * size, 32 * size, 6 * size)),
+              ob.Brick((1 * size, 36 * size, 17 * size, 6 * size))]
 
-    big = [block.Block((5 * size, 18 * size, 9 * size, 13 * size)),
-           block.Block((4 * size, 23 * size, 1 * size, 1 * size)),
-           block.Block((4 * size, 30 * size, 1 * size, 1 * size)),
-           block.Block((14 * size, 23 * size, 1 * size, 1 * size)),
-           block.Block((14 * size, 30 * size, 1 * size, 1 * size))]
+    big = [ob.Brick((5 * size, 18 * size, 9 * size, 13 * size)),
+           ob.Brick((4 * size, 23 * size, 1 * size, 1 * size)),
+           ob.Brick((4 * size, 30 * size, 1 * size, 1 * size)),
+           ob.Brick((14 * size, 23 * size, 1 * size, 1 * size)),
+           ob.Brick((14 * size, 30 * size, 1 * size, 1 * size))]
 
-    floating = [block.Block((20 * size, 21 * size, 9 * size, 2 * size)),
-                block.Block((23 * size, 31 * size, 15 * size, 1 * size)),
-                block.Block((33 * size, 19 * size, 1 * size, 1 * size)),
-                block.Block((37 * size, 16 * size, 7 * size, 2 * size))]
+    floating = [ob.Brick((20 * size, 21 * size, 9 * size, 2 * size)),
+                ob.Brick((23 * size, 31 * size, 15 * size, 1 * size)),
+                ob.Brick((33 * size, 19 * size, 1 * size, 1 * size)),
+                ob.Brick((37 * size, 16 * size, 7 * size, 2 * size))]
 
-    high = [block.Block((6 * size, 9 * size, 3 * size, 2 * size)),
-            block.Block((15 * size, 9 * size, 3 * size, 2 * size)),
-            block.Block((24 * size, 9 * size, 3 * size, 2 * size)),
-            block.Block((33 * size, 9 * size, 3 * size, 2 * size))]
+    high = [ob.Brick((6 * size, 9 * size, 3 * size, 2 * size)),
+            ob.Brick((15 * size, 9 * size, 3 * size, 2 * size)),
+            ob.Brick((24 * size, 9 * size, 3 * size, 2 * size)),
+            ob.Brick((33 * size, 9 * size, 3 * size, 2 * size))]
 
-    return pg.sprite.Group(walls, ground, big, floating, high)
+    high_pillars = [ob.Pillar((6 * size, 8 * size, 3 * size, 1 * size)),
+                    ob.Pillar((15 * size, 8 * size, 3 * size, 1 * size)),
+                    ob.Pillar((24 * size, 8 * size, 3 * size, 1 * size)),
+                    ob.Pillar((33 * size, 8 * size, 3 * size, 1 * size))]
+
+    floating_pillars = [ob.Pillar((20 * size, 20 * size, 9 * size, 1 * size)),
+                        ob.Pillar((23 * size, 30 * size, 15 * size, 1 * size)),
+                        ob.Pillar((37 * size, 15 * size, 7 * size, 1 * size))]
+
+    return (pg.sprite.Group(walls, ground, big, floating, high),
+            pg.sprite.Group(high_pillars, floating_pillars))
 
   # check for key presses and releases
   def event_loop(self):
@@ -144,6 +154,7 @@ class Game(object):
     self.obstacles.draw(self.level)
     self.player1.draw(self.level)
     self.player2.draw(self.level)
+    self.fake_obstacles.draw(self.level)
     self.screen.blit(self.level, (0, 0), self.screen_rect)
 
     self.screen.blit(self.player1.face_im, self.player1_face_rect)
