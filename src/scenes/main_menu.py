@@ -6,22 +6,9 @@ from src.servants import caster as cast
 from src.servants import assassin as ass
 
 class State:
-  PLAY = 0
-  PLAYER1 = 1
-  PLAYER2 = 2
-  EXIT = 3
-
-class Selection:
-  SABER = 0
-  ARCHER = 1
-  CASTER = 2
-  ASSASSIN = 3
-  NAME = {
-    0: 'Saber',
-    1: 'Archer',
-    2: 'Caster',
-    3: 'Assassin'
-  }
+  SINGLEPLAYER = 0
+  MULTIPLAYER = 1
+  EXIT = 2
 
 
 class Menu(object):
@@ -38,22 +25,8 @@ class Menu(object):
     self.quit = False
     self.keys = pg.key.get_pressed()
 
-    # spawning locations of players
-    self.player1_location = (800, 200)
-    self.player2_location = (200, 200)
-
-    # key bindings for players
-    self.player1_keys = (pg.K_UP, pg.K_DOWN, pg.K_LEFT, pg.K_RIGHT)
-    self.player2_keys = (pg.K_w, pg.K_s, pg.K_a, pg.K_d)
-
-    # players
-    self.player1 = sab.Saber(self.player1_keys, self.player1_location)
-    self.player2 = arc.Archer(self.player2_keys, self.player2_location)
-
     # control main menu screen navigation
-    self.state = State.PLAY
-    self.player1_selection = Selection.SABER
-    self.player2_selection = Selection.ARCHER
+    self.state = State.SINGLEPLAYER
     self.default_color = (200, 200, 200)
     self.select_color  = (200, 0, 200)
 
@@ -75,19 +48,15 @@ class Menu(object):
         self.quit = True
 
       elif self.keys[pg.K_UP]:
-        if self.state != State.PLAY:
+        if self.state != State.SINGLEPLAYER:
           self.state -= 1
       elif self.keys[pg.K_DOWN]:
         if self.state != State.EXIT:
           self.state += 1
       elif self.keys[pg.K_RETURN]:
-        if self.state == State.PLAY:
+        if self.state == State.SINGLEPLAYER or self.state == State.MULTIPLAYER:
           self.done = True
           self.quit = False
-        elif self.state == State.PLAYER1:
-          self.player1_selection = (self.player1_selection + 1) % 4
-        elif self.state == State.PLAYER2:
-          self.player2_selection = (self.player2_selection + 1) % 4
         elif self.state == State.EXIT:
           self.done = True
           self.quit = True
@@ -108,42 +77,33 @@ class Menu(object):
     textpos.centery = self.screen_rect.centery - 30
     self.screen.blit(text, textpos)
 
-    play_text_color    = self.default_color
-    player1_text_color = self.default_color
-    player2_text_color = self.default_color
-    exit_text_color    = self.default_color
-    if self.state == State.PLAY:
-      play_text_color = self.select_color
-    elif self.state == State.PLAYER1:
-      player1_text_color = self.select_color
-    elif self.state == State.PLAYER2:
-      player2_text_color = self.select_color
+    singleplayer_text_color = self.default_color
+    multiplayer_text_color  = self.default_color
+    exit_text_color         = self.default_color
+    if self.state == State.SINGLEPLAYER:
+      singleplayer_text_color = self.select_color
+    elif self.state == State.MULTIPLAYER:
+      multiplayer_text_color = self.select_color
     elif self.state == State.EXIT:
       exit_text_color = self.select_color
 
     font = pg.font.Font('assets/fonts/outline_pixel-7_solid.ttf', 24)
-    text = font.render('Play', 1, play_text_color)
+    text = font.render('Single Player', 1, singleplayer_text_color)
     textpos = text.get_rect()
     textpos.centerx = self.screen_rect.centerx
     textpos.centery = self.screen_rect.centery + 30
     self.screen.blit(text, textpos)
 
-    text = font.render('Player 1 selection: ' + Selection.NAME[self.player1_selection], 1, player1_text_color)
+    text = font.render('Multi Player', 1, multiplayer_text_color)
     textpos = text.get_rect()
-    textpos.x = 250
+    textpos.centerx = self.screen_rect.centerx
     textpos.centery = self.screen_rect.centery + 60
-    self.screen.blit(text, textpos)
-
-    text = font.render('Player 2 selection: ' + Selection.NAME[self.player2_selection], 1, player2_text_color)
-    textpos = text.get_rect()
-    textpos.x = 250
-    textpos.centery = self.screen_rect.centery + 90
     self.screen.blit(text, textpos)
 
     text = font.render('Exit', 1, exit_text_color)
     textpos = text.get_rect()
     textpos.centerx = self.screen_rect.centerx
-    textpos.centery = self.screen_rect.centery + 120
+    textpos.centery = self.screen_rect.centery + 90
     self.screen.blit(text, textpos)
 
     font = pg.font.Font(None, 24)
@@ -151,27 +111,6 @@ class Menu(object):
     textpos = text.get_rect()
     textpos.bottomright = self.screen_rect.bottomright
     self.screen.blit(text, textpos)
-
-
-  # pass the resulting selections to initialize the players
-  def initialize_players(self):
-    if self.player1_selection == Selection.SABER:
-      self.player1 = sab.Saber(self.player1_keys, self.player1_location)
-    elif self.player1_selection == Selection.ARCHER:
-      self.player1 = arc.Archer(self.player1_keys, self.player1_location)
-    elif self.player1_selection == Selection.CASTER:
-      self.player1 = cast.Caster(self.player1_keys, self.player1_location)
-    elif self.player1_selection == Selection.ASSASSIN:
-      self.player1 = ass.Assassin(self.player1_keys, self.player1_location)
-
-    if self.player2_selection == Selection.SABER:
-      self.player2 = sab.Saber(self.player2_keys, self.player2_location)
-    elif self.player2_selection == Selection.ARCHER:
-      self.player2 = arc.Archer(self.player2_keys, self.player2_location)
-    elif self.player2_selection == Selection.CASTER:
-      self.player2 = cast.Caster(self.player2_keys, self.player2_location)
-    elif self.player2_selection == Selection.ASSASSIN:
-      self.player2 = ass.Assassin(self.player2_keys, self.player2_location)
 
 
   # main loop of the game
@@ -187,6 +126,5 @@ class Menu(object):
       self.draw()
       pg.display.update()
       self.clock.tick(self.fps)
-    self.initialize_players()
     return self.quit
 
