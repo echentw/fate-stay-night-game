@@ -3,6 +3,7 @@ import pygame as pg
 import archer as arc
 import saber as sab
 import caster as cast
+import assassin as ass
 
 class State:
   PLAY = 0
@@ -14,10 +15,12 @@ class Selection:
   SABER = 0
   ARCHER = 1
   CASTER = 2
+  ASSASSIN = 3
   NAME = {
     0: 'Saber',
     1: 'Archer',
-    2: 'Caster'
+    2: 'Caster',
+    3: 'Assassin'
   }
 
 
@@ -82,9 +85,9 @@ class Menu(object):
           self.done = True
           self.quit = False
         elif self.state == State.PLAYER1:
-          self.player1_selection = (self.player1_selection + 1) % 3
+          self.player1_selection = (self.player1_selection + 1) % 4
         elif self.state == State.PLAYER2:
-          self.player2_selection = (self.player2_selection + 1) % 3
+          self.player2_selection = (self.player2_selection + 1) % 4
         elif self.state == State.EXIT:
           self.done = True
           self.quit = True
@@ -158,6 +161,8 @@ class Menu(object):
       self.player1 = arc.Archer(self.player1_keys, self.player1_location)
     elif self.player1_selection == Selection.CASTER:
       self.player1 = cast.Caster(self.player1_keys, self.player1_location)
+    elif self.player1_selection == Selection.ASSASSIN:
+      self.player1 = ass.Assassin(self.player1_keys, self.player1_location)
 
     if self.player2_selection == Selection.SABER:
       self.player2 = sab.Saber(self.player2_keys, self.player2_location)
@@ -165,6 +170,8 @@ class Menu(object):
       self.player2 = arc.Archer(self.player2_keys, self.player2_location)
     elif self.player2_selection == Selection.CASTER:
       self.player2 = cast.Caster(self.player2_keys, self.player2_location)
+    elif self.player2_selection == Selection.ASSASSIN:
+      self.player2 = ass.Assassin(self.player2_keys, self.player2_location)
 
 
   # main loop of the game
