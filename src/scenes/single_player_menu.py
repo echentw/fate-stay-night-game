@@ -28,7 +28,7 @@ class Menu(object):
       if event.type == pg.QUIT or self.keys[pg.K_ESCAPE]:
         self.done = True
         self.quit = True
-      elif self.keys[pg.K_r]:
+      elif not all(k == 0 for k in self.keys):
         self.done = True
         self.goto_main = True
 
