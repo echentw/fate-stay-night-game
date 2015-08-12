@@ -13,7 +13,7 @@ class Brick(pg.sprite.Sprite):
 
     self.size = 10
 
-    brick_img = pg.image.load("assets/sprites/brick3.png").convert_alpha()
+    brick_img = pg.image.load("assets/sprites/brick.png").convert_alpha()
 
     for i in range(int(math.ceil(self.rect.width / self.size))):
       for j in range(int(math.ceil(self.rect.height / self.size))):

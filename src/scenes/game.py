@@ -26,7 +26,7 @@ class Game(object):
     self.keys = pg.key.get_pressed()
 
     # sound when an attack hits
-    self.sound_impact = pg.mixer.Sound("assets/soundfx/sword_impact.wav")
+    self.sound_impact = pg.mixer.Sound("assets/soundfx/hit.wav")
 
     # initialize the players
     self.player1 = player1

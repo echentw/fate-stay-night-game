@@ -21,7 +21,7 @@ class Assassin(player.Player):
     jump_up_im   = "assets/sprites/assassin_jump1.png"
     jump_down_im = "assets/sprites/assassin_jump2.png"
     hurt_im      = "assets/sprites/assassin_hurt.png"
-    attack_sound = "assets/soundfx/knife_stab.wav"
+    attack_sound = "assets/soundfx/woosh.wav"
     land_sound   = "assets/soundfx/thud.wav"
 
     # bounding boxes for each image
