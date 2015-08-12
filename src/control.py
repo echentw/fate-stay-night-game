@@ -1,9 +1,9 @@
 import os
 import pygame as pg
 
-import game
-import main_menu
-import game_over
+from scenes import game
+from scenes import main_menu
+from scenes import game_over
 
 
 class Control:

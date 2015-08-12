@@ -1,6 +1,6 @@
 import pygame as pg
 
-import player
+from src import player
 
 
 class Caster(player.Player):

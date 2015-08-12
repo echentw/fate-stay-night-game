@@ -1,6 +1,6 @@
 import pygame as pg
 
-import obstacles as ob
+from src import obstacles as ob
 
 
 class Game(object):

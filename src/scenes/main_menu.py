@@ -1,9 +1,9 @@
 import pygame as pg
 
-import archer as arc
-import saber as sab
-import caster as cast
-import assassin as ass
+from src.servants import archer as arc
+from src.servants import saber as sab
+from src.servants import caster as cast
+from src.servants import assassin as ass
 
 class State:
   PLAY = 0
