@@ -101,9 +101,7 @@ class Game(object):
       # someone is attacking
       elif event.type == pg.KEYDOWN:
         if event.key == self.player1.DOWN_KEY:
-          if not self.player1.fall and \
-             not self.player1.attacking and \
-             not self.player1.hurt:
+          if not self.player1.attacking and not self.player1.hurt:
             if self.player1.direction == self.player1.LEFT_KEY:
               if self.player2.receive_attack(self.player2.RIGHT_KEY,
                                              self.player1.attack_left_rect):
@@ -113,9 +111,7 @@ class Game(object):
                                              self.player1.attack_right_rect):
                 self.sound_impact.play()
         elif event.key == self.player2.DOWN_KEY:
-          if not self.player2.fall and \
-             not self.player2.attacking and \
-             not self.player2.hurt:
+          if not self.player2.attacking and not self.player2.hurt:
             if self.player2.direction == self.player2.LEFT_KEY:
               if self.player1.receive_attack(self.player1.RIGHT_KEY,
                                              self.player2.attack_left_rect):

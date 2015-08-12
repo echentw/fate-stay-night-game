@@ -135,11 +135,11 @@ class Player(physics.Physics, pg.sprite.Sprite):
       self.direction_stack.append(key)
       self.direction = key
     elif key == self.DOWN_KEY:
-      if not self.fall and not self.attacking:
+      if not self.attacking:
         self.attacking = True
         self.sound_attack.play()
     elif key == self.UP_KEY:
-      if not self.fall:
+      if not self.fall and not self.attacking:
         self.y_vel = -self.jump_power
         self.fall = True
 
@@ -173,9 +173,7 @@ class Player(physics.Physics, pg.sprite.Sprite):
   def draw(self, surface):
     if self.hurt:
       surface.blit(self.image, self.hurt_rect)
-      return
-
-    if self.old_attacking:
+    elif self.old_attacking:
       if self.direction == self.LEFT_KEY:
         surface.blit(self.image, self.attack_left_rect)
       else:
@@ -205,20 +203,6 @@ class Player(physics.Physics, pg.sprite.Sprite):
       else:
         self.curr_frames = self.hurt_frames[self.direction]
       self.redraw = True
-    elif self.fall != self.old_fall:
-      self.old_fall = self.fall
-      self.redraw = True
-      self.frame_id = -1
-      if self.fall:
-        if self.y_vel > 0:
-          self.curr_frames = self.jump_down_frames[self.direction]
-        else:
-          self.curr_frames = self.jump_up_frames[self.direction]
-      else:
-        self.curr_frames = self.walk_frames[self.direction]
-      self.attacking = False
-      self.old_attacking = False
-      self.attack_counter = 0
     elif self.attacking != self.old_attacking:
       self.old_attacking = self.attacking
       self.redraw = True
@@ -227,6 +211,21 @@ class Player(physics.Physics, pg.sprite.Sprite):
         self.curr_frames = self.attack_frames[self.direction]
       else:
         self.curr_frames = self.walk_frames[self.direction]
+    elif self.fall != self.old_fall:
+      if not self.attacking:
+        self.old_fall = self.fall
+        self.redraw = True
+        self.frame_id = -1
+        if self.fall:
+          if self.y_vel > 0:
+            self.curr_frames = self.jump_down_frames[self.direction]
+          else:
+            self.curr_frames = self.jump_up_frames[self.direction]
+        else:
+          self.curr_frames = self.walk_frames[self.direction]
+        self.attacking = False
+        self.old_attacking = False
+        self.attack_counter = 0
     elif self.direction != self.old_direction:
       self.old_direction = self.direction
       self.redraw = True
@@ -240,7 +239,7 @@ class Player(physics.Physics, pg.sprite.Sprite):
           self.curr_frames = self.jump_up_frames[self.direction]
       else:
         self.curr_frames = self.walk_frames[self.direction]
-    elif self.fall:
+    elif self.fall and not self.attacking:
       if self.old_y_vel <= 0 and self.y_vel > 0:
         self.redraw = True
         self.frame_id = -1
