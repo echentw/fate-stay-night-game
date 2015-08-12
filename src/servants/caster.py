@@ -68,7 +68,7 @@ class Caster(player.Player):
   # Helper method to load face images
   def get_face_image(self, face_im, size):
     sheet = pg.image.load(face_im).convert()
-    sheet.set_colorkey(Caster.COLOR_KEY)
+    sheet.set_colorkey(player.Player.COLOR_KEY)
     sheet.set_alpha(150)
     frames = player.get_images(sheet, [[0, 0]], size)
     return frames[0]
@@ -76,7 +76,7 @@ class Caster(player.Player):
   # Helper method to load walk frames
   def get_walk_frames(self, walk_im, indices, rect):
     sheet = pg.image.load(walk_im).convert()
-    sheet.set_colorkey(Caster.COLOR_KEY)
+    sheet.set_colorkey(player.Player.COLOR_KEY)
     frames = player.get_images(sheet, indices, rect.size)
     frame_dict = {self.LEFT_KEY : [frames[i] for i in xrange(6)],
                   self.RIGHT_KEY: [pg.transform.flip(frames[i], True, False) \
@@ -109,9 +109,9 @@ class Caster(player.Player):
   def get_jump_frames(self, jump1_im, indices1, rect1,
                             jump2_im, indices2, rect2):
     sheet1 = pg.image.load(jump1_im).convert()
-    sheet1.set_colorkey(Caster.COLOR_KEY)
+    sheet1.set_colorkey(player.Player.COLOR_KEY)
     sheet2 = pg.image.load(jump2_im).convert()
-    sheet2.set_colorkey(Caster.COLOR_KEY)
+    sheet2.set_colorkey(player.Player.COLOR_KEY)
     frames1 = player.get_images(sheet1, indices1, rect1.size)
     frames2 = player.get_images(sheet2, indices2, rect2.size)
     frame1_dict = {
@@ -127,7 +127,7 @@ class Caster(player.Player):
   # Helper method to load attack frames
   def get_attack_frames(self, attack_im, indices, rect):
     sheet = pg.image.load(attack_im).convert()
-    sheet.set_colorkey(Caster.COLOR_KEY)
+    sheet.set_colorkey(player.Player.COLOR_KEY)
     frames = player.get_images(sheet, indices, rect.size)
     frame_dict = {
       self.LEFT_KEY : [frames[i] for i in xrange(4)],
@@ -139,7 +139,7 @@ class Caster(player.Player):
   # Helper method to load hurt frames
   def get_hurt_frames(self, hurt_im, indices, rect):
     sheet = pg.image.load(hurt_im).convert()
-    sheet.set_colorkey(Caster.COLOR_KEY)
+    sheet.set_colorkey(player.Player.COLOR_KEY)
     frames = player.get_images(sheet, indices, rect.size)
     frame_dict = {
       self.LEFT_KEY : [frames[0]],
