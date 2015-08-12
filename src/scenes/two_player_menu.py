@@ -9,7 +9,7 @@ class State:
   PLAY = 0
   PLAYER1 = 1
   PLAYER2 = 2
-  EXIT = 3
+  BACK = 3
 
 class Selection:
   SABER = 0
@@ -33,10 +33,12 @@ class Menu(object):
     self.screen_rect = self.screen.get_rect()
     self.clock = pg.time.Clock()
     self.fps = 60.0
-
-    self.done = False
-    self.quit = False
     self.keys = pg.key.get_pressed()
+
+    # handle what happens after the menu is exited
+    self.done      = False
+    self.quit      = False
+    self.goto_main = False
 
     # spawning locations of players
     self.player1_location = (800, 200)
@@ -78,7 +80,7 @@ class Menu(object):
         if self.state != State.PLAY:
           self.state -= 1
       elif self.keys[pg.K_DOWN]:
-        if self.state != State.EXIT:
+        if self.state != State.BACK:
           self.state += 1
       elif self.keys[pg.K_RETURN]:
         if self.state == State.PLAY:
@@ -88,9 +90,9 @@ class Menu(object):
           self.player1_selection = (self.player1_selection + 1) % 4
         elif self.state == State.PLAYER2:
           self.player2_selection = (self.player2_selection + 1) % 4
-        elif self.state == State.EXIT:
+        elif self.state == State.BACK:
           self.done = True
-          self.quit = True
+          self.goto_main = True
 
 
   # draw things onto the screen
@@ -115,7 +117,7 @@ class Menu(object):
       player1_text_color = self.select_color
     elif self.state == State.PLAYER2:
       player2_text_color = self.select_color
-    elif self.state == State.EXIT:
+    elif self.state == State.BACK:
       exit_text_color = self.select_color
 
     font = pg.font.Font('assets/fonts/outline_pixel-7_solid.ttf', 24)
@@ -137,7 +139,7 @@ class Menu(object):
     textpos.centery = self.screen_rect.centery + 90
     self.screen.blit(text, textpos)
 
-    text = font.render('Exit', 1, exit_text_color)
+    text = font.render('Back', 1, exit_text_color)
     textpos = text.get_rect()
     textpos.centerx = self.screen_rect.centerx
     textpos.centery = self.screen_rect.centery + 120
@@ -180,5 +182,4 @@ class Menu(object):
       pg.display.update()
       self.clock.tick(self.fps)
     self.initialize_players()
-    return self.quit
 

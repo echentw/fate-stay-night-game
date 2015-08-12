@@ -74,5 +74,4 @@ class GameOver(object):
       self.draw()
       pg.display.update()
       self.clock.tick(self.fps)
-    return self.quit
 

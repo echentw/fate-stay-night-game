@@ -30,31 +30,33 @@ class Control:
   def start(self):
     while True:
       self.menu.reset()
-      quit = self.menu.main_loop()
-      if quit:
+      self.menu.main_loop()
+      if self.menu.quit:
         return
 
       if self.menu.state == main_menu.State.SINGLEPLAYER:
         self.sp_menu.reset()
-        quit = self.sp_menu.main_loop()
-        if quit:
+        self.sp_menu.main_loop()
+        if self.sp_menu.quit:
           return
 
       elif self.menu.state == main_menu.State.MULTIPLAYER:
         self.tp_menu.reset()
-        quit = self.tp_menu.main_loop()
-        if quit:
+        self.tp_menu.main_loop()
+        if self.tp_menu.goto_main:
+          continue
+        if self.tp_menu.quit:
           return
 
         self.versus_game.reset(self.tp_menu.player1, self.tp_menu.player2)
-        quit = self.versus_game.main_loop()
-        if quit:
+        self.versus_game.main_loop()
+        if self.versus_game.quit:
           return
 
         self.game_over.reset()
         self.game_over.set_winner(self.versus_game.winner)
-        quit = self.game_over.main_loop()
-        if quit:
+        self.game_over.main_loop()
+        if self.game_over.quit:
           return
 
       else:

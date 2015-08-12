@@ -11,10 +11,11 @@ class Menu(object):
     self.screen_rect = self.screen.get_rect()
     self.clock  = pg.time.Clock()
     self.fps = 60.0
-
-    self.done = False
-    self.quit = False
     self.keys = pg.key.get_pressed()
+
+    self.done      = False
+    self.quit      = False
+    self.goto_main = False
 
 
   def reset(self):
@@ -29,7 +30,7 @@ class Menu(object):
         self.quit = True
       elif self.keys[pg.K_r]:
         self.done = True
-        self.quit = False
+        self.goto_main = True
 
   def draw(self):
     self.screen.fill(Menu.BACKGROUND_COLOR)
@@ -46,5 +47,4 @@ class Menu(object):
       self.draw()
       pg.display.update()
       self.clock.tick(self.fps)
-    return self.quit
 

@@ -187,7 +187,6 @@ class Game(object):
       self.draw()
       pg.display.update()
       self.clock.tick(self.fps)
-    return self.quit
 
 
 # Hacky way to show the health bar

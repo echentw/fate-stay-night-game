@@ -20,10 +20,10 @@ class Menu(object):
     self.screen_rect = self.screen.get_rect()
     self.clock = pg.time.Clock()
     self.fps = 60.0
+    self.keys = pg.key.get_pressed()
 
     self.done = False
     self.quit = False
-    self.keys = pg.key.get_pressed()
 
     # control main menu screen navigation
     self.state = State.SINGLEPLAYER
@@ -126,5 +126,4 @@ class Menu(object):
       self.draw()
       pg.display.update()
       self.clock.tick(self.fps)
-    return self.quit
 
