@@ -25,7 +25,6 @@ class Selection:
 
 
 class Menu(object):
-  CAPTION = "My Game"
   BACKGROUND_COLOR = (100, 100, 100)
 
   def __init__(self, screen_size):
@@ -175,7 +174,6 @@ class Menu(object):
 
   # main loop of the game
   def main_loop(self):
-    pg.display.set_caption(Menu.CAPTION)
     while not self.done:
       self.event_loop()
       self.draw()

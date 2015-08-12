@@ -2,7 +2,6 @@ import pygame as pg
 
 
 class Menu(object):
-  CAPTION = "My Game"
   BACKGROUND_COLOR = (100, 100, 100)
 
   def __init__(self):
@@ -41,7 +40,6 @@ class Menu(object):
     self.screen.blit(text, textpos)
 
   def main_loop(self):
-    pg.display.set_caption(Menu.CAPTION)
     while not self.done:
       self.event_loop()
       self.draw()

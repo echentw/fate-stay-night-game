@@ -4,7 +4,6 @@ from src import obstacles as ob
 
 
 class Game(object):
-  CAPTION = "My Game"
   BACKGROUND_COLOR = (100, 100, 100)
 
   def __init__(self, level_size, player1, player2):
@@ -176,7 +175,6 @@ class Game(object):
 
   # main loop of the game
   def main_loop(self):
-    pg.display.set_caption(Game.CAPTION)
     pg.mixer.music.load("assets/music/oath-sign-orchestra.wav")
     pg.mixer.music.play()
     while not self.done:

@@ -9,7 +9,7 @@ from scenes import game_over
 
 
 class Control:
-  CAPTION = "My Game"
+  CAPTION = "Fate/Stay Night Game"
   SCREEN_SIZE = (900, 700)
 
   def __init__(self):

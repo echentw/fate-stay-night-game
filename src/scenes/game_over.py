@@ -2,7 +2,6 @@ import pygame as pg
 
 
 class GameOver(object):
-  CAPTION = "My Game"
   BACKGROUND_COLOR = (100, 100, 100)
 
   def __init__(self, screen_size):
@@ -67,7 +66,6 @@ class GameOver(object):
 
 
   def main_loop(self):
-    pg.display.set_caption(GameOver.CAPTION)
     while not self.done:
       self.event_loop()
       self.update()
