@@ -1,5 +1,9 @@
 import pygame as pg
 
+class State:
+  MAIN_MENU = 1
+  EXIT = 2
+
 
 class GameOver(object):
   BACKGROUND_COLOR = (100, 100, 100)
@@ -19,6 +23,14 @@ class GameOver(object):
     self.done = False
     self.quit = False
 
+    # control navigation
+    self.state = State.MAIN_MENU
+    self.default_color = (200, 200, 200)
+    self.select_color  = (250, 250, 0)
+
+    # decoration
+    self.background = pg.image.load("assets/sprites/ubw.png").convert()
+
 
   def reset(self):
     self.__init__((self.screen_rect.width, self.screen_rect.height))
@@ -33,36 +45,53 @@ class GameOver(object):
       if event.type == pg.QUIT or self.keys[pg.K_ESCAPE]:
         self.done = True
         self.quit = True
-      elif self.keys[pg.K_r]:
-        self.done = True
-        self.quit = False
+      elif self.keys[pg.K_UP]:
+        if self.state != State.MAIN_MENU:
+          self.state -= 1
+      elif self.keys[pg.K_DOWN]:
+        if self.state != State.EXIT:
+          self.state += 1
+      elif self.keys[pg.K_RETURN]:
+        if self.state == State.MAIN_MENU:
+          self.done = True
+          self.quit = False
+        elif self.state == State.EXIT:
+          self.done = True
+          self.quit = True
 
   def update(self):
     pass
 
   def draw(self):
-    font = pg.font.Font(None, 48)
-    text1 = font.render(self.winner.name + " wins!", 1, (230, 230, 230))
-    textpos1 = text1.get_rect()
-    textpos1.centerx = self.screen.get_rect().centerx
-    textpos1.centery = self.screen.get_rect().centery
+    self.screen.blit(self.background, (0, 0))
 
-    font = pg.font.Font(None, 24)
-    text2 = font.render("Press esc to quit", 1, (230, 230, 230))
-    textpos2 = text2.get_rect()
-    textpos2.centerx = self.screen.get_rect().centerx
-    textpos2.centery = self.screen.get_rect().centery + 40
+    font = pg.font.Font('assets/fonts/outline_pixel-7_solid.ttf', 48)
+    text = font.render(self.winner.name + " wins!", 1, (230, 230, 230))
+    textpos = text.get_rect()
+    textpos.centerx = self.screen.get_rect().centerx
+    textpos.centery = self.screen.get_rect().centery - 30
+    self.screen.blit(text, textpos)
 
-    font = pg.font.Font(None, 24)
-    text3 = font.render("Press r to go back to main menu", 1, (230, 230, 230))
-    textpos3 = text3.get_rect()
-    textpos3.centerx = self.screen.get_rect().centerx
-    textpos3.centery = self.screen.get_rect().centery + 70
+    main_menu_text_color = self.default_color
+    exit_text_color      = self.default_color
+    if self.state == State.MAIN_MENU:
+      main_menu_text_color = self.select_color
+    elif self.state == State.EXIT:
+      exit_text_color = self.select_color
 
-    self.screen.fill(GameOver.BACKGROUND_COLOR)
-    self.screen.blit(text1, textpos1)
-    self.screen.blit(text2, textpos2)
-    self.screen.blit(text3, textpos3)
+    font = pg.font.Font('assets/fonts/outline_pixel-7_solid.ttf', 24)
+    text = font.render('Main Menu', 1, main_menu_text_color)
+    textpos = text.get_rect()
+    textpos.centerx = self.screen_rect.centerx
+    textpos.centery = self.screen_rect.centery + 30
+    self.screen.blit(text, textpos)
+
+    font = pg.font.Font('assets/fonts/outline_pixel-7_solid.ttf', 24)
+    text = font.render('Exit', 1, exit_text_color)
+    textpos = text.get_rect()
+    textpos.centerx = self.screen_rect.centerx
+    textpos.centery = self.screen_rect.centery + 60
+    self.screen.blit(text, textpos)
 
 
   def main_loop(self):
