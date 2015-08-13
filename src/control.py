@@ -29,6 +29,10 @@ class Control:
 
   def start(self):
     while True:
+      if not self.tp_menu.goto_main:
+        pg.mixer.music.load("assets/music/kodoku-na-junrei.wav")
+        pg.mixer.music.play()
+
       self.menu.reset()
       self.menu.main_loop()
       if self.menu.quit:

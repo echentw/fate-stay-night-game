@@ -114,8 +114,6 @@ class Menu(object):
 
   # main loop of the game
   def main_loop(self):
-    pg.mixer.music.load("assets/music/kodoku-na-junrei.wav")
-    pg.mixer.music.play()
     while not self.done:
       if not pg.mixer.music.get_busy():
         pg.mixer.music.play()
