@@ -109,7 +109,7 @@ class Menu(object):
     play_text_color    = self.default_color
     player1_text_color = self.default_color
     player2_text_color = self.default_color
-    exit_text_color    = self.default_color
+    back_text_color    = self.default_color
     if self.state == State.PLAY:
       play_text_color = self.select_color
     elif self.state == State.PLAYER1:
@@ -117,7 +117,7 @@ class Menu(object):
     elif self.state == State.PLAYER2:
       player2_text_color = self.select_color
     elif self.state == State.BACK:
-      exit_text_color = self.select_color
+      back_text_color = self.select_color
 
     font = pg.font.Font('assets/fonts/outline_pixel-7_solid.ttf', 24)
     text = font.render('Play', 1, play_text_color)
@@ -138,7 +138,7 @@ class Menu(object):
     textpos.centery = self.screen_rect.centery + 90
     self.screen.blit(text, textpos)
 
-    text = font.render('Back', 1, exit_text_color)
+    text = font.render('Back', 1, back_text_color)
     textpos = text.get_rect()
     textpos.centerx = self.screen_rect.centerx
     textpos.centery = self.screen_rect.centery + 120
@@ -175,6 +175,8 @@ class Menu(object):
   # main loop of the game
   def main_loop(self):
     while not self.done:
+      if not pg.mixer.music.get_busy():
+        pg.mixer.music.play()
       self.event_loop()
       self.draw()
       pg.display.update()
