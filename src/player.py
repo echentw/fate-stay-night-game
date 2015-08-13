@@ -209,6 +209,11 @@ class Player(physics.Physics, pg.sprite.Sprite):
       self.frame_id = -1
       if self.attacking:
         self.curr_frames = self.attack_frames[self.direction]
+      elif self.fall:
+        if self.y_vel > 0:
+          self.curr_frames = self.jump_up_frames[self.direction]
+        else:
+          self.curr_frames = self.jump_down_frames[self.direction]
       else:
         self.curr_frames = self.walk_frames[self.direction]
     elif self.fall != self.old_fall:
