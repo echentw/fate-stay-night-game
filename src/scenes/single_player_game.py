@@ -2,6 +2,8 @@ import pygame as pg
 
 from src import obstacles as ob
 
+from src.servants import assassin as ass
+
 
 class Game(object):
   BACKGROUND_COLOR = (100, 100, 100)
@@ -27,8 +29,9 @@ class Game(object):
     # sound when an attack hits
     self.sound_impact = pg.mixer.Sound("assets/soundfx/hit.wav")
 
-    # initialize the player
+    # initialize the player and npcs
     self.player = player
+    self.npcs = self.get_npcs();
 
     # initialize the obstacles of the game
     self.obstacles, self.fake_obstacles = self.make_obstacles()
@@ -41,6 +44,14 @@ class Game(object):
 
   def reset(self, player):
     self.__init__((self.level_rect.width, self.level_rect.height), player)
+
+  # helper method to initialize the npcs
+  def get_npcs(self):
+    npcs = [
+      ass.Assassin((pg.K_w, pg.K_s, pg.K_a, pg.K_d), (800, 200)),
+      ass.Assassin((pg.K_w, pg.K_s, pg.K_a, pg.K_d), (880, 200))
+    ]
+    return npcs
 
   # helper method to create the platforms in the game
   def make_obstacles(self):
@@ -90,17 +101,40 @@ class Game(object):
       if event.type == pg.QUIT or self.keys[pg.K_ESCAPE]:
         self.done = True
         self.quit = True
+
       elif event.type == pg.KEYDOWN:
+        if event.key == self.player.DOWN_KEY:
+          if not self.player.attacking and not self.player.hurt:
+            if self.player.direction == self.player.LEFT_KEY:
+              for npc in self.npcs:
+                if npc.receive_attack(npc.RIGHT_KEY,
+                                      self.player.attack_left_rect):
+                  self.sound_impact.play()
+            else:
+              for npc in self.npcs:
+                if npc.receive_attack(npc.LEFT_KEY,
+                                      self.player.attack_right_rect):
+                  self.sound_impact.play()
         self.player.handle_keydown(event.key, self.player_obstacles)
+
       elif event.type == pg.KEYUP:
         self.player.handle_keyup(event.key)
+
 
   # check for winner, update player position
   def update(self):
     if self.player.health == 0:
       self.done = True
       self.quit = False
+    for npc in self.npcs:
+      if npc.health == 0:
+        self.npcs.remove(npc)
+    if not self.npcs:
+      self.done = True
+      self.quit = False
     self.player.update(self.screen_rect, self.player_obstacles)
+    for npc in self.npcs:
+      npc.update(self.screen_rect, self.player_obstacles)
     self.screen_rect.center = self.player.rect.center
 
   # draw things onto the screen
@@ -108,6 +142,8 @@ class Game(object):
     self.level.fill(Game.BACKGROUND_COLOR)
     self.screen_rect.clamp_ip(self.level_rect)
     self.obstacles.draw(self.level)
+    for npc in self.npcs:
+      npc.draw(self.level)
     self.player.draw(self.level)
     self.fake_obstacles.draw(self.level)
     self.screen.blit(self.level, (0, 0), self.screen_rect)
