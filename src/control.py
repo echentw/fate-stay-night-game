@@ -43,9 +43,12 @@ class Control:
   def start(self):
     while True:
       if self.state == State.MAIN_MENU:
-        pg.mixer.music.load("assets/music/kodoku-na-junrei.wav")
-        pg.mixer.music.play()
-
+        if self.prev_state != State.MAIN_MENU and \
+           self.prev_state != State.SINGLE_PLAYER_MENU and \
+           self.prev_state != State.TWO_PLAYER_MENU:
+          pg.mixer.music.load("assets/music/kodoku-na-junrei.wav")
+          pg.mixer.music.play()
+        self.prev_state = self.state
         self.menu.reset()
         self.menu.main_loop()
         if self.menu.state == main_menu.State.SINGLE_PLAYER:
@@ -56,6 +59,7 @@ class Control:
           return
 
       elif self.state == State.SINGLE_PLAYER_MENU:
+        self.prev_state = self.state
         self.sp_menu.reset()
         self.sp_menu.main_loop()
         if self.sp_menu.state == sp_menu.State.PLAY:
@@ -64,6 +68,9 @@ class Control:
           self.state = State.MAIN_MENU
 
       elif self.state == State.SINGLE_PLAYER_GAME:
+        pg.mixer.music.load("assets/music/oath-sign-orchestra.wav")
+        pg.mixer.music.play()
+        self.prev_state = self.state
         self.sp_game.reset(self.sp_menu.player)
         self.sp_game.main_loop()
         if self.sp_game.quit:
@@ -72,6 +79,7 @@ class Control:
         return
 
       elif self.state == State.TWO_PLAYER_MENU:
+        self.prev_state = self.state
         self.tp_menu.reset()
         self.tp_menu.main_loop()
         if self.tp_menu.state == tp_menu.State.PLAY:
@@ -80,6 +88,9 @@ class Control:
           self.state = State.MAIN_MENU
 
       elif self.state == State.TWO_PLAYER_GAME:
+        pg.mixer.music.load("assets/music/oath-sign-orchestra.wav")
+        pg.mixer.music.play()
+        self.prev_state = self.state
         self.tp_game.reset(self.tp_menu.player1, self.tp_menu.player2)
         self.tp_game.main_loop()
         if self.tp_game.quit:
@@ -87,6 +98,7 @@ class Control:
         self.state = State.TWO_PLAYER_GAME_OVER
 
       elif self.state == State.TWO_PLAYER_GAME_OVER:
+        self.prev_state = self.state
         self.game_over.reset()
         self.game_over.set_winner(self.tp_game.winner)
         self.game_over.main_loop()

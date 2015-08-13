@@ -92,6 +92,8 @@ class GameOver(object):
 
   def main_loop(self):
     while not self.done:
+      if not pg.mixer.music.get_busy():
+        pg.mixer.music.play()
       self.event_loop()
       self.update()
       self.draw()
