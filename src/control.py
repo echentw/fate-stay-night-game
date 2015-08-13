@@ -51,7 +51,9 @@ class Control:
         self.prev_state = self.state
         self.menu.reset()
         self.menu.main_loop()
-        if self.menu.state == main_menu.State.SINGLE_PLAYER:
+        if self.menu.quit:
+          return
+        elif self.menu.state == main_menu.State.SINGLE_PLAYER:
           self.state = State.SINGLE_PLAYER_MENU
         elif self.menu.state == main_menu.State.TWO_PLAYER:
           self.state = State.TWO_PLAYER_MENU
@@ -62,7 +64,9 @@ class Control:
         self.prev_state = self.state
         self.sp_menu.reset()
         self.sp_menu.main_loop()
-        if self.sp_menu.state == sp_menu.State.PLAY:
+        if self.sp_menu.quit:
+          return
+        elif self.sp_menu.state == sp_menu.State.PLAY:
           self.state = State.SINGLE_PLAYER_GAME
         elif self.sp_menu.state == sp_menu.State.BACK:
           self.state = State.MAIN_MENU
@@ -82,7 +86,9 @@ class Control:
         self.prev_state = self.state
         self.tp_menu.reset()
         self.tp_menu.main_loop()
-        if self.tp_menu.state == tp_menu.State.PLAY:
+        if self.tp_menu.quit:
+          return
+        elif self.tp_menu.state == tp_menu.State.PLAY:
           self.state = State.TWO_PLAYER_GAME
         elif self.tp_menu.state == tp_menu.State.BACK:
           self.state = State.MAIN_MENU
@@ -102,7 +108,9 @@ class Control:
         self.game_over.reset()
         self.game_over.set_winner(self.tp_game.winner)
         self.game_over.main_loop()
-        if self.game_over.state == game_over.State.MAIN_MENU:
+        if self.game_over.quit:
+          return
+        elif self.game_over.state == game_over.State.MAIN_MENU:
           self.state = State.MAIN_MENU
         elif self.game_over.state == game_over.State.EXIT:
           return

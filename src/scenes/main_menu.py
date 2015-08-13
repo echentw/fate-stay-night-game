@@ -22,6 +22,7 @@ class Menu(object):
     self.keys = pg.key.get_pressed()
 
     self.done = False
+    self.quit = False
 
     # control main menu screen navigation
     self.state = State.SINGLE_PLAYER
@@ -43,6 +44,7 @@ class Menu(object):
       self.keys = pg.key.get_pressed()
       if event.type == pg.QUIT or self.keys[pg.K_ESCAPE]:
         self.done = True
+        self.quit = True
 
       elif self.keys[pg.K_UP]:
         if self.state != State.SINGLE_PLAYER:

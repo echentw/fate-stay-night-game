@@ -35,7 +35,8 @@ class Menu(object):
     self.keys = pg.key.get_pressed()
 
     # handle what happens after the menu is exited
-    self.done      = False
+    self.done = False
+    self.quit = False
 
     # spawning locations of players
     self.player1_location = (800, 200)
@@ -71,6 +72,7 @@ class Menu(object):
       self.keys = pg.key.get_pressed()
       if event.type == pg.QUIT or self.keys[pg.K_ESCAPE]:
         self.done = True
+        self.quit = True
       elif self.keys[pg.K_UP]:
         if self.state != State.PLAY:
           self.state -= 1
