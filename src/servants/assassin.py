@@ -10,9 +10,9 @@ class Assassin(player.Player):
     # qualities
     self.name = 'Assassin'
     self.health = 2
-    self.max_speed = 5
-    self.agility = 1
-    self.jump_power = 13.0
+    self.max_speed = 7
+    self.agility = 2
+    self.jump_power = 14.0
 
     # files used
     face_im      = "assets/sprites/assassin_face.png"
