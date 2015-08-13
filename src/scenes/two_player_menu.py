@@ -36,8 +36,6 @@ class Menu(object):
 
     # handle what happens after the menu is exited
     self.done      = False
-    self.quit      = False
-    self.goto_main = False
 
     # spawning locations of players
     self.player1_location = (800, 200)
@@ -73,8 +71,6 @@ class Menu(object):
       self.keys = pg.key.get_pressed()
       if event.type == pg.QUIT or self.keys[pg.K_ESCAPE]:
         self.done = True
-        self.quit = True
-
       elif self.keys[pg.K_UP]:
         if self.state != State.PLAY:
           self.state -= 1
@@ -84,14 +80,12 @@ class Menu(object):
       elif self.keys[pg.K_RETURN]:
         if self.state == State.PLAY:
           self.done = True
-          self.quit = False
         elif self.state == State.PLAYER1:
           self.player1_selection = (self.player1_selection + 1) % 4
         elif self.state == State.PLAYER2:
           self.player2_selection = (self.player2_selection + 1) % 4
         elif self.state == State.BACK:
           self.done = True
-          self.goto_main = True
 
 
   # draw things onto the screen

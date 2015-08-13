@@ -21,7 +21,6 @@ class GameOver(object):
 
     # handle player selection
     self.done = False
-    self.quit = False
 
     # control navigation
     self.state = State.MAIN_MENU
@@ -44,7 +43,6 @@ class GameOver(object):
       self.keys = pg.key.get_pressed()
       if event.type == pg.QUIT or self.keys[pg.K_ESCAPE]:
         self.done = True
-        self.quit = True
       elif self.keys[pg.K_UP]:
         if self.state != State.MAIN_MENU:
           self.state -= 1
@@ -54,10 +52,8 @@ class GameOver(object):
       elif self.keys[pg.K_RETURN]:
         if self.state == State.MAIN_MENU:
           self.done = True
-          self.quit = False
         elif self.state == State.EXIT:
           self.done = True
-          self.quit = True
 
   def update(self):
     pass

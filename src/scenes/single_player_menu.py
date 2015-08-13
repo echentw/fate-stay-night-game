@@ -33,8 +33,6 @@ class Menu(object):
 
     # handles what happens after the menu is exited
     self.done      = False
-    self.quit      = False
-    self.goto_main = False
 
     # player
     self.player_location = (200, 200)
@@ -62,8 +60,6 @@ class Menu(object):
       self.keys = pg.key.get_pressed()
       if event.type == pg.QUIT or self.keys[pg.K_ESCAPE]:
         self.done = True
-        self.quit = True
-
       elif self.keys[pg.K_UP]:
         if self.state != State.PLAY:
           self.state -= 1
@@ -73,12 +69,10 @@ class Menu(object):
       elif self.keys[pg.K_RETURN]:
         if self.state == State.PLAY:
           self.done = True
-          self.quit = False
         elif self.state == State.PLAYER:
           self.player_selection = (self.player_selection + 1) % 3
         elif self.state == State.BACK:
           self.done = True
-          self.goto_main = True
 
 
   def draw(self):

@@ -6,8 +6,8 @@ from src.servants import caster as cast
 from src.servants import assassin as ass
 
 class State:
-  SINGLEPLAYER = 0
-  MULTIPLAYER = 1
+  SINGLE_PLAYER = 0
+  TWO_PLAYER = 1
   EXIT = 2
 
 
@@ -22,10 +22,9 @@ class Menu(object):
     self.keys = pg.key.get_pressed()
 
     self.done = False
-    self.quit = False
 
     # control main menu screen navigation
-    self.state = State.SINGLEPLAYER
+    self.state = State.SINGLE_PLAYER
     self.default_color = (200, 200, 200)
     self.select_color  = (200, 0, 200)
 
@@ -44,21 +43,18 @@ class Menu(object):
       self.keys = pg.key.get_pressed()
       if event.type == pg.QUIT or self.keys[pg.K_ESCAPE]:
         self.done = True
-        self.quit = True
 
       elif self.keys[pg.K_UP]:
-        if self.state != State.SINGLEPLAYER:
+        if self.state != State.SINGLE_PLAYER:
           self.state -= 1
       elif self.keys[pg.K_DOWN]:
         if self.state != State.EXIT:
           self.state += 1
       elif self.keys[pg.K_RETURN]:
-        if self.state == State.SINGLEPLAYER or self.state == State.MULTIPLAYER:
+        if self.state == State.SINGLE_PLAYER or self.state == State.TWO_PLAYER:
           self.done = True
-          self.quit = False
         elif self.state == State.EXIT:
           self.done = True
-          self.quit = True
 
 
   def update(self):
@@ -79,9 +75,9 @@ class Menu(object):
     singleplayer_text_color = self.default_color
     multiplayer_text_color  = self.default_color
     exit_text_color         = self.default_color
-    if self.state == State.SINGLEPLAYER:
+    if self.state == State.SINGLE_PLAYER:
       singleplayer_text_color = self.select_color
-    elif self.state == State.MULTIPLAYER:
+    elif self.state == State.TWO_PLAYER:
       multiplayer_text_color = self.select_color
     elif self.state == State.EXIT:
       exit_text_color = self.select_color
