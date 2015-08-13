@@ -39,6 +39,7 @@ class Game(object):
     self.player2_obstacles.add(self.obstacles)
 
     # initialize the face images of the characters
+    self.player2.face_im = pg.transform.flip(self.player2.face_im, True, False)
     self.player1_face_rect = self.player1.face_im.get_rect()
     self.player1_face_rect.right = self.screen_rect.width
     self.player2_face_rect = self.player2.face_im.get_rect()
