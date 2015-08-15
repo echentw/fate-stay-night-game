@@ -8,13 +8,14 @@ from src.servants import assassin as ass
 class State:
   SINGLE_PLAYER = 0
   TWO_PLAYER = 1
-  EXIT = 2
+  SOUND = 2
+  EXIT = 3
 
 
 class Menu(object):
   BACKGROUND_COLOR = (100, 100, 100)
 
-  def __init__(self, screen_size):
+  def __init__(self, screen_size, mute=False):
     self.screen = pg.display.get_surface()
     self.screen_rect = self.screen.get_rect()
     self.clock = pg.time.Clock()
@@ -34,9 +35,11 @@ class Menu(object):
     self.excalibur_im = pg.image.load("assets/sprites/excalibur.png").convert()
     self.excalibur_im.set_colorkey((255, 0, 255))
 
+    self.mute = mute
+
 
   def reset(self):
-    self.__init__((self.screen_rect.width, self.screen_rect.height))
+    self.__init__((self.screen_rect.width, self.screen_rect.height), self.mute)
 
   # check for key presses and releases
   def event_loop(self):
@@ -45,7 +48,6 @@ class Menu(object):
       if event.type == pg.QUIT or self.keys[pg.K_ESCAPE]:
         self.done = True
         self.quit = True
-
       elif self.keys[pg.K_UP]:
         if self.state != State.SINGLE_PLAYER:
           self.state -= 1
@@ -55,12 +57,17 @@ class Menu(object):
       elif self.keys[pg.K_RETURN]:
         if self.state == State.SINGLE_PLAYER or self.state == State.TWO_PLAYER:
           self.done = True
+        elif self.state == State.SOUND:
+          self.mute = not self.mute
+          if self.mute:
+            pg.mixer.music.set_volume(0.0)
+            self.mute = True
+          else:
+            pg.mixer.music.set_volume(1.0)
+            self.mute = False
         elif self.state == State.EXIT:
           self.done = True
 
-
-  def update(self):
-    pass
 
   # draw things onto the screen
   def draw(self):
@@ -76,11 +83,14 @@ class Menu(object):
 
     singleplayer_text_color = self.default_color
     multiplayer_text_color  = self.default_color
+    sound_text_color        = self.default_color
     exit_text_color         = self.default_color
     if self.state == State.SINGLE_PLAYER:
       singleplayer_text_color = self.select_color
     elif self.state == State.TWO_PLAYER:
       multiplayer_text_color = self.select_color
+    elif self.state == State.SOUND:
+      sound_text_color = self.select_color
     elif self.state == State.EXIT:
       exit_text_color = self.select_color
 
@@ -97,10 +107,16 @@ class Menu(object):
     textpos.centery = self.screen_rect.centery + 60
     self.screen.blit(text, textpos)
 
+    text = font.render('Sound: ' + get_str(self.mute), 1, sound_text_color)
+    textpos = text.get_rect()
+    textpos.x = 375
+    textpos.centery = self.screen_rect.centery + 90
+    self.screen.blit(text, textpos)
+
     text = font.render('Exit', 1, exit_text_color)
     textpos = text.get_rect()
     textpos.centerx = self.screen_rect.centerx
-    textpos.centery = self.screen_rect.centery + 90
+    textpos.centery = self.screen_rect.centery + 120
     self.screen.blit(text, textpos)
 
     font = pg.font.Font(None, 24)
@@ -113,11 +129,16 @@ class Menu(object):
   # main loop of the game
   def main_loop(self):
     while not self.done:
-      if not pg.mixer.music.get_busy():
+      if self.mute and not pg.mixer.music.get_busy():
         pg.mixer.music.play()
       self.event_loop()
-      self.update()
       self.draw()
       pg.display.update()
       self.clock.tick(self.fps)
+
+def get_str(mute):
+  if mute:
+    return 'OFF'
+  else:
+    return 'ON'
 

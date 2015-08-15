@@ -27,33 +27,34 @@ class Selection:
 class Menu(object):
   BACKGROUND_COLOR = (100, 100, 100)
 
-  def __init__(self, screen_size):
+  def __init__(self, screen_size, mute=False):
     self.screen = pg.display.get_surface()
     self.screen_rect = self.screen.get_rect()
     self.clock = pg.time.Clock()
     self.fps = 60.0
     self.keys = pg.key.get_pressed()
+    self.mute = mute
 
     # handle what happens after the menu is exited
     self.done = False
     self.quit = False
 
     # spawning locations of players
-    self.player1_location = (800, 200)
-    self.player2_location = (200, 200)
+    self.p1_location = (800, 200)
+    self.p2_location = (200, 200)
 
     # key bindings for players
-    self.player1_keys = (pg.K_UP, pg.K_DOWN, pg.K_LEFT, pg.K_RIGHT)
-    self.player2_keys = (pg.K_w, pg.K_s, pg.K_a, pg.K_d)
+    self.p1_keys = (pg.K_UP, pg.K_DOWN, pg.K_LEFT, pg.K_RIGHT)
+    self.p2_keys = (pg.K_w, pg.K_s, pg.K_a, pg.K_d)
 
     # players
-    self.player1 = sab.Saber(self.player1_keys, self.player1_location)
-    self.player2 = arc.Archer(self.player2_keys, self.player2_location)
+    self.p1 = sab.Saber(self.p1_keys, self.p1_location, self.mute)
+    self.p2 = arc.Archer(self.p2_keys, self.p2_location, self.mute)
 
     # control main menu screen navigation
     self.state = State.PLAY
-    self.player1_selection = Selection.SABER
-    self.player2_selection = Selection.ARCHER
+    self.p1_selection = Selection.SABER
+    self.p2_selection = Selection.ARCHER
     self.default_color = (200, 200, 200)
     self.select_color  = (200, 0, 200)
 
@@ -63,8 +64,8 @@ class Menu(object):
     self.excalibur_im.set_colorkey((255, 0, 255))
 
 
-  def reset(self):
-    self.__init__((self.screen_rect.width, self.screen_rect.height))
+  def reset(self, mute=False):
+    self.__init__((self.screen_rect.width, self.screen_rect.height), mute)
 
   # check for key presses and releases
   def event_loop(self):
@@ -83,9 +84,9 @@ class Menu(object):
         if self.state == State.PLAY:
           self.done = True
         elif self.state == State.PLAYER1:
-          self.player1_selection = (self.player1_selection + 1) % 4
+          self.p1_selection = (self.p1_selection + 1) % 4
         elif self.state == State.PLAYER2:
-          self.player2_selection = (self.player2_selection + 1) % 4
+          self.p2_selection = (self.p2_selection + 1) % 4
         elif self.state == State.BACK:
           self.done = True
 
@@ -122,13 +123,13 @@ class Menu(object):
     textpos.centery = self.screen_rect.centery + 30
     self.screen.blit(text, textpos)
 
-    text = font.render('Player 1 selection: ' + Selection.NAME[self.player1_selection], 1, player1_text_color)
+    text = font.render('Player 1 selection: ' + Selection.NAME[self.p1_selection], 1, player1_text_color)
     textpos = text.get_rect()
     textpos.x = 250
     textpos.centery = self.screen_rect.centery + 60
     self.screen.blit(text, textpos)
 
-    text = font.render('Player 2 selection: ' + Selection.NAME[self.player2_selection], 1, player2_text_color)
+    text = font.render('Player 2 selection: ' + Selection.NAME[self.p2_selection], 1, player2_text_color)
     textpos = text.get_rect()
     textpos.x = 250
     textpos.centery = self.screen_rect.centery + 90
@@ -149,23 +150,23 @@ class Menu(object):
 
   # pass the resulting selections to initialize the players
   def initialize_players(self):
-    if self.player1_selection == Selection.SABER:
-      self.player1 = sab.Saber(self.player1_keys, self.player1_location)
-    elif self.player1_selection == Selection.ARCHER:
-      self.player1 = arc.Archer(self.player1_keys, self.player1_location)
-    elif self.player1_selection == Selection.CASTER:
-      self.player1 = cast.Caster(self.player1_keys, self.player1_location)
-    elif self.player1_selection == Selection.ASSASSIN:
-      self.player1 = ass.Assassin(self.player1_keys, self.player1_location)
+    if self.p1_selection == Selection.SABER:
+      self.p1 = sab.Saber(self.p1_keys, self.p1_location, self.mute)
+    elif self.p1_selection == Selection.ARCHER:
+      self.p1 = arc.Archer(self.p1_keys, self.p1_location, self.mute)
+    elif self.p1_selection == Selection.CASTER:
+      self.p1 = cast.Caster(self.p1_keys, self.p1_location, self.mute)
+    elif self.p1_selection == Selection.ASSASSIN:
+      self.p1 = ass.Assassin(self.p1_keys, self.p1_location, self.mute)
 
-    if self.player2_selection == Selection.SABER:
-      self.player2 = sab.Saber(self.player2_keys, self.player2_location)
-    elif self.player2_selection == Selection.ARCHER:
-      self.player2 = arc.Archer(self.player2_keys, self.player2_location)
-    elif self.player2_selection == Selection.CASTER:
-      self.player2 = cast.Caster(self.player2_keys, self.player2_location)
-    elif self.player2_selection == Selection.ASSASSIN:
-      self.player2 = ass.Assassin(self.player2_keys, self.player2_location)
+    if self.p2_selection == Selection.SABER:
+      self.p2 = sab.Saber(self.p2_keys, self.p2_location, self.mute)
+    elif self.p2_selection == Selection.ARCHER:
+      self.p2 = arc.Archer(self.p2_keys, self.p2_location, self.mute)
+    elif self.p2_selection == Selection.CASTER:
+      self.p2 = cast.Caster(self.p2_keys, self.p2_location, self.mute)
+    elif self.p2_selection == Selection.ASSASSIN:
+      self.p2 = ass.Assassin(self.p2_keys, self.p2_location, self.mute)
 
 
   # main loop of the game

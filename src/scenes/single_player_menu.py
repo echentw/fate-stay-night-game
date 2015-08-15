@@ -23,22 +23,23 @@ class Selection:
 class Menu(object):
   BACKGROUND_COLOR = (100, 100, 100)
 
-  def __init__(self, screen_size):
+  def __init__(self, screen_size, mute=False):
     # handles the display
     self.screen = pg.display.get_surface()
     self.screen_rect = self.screen.get_rect()
     self.clock  = pg.time.Clock()
     self.fps = 60.0
     self.keys = pg.key.get_pressed()
+    self.mute = mute
 
     # handles what happens after the menu is exited
     self.done = False
     self.quit = False
 
     # player
-    self.player_location = (200, 200)
+    self.player_loc = (200, 200)
     self.player_keys = (pg.K_UP, pg.K_DOWN, pg.K_LEFT, pg.K_RIGHT)
-    self.player = sab.Saber(self.player_keys, self.player_location)
+    self.player = sab.Saber(self.player_keys, self.player_loc, self.mute)
 
     # control navigation
     self.state = State.PLAY
@@ -52,8 +53,8 @@ class Menu(object):
     self.excalibur_im.set_colorkey((255, 0, 255))
 
 
-  def reset(self):
-    self.__init__((self.screen_rect.width, self.screen_rect.height))
+  def reset(self, mute=False):
+    self.__init__((self.screen_rect.width, self.screen_rect.height), mute)
 
   # check for key presses and releases
   def event_loop(self):
@@ -126,11 +127,11 @@ class Menu(object):
 
   def initialize_player(self):
     if self.player_selection == Selection.SABER:
-      self.player = sab.Saber(self.player_keys, self.player_location)
+      self.player = sab.Saber(self.player_keys, self.player_loc, self.mute)
     elif self.player_selection == Selection.ARCHER:
-      self.player = arc.Archer(self.player_keys, self.player_location)
+      self.player = arc.Archer(self.player_keys, self.player_loc, self.mute)
     elif self.player_selection == Selection.CASTER:
-      self.player = cas.Caster(self.player_keys, self.player_location)
+      self.player = cas.Caster(self.player_keys, self.player_loc, self.mute)
 
 
   def main_loop(self):

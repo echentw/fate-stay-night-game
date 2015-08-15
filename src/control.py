@@ -32,12 +32,14 @@ class Control:
     self.sp_menu = sp_menu.Menu(Control.SCREEN_SIZE)
     self.tp_menu = tp_menu.Menu(Control.SCREEN_SIZE)
     self.sp_game = sp_game.Game((1000, 1000), self.sp_menu.player)
-    self.tp_game = tp_game.Game((1000, 1000), self.tp_menu.player1,
-                                              self.tp_menu.player2)
+    self.tp_game = tp_game.Game((1000, 1000), self.tp_menu.p1,
+                                              self.tp_menu.p2)
     self.game_over = game_over.GameOver(Control.SCREEN_SIZE)
 
     self.state = State.MAIN_MENU
     self.prev_state = None
+
+    self.mute = False
 
 
   def start(self):
@@ -51,6 +53,7 @@ class Control:
         self.prev_state = self.state
         self.menu.reset()
         self.menu.main_loop()
+        self.mute = self.menu.mute
         if self.menu.quit:
           return
         elif self.menu.state == main_menu.State.SINGLE_PLAYER:
@@ -62,7 +65,7 @@ class Control:
 
       elif self.state == State.SINGLE_PLAYER_MENU:
         self.prev_state = self.state
-        self.sp_menu.reset()
+        self.sp_menu.reset(self.mute)
         self.sp_menu.main_loop()
         if self.sp_menu.quit:
           return
@@ -75,7 +78,7 @@ class Control:
         pg.mixer.music.load("assets/music/oath-sign-orchestra.wav")
         pg.mixer.music.play()
         self.prev_state = self.state
-        self.sp_game.reset(self.sp_menu.player)
+        self.sp_game.reset(self.sp_menu.player, self.mute)
         self.sp_game.main_loop()
         if self.sp_game.quit:
           return
@@ -84,7 +87,7 @@ class Control:
 
       elif self.state == State.TWO_PLAYER_MENU:
         self.prev_state = self.state
-        self.tp_menu.reset()
+        self.tp_menu.reset(self.mute)
         self.tp_menu.main_loop()
         if self.tp_menu.quit:
           return
@@ -97,7 +100,7 @@ class Control:
         pg.mixer.music.load("assets/music/oath-sign-orchestra.wav")
         pg.mixer.music.play()
         self.prev_state = self.state
-        self.tp_game.reset(self.tp_menu.player1, self.tp_menu.player2)
+        self.tp_game.reset(self.tp_menu.p1, self.tp_menu.p2, self.mute)
         self.tp_game.main_loop()
         if self.tp_game.quit:
           return

@@ -4,8 +4,8 @@ from src import player
 
 
 class Caster(player.Player):
-  def __init__(self, keys, start_location):
-    player.Player.__init__(self, keys)
+  def __init__(self, keys, start_location, mute=False):
+    player.Player.__init__(self, keys, mute)
 
     # qualities
     self.name = 'Caster'

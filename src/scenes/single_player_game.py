@@ -8,7 +8,7 @@ from src.servants import assassin as ass
 class Game(object):
   BACKGROUND_COLOR = (100, 100, 100)
 
-  def __init__(self, level_size, player):
+  def __init__(self, level_size, player, mute=False):
     # winner is set when one player's health hits 0
     self.winner = None
 
@@ -27,6 +27,7 @@ class Game(object):
     self.keys = pg.key.get_pressed()
 
     # sound when an attack hits
+    self.mute = mute
     self.sound_impact = pg.mixer.Sound("assets/soundfx/hit.wav")
 
     # initialize the player and npcs
@@ -42,14 +43,15 @@ class Game(object):
     self.player_face_rect = self.player.face_im.get_rect()
 
 
-  def reset(self, player):
-    self.__init__((self.level_rect.width, self.level_rect.height), player)
+  def reset(self, player, mute=False):
+    self.__init__((self.level_rect.width, self.level_rect.height),
+                  player, mute)
 
   # helper method to initialize the npcs
   def get_npcs(self):
     npcs = [
-      ass.Assassin((pg.K_w, pg.K_s, pg.K_a, pg.K_d), (800, 200)),
-      ass.Assassin((pg.K_w, pg.K_s, pg.K_a, pg.K_d), (880, 200))
+      ass.Assassin((pg.K_w, pg.K_s, pg.K_a, pg.K_d), (800, 200), self.mute),
+      ass.Assassin((pg.K_w, pg.K_s, pg.K_a, pg.K_d), (880, 200), self.mute)
     ]
     return npcs
 
@@ -109,12 +111,14 @@ class Game(object):
               for npc in self.npcs:
                 if npc.receive_attack(npc.RIGHT_KEY,
                                       self.player.attack_left_rect):
-                  self.sound_impact.play()
+                  if not self.mute:
+                    self.sound_impact.play()
             else:
               for npc in self.npcs:
                 if npc.receive_attack(npc.LEFT_KEY,
                                       self.player.attack_right_rect):
-                  self.sound_impact.play()
+                  if not self.mute:
+                    self.sound_impact.play()
         self.player.handle_keydown(event.key, self.player_obstacles)
 
       elif event.type == pg.KEYUP:

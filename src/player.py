@@ -6,7 +6,7 @@ import physics
 class Player(physics.Physics, pg.sprite.Sprite):
   COLOR_KEY = (255, 0, 255)
 
-  def __init__(self, keys):
+  def __init__(self, keys, mute=False):
     physics.Physics.__init__(self)
     pg.sprite.Sprite.__init__(self)
 
@@ -63,6 +63,7 @@ class Player(physics.Physics, pg.sprite.Sprite):
     self.hurt_counter = 0
 
     # handle sound effects
+    self.mute = mute
     self.sound_attack = None
     self.sound_land = None
 
@@ -97,7 +98,8 @@ class Player(physics.Physics, pg.sprite.Sprite):
       self.y_vel = min(self.y_vel, 0)
       if self.y_vel == 0:
         if self.fall:
-          self.sound_land.play()
+          if not self.mute:
+            self.sound_land.play()
         self.fall = False
     else:
       self.fall = True
@@ -137,7 +139,8 @@ class Player(physics.Physics, pg.sprite.Sprite):
     elif key == self.DOWN_KEY:
       if not self.attacking:
         self.attacking = True
-        self.sound_attack.play()
+        if not self.mute:
+          self.sound_attack.play()
     elif key == self.UP_KEY:
       if not self.fall and not self.attacking:
         self.y_vel = -self.jump_power

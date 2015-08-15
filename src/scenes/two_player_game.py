@@ -6,7 +6,7 @@ from src import obstacles as ob
 class Game(object):
   BACKGROUND_COLOR = (100, 100, 100)
 
-  def __init__(self, level_size, player1, player2):
+  def __init__(self, level_size, player1, player2, mute=False):
     # winner is set when one player's health hits 0
     self.winner = None
 
@@ -25,6 +25,7 @@ class Game(object):
     self.keys = pg.key.get_pressed()
 
     # sound when an attack hits
+    self.mute = mute
     self.sound_impact = pg.mixer.Sound("assets/soundfx/hit.wav")
 
     # initialize the players
@@ -45,9 +46,9 @@ class Game(object):
     self.player2_face_rect = self.player2.face_im.get_rect()
 
 
-  def reset(self, player1, player2):
+  def reset(self, player1, player2, mute=False):
     self.__init__((self.level_rect.width, self.level_rect.height),
-                  player1, player2)
+                  player1, player2, mute)
 
   # helper method to create the platforms in the game
   def make_obstacles(self):
@@ -105,21 +106,25 @@ class Game(object):
             if self.player1.direction == self.player1.LEFT_KEY:
               if self.player2.receive_attack(self.player2.RIGHT_KEY,
                                              self.player1.attack_left_rect):
-                self.sound_impact.play()
+                if not self.mute:
+                  self.sound_impact.play()
             else:
               if self.player2.receive_attack(self.player2.LEFT_KEY,
                                              self.player1.attack_right_rect):
-                self.sound_impact.play()
+                if not self.mute:
+                  self.sound_impact.play()
         elif event.key == self.player2.DOWN_KEY:
           if not self.player2.attacking and not self.player2.hurt:
             if self.player2.direction == self.player2.LEFT_KEY:
               if self.player1.receive_attack(self.player1.RIGHT_KEY,
                                              self.player2.attack_left_rect):
-                self.sound_impact.play()
+                if not self.mute:
+                  self.sound_impact.play()
             else:
               if self.player1.receive_attack(self.player1.LEFT_KEY,
                                              self.player2.attack_right_rect):
-                self.sound_impact.play()
+                if not self.mute:
+                  self.sound_impact.play()
         self.player1.handle_keydown(event.key, self.player1_obstacles)
         self.player2.handle_keydown(event.key, self.player2_obstacles)
 
