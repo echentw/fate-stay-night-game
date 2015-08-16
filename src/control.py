@@ -6,15 +6,17 @@ from scenes import single_player_game as sp_game
 from scenes import two_player_menu as tp_menu
 from scenes import two_player_game as tp_game
 from scenes import main_menu
-from scenes import game_over
+from scenes import two_player_game_over as tp_go
+from scenes import single_player_game_over as sp_go
 
 class State:
-  MAIN_MENU = 0
-  SINGLE_PLAYER_MENU = 1
-  SINGLE_PLAYER_GAME = 3
-  TWO_PLAYER_MENU = 2
-  TWO_PLAYER_GAME = 4
-  TWO_PLAYER_GAME_OVER = 5
+  MAIN_MENU               = 0
+  SINGLE_PLAYER_MENU      = 1
+  SINGLE_PLAYER_GAME      = 2
+  SINGLE_PLAYER_GAME_OVER = 3
+  TWO_PLAYER_MENU         = 4
+  TWO_PLAYER_GAME         = 5
+  TWO_PLAYER_GAME_OVER    = 6
 
 
 class Control:
@@ -34,8 +36,8 @@ class Control:
     self.sp_game = sp_game.Game((1000, 1000), self.sp_menu.player)
     self.tp_game = tp_game.Game((1000, 1000), self.tp_menu.p1,
                                               self.tp_menu.p2)
-    self.game_over = game_over.GameOver(Control.SCREEN_SIZE,
-                                        self.tp_menu.p1)
+    self.sp_go = sp_go.GameOver(Control.SCREEN_SIZE, self.sp_menu.player)
+    self.tp_go = tp_go.GameOver(Control.SCREEN_SIZE, self.tp_menu.p1)
 
     self.state = State.MAIN_MENU
     self.prev_state = None
@@ -83,8 +85,7 @@ class Control:
         self.sp_game.main_loop()
         if self.sp_game.quit:
           return
-        print 'not implemented!'
-        return
+        self.state = State.SINGLE_PLAYER_GAME_OVER
 
       elif self.state == State.TWO_PLAYER_MENU:
         self.prev_state = self.state
@@ -107,15 +108,25 @@ class Control:
           return
         self.state = State.TWO_PLAYER_GAME_OVER
 
+      elif self.state == State.SINGLE_PLAYER_GAME_OVER:
+        self.prev_state = self.state
+        self.sp_go.reset(self.sp_game.player)
+        self.sp_go.main_loop()
+        if self.sp_go.quit:
+          return
+        elif self.sp_go.state == sp_go.State.MAIN_MENU:
+          self.state = State.MAIN_MENU
+        elif self.sp_go.state == sp_go.State.EXIT:
+          return
+
       elif self.state == State.TWO_PLAYER_GAME_OVER:
         self.prev_state = self.state
-        self.game_over.reset(self.tp_game.winner)
-#        self.game_over.set_winner(self.tp_game.winner)
-        self.game_over.main_loop()
-        if self.game_over.quit:
+        self.tp_go.reset(self.tp_game.winner)
+        self.tp_go.main_loop()
+        if self.tp_go.quit:
           return
-        elif self.game_over.state == game_over.State.MAIN_MENU:
+        elif self.tp_go.state == tp_go.State.MAIN_MENU:
           self.state = State.MAIN_MENU
-        elif self.game_over.state == game_over.State.EXIT:
+        elif self.tp_go.state == tp_go.State.EXIT:
           return
 
