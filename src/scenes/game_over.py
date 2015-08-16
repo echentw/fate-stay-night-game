@@ -8,7 +8,7 @@ class State:
 class GameOver(object):
   BACKGROUND_COLOR = (100, 100, 100)
 
-  def __init__(self, screen_size):
+  def __init__(self, screen_size, winner):
     # handles the display
     self.screen = pg.display.get_surface()
     self.screen_rect = self.screen.get_rect()
@@ -17,7 +17,12 @@ class GameOver(object):
     self.keys = pg.key.get_pressed()
 
     # the winner to display
-    self.winner = None
+    self.winner = winner
+    self.winner_image = None
+    self.frame_id = 0
+    self.animate_timer = 0.0
+    self.animate_fps = 7.0
+    self.frames = self.get_big_frames(self.winner)
 
     # handle player selection
     self.done = False
@@ -29,14 +34,19 @@ class GameOver(object):
     self.select_color  = (250, 250, 0)
 
     # decoration
-    self.background = pg.image.load("assets/sprites/ubw.png").convert()
+    self.background = pg.image.load("assets/sprites/blue.png").convert()
 
 
-  def reset(self):
-    self.__init__((self.screen_rect.width, self.screen_rect.height))
+  def reset(self, winner):
+    self.__init__((self.screen_rect.width, self.screen_rect.height), winner)
 
-  def set_winner(self, winner):
-    self.winner = winner
+
+  # helper method to get big walking frames
+  def get_big_frames(self, servant):
+    frames = [pg.transform.scale(servant.walk_frames[servant.LEFT_KEY][i],
+        (servant.rect.width * 2, servant.rect.height * 2)) \
+        for i in xrange(len(servant.walk_frames[servant.LEFT_KEY]))]
+    return frames
 
   # check for key presses
   def event_loop(self):
@@ -58,10 +68,19 @@ class GameOver(object):
           self.done = True
 
   def update(self):
-    pass
+    now = pg.time.get_ticks()
+    if now - self.animate_timer > 1000 / self.animate_fps:
+      self.animate_timer = now
+      self.frame_id = (self.frame_id + 1) % len(self.frames)
+    self.winner_image = self.frames[self.frame_id]
 
   def draw(self):
     self.screen.blit(self.background, (0, 0))
+#    self.screen.fill(GameOver.BACKGROUND_COLOR)
+
+    self.screen.blit(self.winner_image,
+                     (self.screen_rect.centerx - self.winner.rect.width,
+                      self.screen_rect.centery - 200))
 
     font = pg.font.Font('assets/fonts/outline_pixel-7_solid.ttf', 48)
     text = font.render(self.winner.name + " wins!", 1, (230, 230, 230))

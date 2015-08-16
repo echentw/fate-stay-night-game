@@ -34,7 +34,8 @@ class Control:
     self.sp_game = sp_game.Game((1000, 1000), self.sp_menu.player)
     self.tp_game = tp_game.Game((1000, 1000), self.tp_menu.p1,
                                               self.tp_menu.p2)
-    self.game_over = game_over.GameOver(Control.SCREEN_SIZE)
+    self.game_over = game_over.GameOver(Control.SCREEN_SIZE,
+                                        self.tp_menu.p1)
 
     self.state = State.MAIN_MENU
     self.prev_state = None
@@ -108,8 +109,8 @@ class Control:
 
       elif self.state == State.TWO_PLAYER_GAME_OVER:
         self.prev_state = self.state
-        self.game_over.reset()
-        self.game_over.set_winner(self.tp_game.winner)
+        self.game_over.reset(self.tp_game.winner)
+#        self.game_over.set_winner(self.tp_game.winner)
         self.game_over.main_loop()
         if self.game_over.quit:
           return
