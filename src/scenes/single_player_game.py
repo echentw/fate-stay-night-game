@@ -10,8 +10,8 @@ class Game(object):
   BACKGROUND_COLOR = (100, 100, 100)
 
   def __init__(self, level_size, player, mute=False):
-    # winner is set when one player's health hits 0
-    self.winner = None
+    # whether the player wins or loses
+    self.win = False
 
     # the entire map
     self.level = pg.Surface((level_size[0], level_size[1])).convert()
@@ -150,15 +150,17 @@ class Game(object):
 
   # check for winner, update player position
   def update(self):
-    if self.player.health <= 0:
-      self.done = True
-      self.quit = False
     for npc in self.npcs:
       if npc.servant.health <= 0:
         self.npcs.remove(npc)
-    if not self.npcs:
+    if self.player.health <= 0:
       self.done = True
       self.quit = False
+      self.win = False
+    elif not self.npcs:
+      self.done = True
+      self.quit = False
+      self.win = True
     self.player.update(self.screen_rect, self.player_obstacles)
     for npc in self.npcs:
       npc.servant.update(self.screen_rect, self.player_obstacles)

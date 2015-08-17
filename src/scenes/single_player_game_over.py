@@ -8,7 +8,10 @@ class State:
 class GameOver(object):
   BACKGROUND_COLOR = (100, 100, 100)
 
-  def __init__(self, screen_size, player, mute=False):
+  def __init__(self, screen_size, win, player, mute=False):
+    # whether the player won or lost
+    self.win = win
+
     # handles the display
     self.screen = pg.display.get_surface()
     self.screen_rect = self.screen.get_rect()
@@ -34,7 +37,12 @@ class GameOver(object):
     self.select_color  = (250, 250, 0)
 
     # decoration
-    self.background = pg.image.load("assets/sprites/blue.png").convert()
+    if self.win:
+      self.background = pg.image.load("assets/sprites/blue.png").convert()
+      self.message = 'You win!'
+    else:
+      self.background = pg.image.load("assets/sprites/ubw.png").convert()
+      self.message = 'You lose...'
 
     # sound
     self.mute = mute
@@ -42,9 +50,9 @@ class GameOver(object):
     self.sound_select = pg.mixer.Sound("assets/soundfx/menu_select.wav")
 
 
-  def reset(self, player, mute=False):
+  def reset(self, win, player, mute=False):
     self.__init__((self.screen_rect.width, self.screen_rect.height),
-                  player, mute)
+                  win, player, mute)
 
 
   # helper method to get big walking frames
@@ -95,7 +103,7 @@ class GameOver(object):
                       self.screen_rect.centery - 200))
 
     font = pg.font.Font('assets/fonts/outline_pixel-7_solid.ttf', 48)
-    text = font.render('You win!', 1, (230, 230, 230))
+    text = font.render(self.message, 1, (230, 230, 230))
     textpos = text.get_rect()
     textpos.centerx = self.screen.get_rect().centerx
     textpos.centery = self.screen.get_rect().centery - 30

@@ -36,7 +36,9 @@ class Control:
     self.sp_game = sp_game.Game((1000, 1000), self.sp_menu.player)
     self.tp_game = tp_game.Game((1000, 1000), self.tp_menu.p1,
                                               self.tp_menu.p2)
-    self.sp_go = sp_go.GameOver(Control.SCREEN_SIZE, self.sp_menu.player)
+    self.sp_go = sp_go.GameOver(Control.SCREEN_SIZE,
+                                self.sp_game.win,
+                                self.sp_menu.player)
     self.tp_go = tp_go.GameOver(Control.SCREEN_SIZE, self.tp_menu.p1)
 
     self.state = State.MAIN_MENU
@@ -110,7 +112,7 @@ class Control:
 
       elif self.state == State.SINGLE_PLAYER_GAME_OVER:
         self.prev_state = self.state
-        self.sp_go.reset(self.sp_game.player, self.mute)
+        self.sp_go.reset(self.sp_game.win, self.sp_game.player, self.mute)
         self.sp_go.main_loop()
         if self.sp_go.quit:
           return
