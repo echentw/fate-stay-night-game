@@ -6,7 +6,7 @@ import physics
 class Player(physics.Physics, pg.sprite.Sprite):
   COLOR_KEY = (255, 0, 255)
 
-  def __init__(self, keys, mute=False):
+  def __init__(self, keys, mute=False, direction=3):
     physics.Physics.__init__(self)
     pg.sprite.Sprite.__init__(self)
 
@@ -33,7 +33,7 @@ class Player(physics.Physics, pg.sprite.Sprite):
     self.RIGHT_KEY = keys[3]
     self.direct_dict = {self.LEFT_KEY : (-1, 0),
                         self.RIGHT_KEY: ( 1, 0)}
-    self.direction = self.RIGHT_KEY       # the direction Player is facing
+    self.direction = keys[direction]      # the direction Player is facing
     self.old_direction = None             # the previous direction
     self.direction_stack = []
 

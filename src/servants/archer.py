@@ -4,8 +4,8 @@ from src import player
 
 
 class Archer(player.Player):
-  def __init__(self, keys, start_location, mute=False):
-    player.Player.__init__(self, keys, mute)
+  def __init__(self, keys, start_location, mute=False, direction=3):
+    player.Player.__init__(self, keys, mute, direction)
 
     # qualities
     self.name = 'Archer'
