@@ -30,7 +30,6 @@ class Menu(object):
     self.clock  = pg.time.Clock()
     self.fps = 60.0
     self.keys = pg.key.get_pressed()
-    self.mute = mute
 
     # handles what happens after the menu is exited
     self.done = False
@@ -39,7 +38,7 @@ class Menu(object):
     # player
     self.player_loc = (200, 200)
     self.player_keys = (pg.K_UP, pg.K_DOWN, pg.K_LEFT, pg.K_RIGHT)
-    self.player = sab.Saber(self.player_keys, self.player_loc, self.mute)
+    self.player = sab.Saber(self.player_keys, self.player_loc, mute)
 
     # control navigation
     self.state = State.PLAY
@@ -51,6 +50,11 @@ class Menu(object):
     self.background = pg.image.load("assets/sprites/night.png").convert()
     self.excalibur_im = pg.image.load("assets/sprites/excalibur.png").convert()
     self.excalibur_im.set_colorkey((255, 0, 255))
+
+    # sound
+    self.mute = mute
+    self.sound_switch = pg.mixer.Sound("assets/soundfx/menu_switch.wav")
+    self.sound_select = pg.mixer.Sound("assets/soundfx/menu_select.wav")
 
 
   def reset(self, mute=False):
@@ -66,16 +70,27 @@ class Menu(object):
       elif self.keys[pg.K_UP]:
         if self.state != State.PLAY:
           self.state -= 1
+          if not self.mute:
+            self.sound_switch.play()
       elif self.keys[pg.K_DOWN]:
         if self.state != State.BACK:
           self.state += 1
+          if not self.mute:
+            self.sound_switch.play()
       elif self.keys[pg.K_RETURN]:
         if self.state == State.PLAY:
           self.done = True
+          if not self.mute:
+            self.sound_switch.play()
+            self.sound_select.play()
         elif self.state == State.PLAYER:
           self.player_selection = (self.player_selection + 1) % 3
+          if not self.mute:
+            self.sound_switch.play()
         elif self.state == State.BACK:
           self.done = True
+          if not self.mute:
+            self.sound_switch.play()
 
 
   def draw(self):

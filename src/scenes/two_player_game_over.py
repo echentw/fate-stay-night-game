@@ -8,7 +8,7 @@ class State:
 class GameOver(object):
   BACKGROUND_COLOR = (100, 100, 100)
 
-  def __init__(self, screen_size, winner):
+  def __init__(self, screen_size, winner, mute=False):
     # handles the display
     self.screen = pg.display.get_surface()
     self.screen_rect = self.screen.get_rect()
@@ -36,10 +36,16 @@ class GameOver(object):
     # decoration
     self.background = pg.image.load("assets/sprites/blue.png").convert()
 
+    # sound
+    self.mute = mute
+    self.sound_switch = pg.mixer.Sound("assets/soundfx/menu_switch.wav")
+    self.sound_select = pg.mixer.Sound("assets/soundfx/menu_select.wav")
 
-  def reset(self, winner):
-    self.__init__((self.screen_rect.width, self.screen_rect.height), winner)
 
+
+  def reset(self, winner, mute=False):
+    self.__init__((self.screen_rect.width, self.screen_rect.height),
+                  winner, mute)
 
   # helper method to get big walking frames
   def get_big_frames(self, servant):
@@ -58,12 +64,19 @@ class GameOver(object):
       elif self.keys[pg.K_UP]:
         if self.state != State.MAIN_MENU:
           self.state -= 1
+          if not self.mute:
+            self.sound_switch.play()
       elif self.keys[pg.K_DOWN]:
         if self.state != State.EXIT:
           self.state += 1
+          if not self.mute:
+            self.sound_switch.play()
       elif self.keys[pg.K_RETURN]:
         if self.state == State.MAIN_MENU:
           self.done = True
+          if not self.mute:
+            self.sound_switch.play()
+            self.sound_select.play()
         elif self.state == State.EXIT:
           self.done = True
 
@@ -76,7 +89,6 @@ class GameOver(object):
 
   def draw(self):
     self.screen.blit(self.background, (0, 0))
-#    self.screen.fill(GameOver.BACKGROUND_COLOR)
 
     self.screen.blit(self.winner_image,
                      (self.screen_rect.centerx - self.winner.rect.width,

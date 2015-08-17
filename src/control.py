@@ -110,7 +110,7 @@ class Control:
 
       elif self.state == State.SINGLE_PLAYER_GAME_OVER:
         self.prev_state = self.state
-        self.sp_go.reset(self.sp_game.player)
+        self.sp_go.reset(self.sp_game.player, self.mute)
         self.sp_go.main_loop()
         if self.sp_go.quit:
           return
@@ -121,7 +121,7 @@ class Control:
 
       elif self.state == State.TWO_PLAYER_GAME_OVER:
         self.prev_state = self.state
-        self.tp_go.reset(self.tp_game.winner)
+        self.tp_go.reset(self.tp_game.winner, self.mute)
         self.tp_go.main_loop()
         if self.tp_go.quit:
           return

@@ -33,7 +33,6 @@ class Menu(object):
     self.clock = pg.time.Clock()
     self.fps = 60.0
     self.keys = pg.key.get_pressed()
-    self.mute = mute
 
     # handle what happens after the menu is exited
     self.done = False
@@ -48,8 +47,8 @@ class Menu(object):
     self.p2_keys = (pg.K_w, pg.K_s, pg.K_a, pg.K_d)
 
     # players
-    self.p1 = sab.Saber(self.p1_keys, self.p1_location, self.mute)
-    self.p2 = arc.Archer(self.p2_keys, self.p2_location, self.mute)
+    self.p1 = sab.Saber(self.p1_keys, self.p1_location, mute)
+    self.p2 = arc.Archer(self.p2_keys, self.p2_location, mute)
 
     # control main menu screen navigation
     self.state = State.PLAY
@@ -62,6 +61,12 @@ class Menu(object):
     self.background = pg.image.load("assets/sprites/night.png").convert()
     self.excalibur_im = pg.image.load("assets/sprites/excalibur.png").convert()
     self.excalibur_im.set_colorkey((255, 0, 255))
+
+    # sound
+    self.mute = mute
+    self.sound_switch = pg.mixer.Sound("assets/soundfx/menu_switch.wav")
+    self.sound_select = pg.mixer.Sound("assets/soundfx/menu_select.wav")
+
 
 
   def reset(self, mute=False):
@@ -77,18 +82,31 @@ class Menu(object):
       elif self.keys[pg.K_UP]:
         if self.state != State.PLAY:
           self.state -= 1
+          if not self.mute:
+            self.sound_switch.play()
       elif self.keys[pg.K_DOWN]:
         if self.state != State.BACK:
           self.state += 1
+          if not self.mute:
+            self.sound_switch.play()
       elif self.keys[pg.K_RETURN]:
         if self.state == State.PLAY:
           self.done = True
+          if not self.mute:
+            self.sound_switch.play()
+            self.sound_select.play()
         elif self.state == State.PLAYER1:
           self.p1_selection = (self.p1_selection + 1) % 4
+          if not self.mute:
+            self.sound_switch.play()
         elif self.state == State.PLAYER2:
           self.p2_selection = (self.p2_selection + 1) % 4
+          if not self.mute:
+            self.sound_switch.play()
         elif self.state == State.BACK:
           self.done = True
+          if not self.mute:
+            self.sound_switch.play()
 
 
   # draw things onto the screen

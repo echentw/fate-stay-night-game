@@ -35,7 +35,10 @@ class Menu(object):
     self.excalibur_im = pg.image.load("assets/sprites/excalibur.png").convert()
     self.excalibur_im.set_colorkey((255, 0, 255))
 
+    # sound
     self.mute = mute
+    self.sound_switch = pg.mixer.Sound("assets/soundfx/menu_switch.wav")
+    self.sound_select = pg.mixer.Sound("assets/soundfx/menu_select.wav")
 
 
   def reset(self):
@@ -51,12 +54,19 @@ class Menu(object):
       elif self.keys[pg.K_UP]:
         if self.state != State.SINGLE_PLAYER:
           self.state -= 1
+          if not self.mute:
+            self.sound_switch.play()
       elif self.keys[pg.K_DOWN]:
         if self.state != State.EXIT:
           self.state += 1
+          if not self.mute:
+            self.sound_switch.play()
       elif self.keys[pg.K_RETURN]:
         if self.state == State.SINGLE_PLAYER or self.state == State.TWO_PLAYER:
           self.done = True
+          if not self.mute:
+            self.sound_switch.play()
+            self.sound_select.play()
         elif self.state == State.SOUND:
           self.mute = not self.mute
           if self.mute:
@@ -65,6 +75,7 @@ class Menu(object):
           else:
             pg.mixer.music.set_volume(1.0)
             self.mute = False
+            self.sound_switch.play()
         elif self.state == State.EXIT:
           self.done = True
 
