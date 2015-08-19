@@ -1,6 +1,6 @@
 import pygame as pg
 
-from src import obstacles as ob
+from src import maps
 from src import ai
 
 from src.servants import assassin as ass
@@ -32,7 +32,7 @@ class Game(object):
     self.sound_impact = pg.mixer.Sound("assets/soundfx/hit.wav")
 
     # initialize the obstacles of the game
-    self.obstacles, self.fake_obstacles = self.make_obstacles()
+    self.obstacles, self.fake_obstacles = maps.get_simple_map()
     self.player_obstacles = pg.sprite.Group(self.obstacles)
 
     # initialize the player and npcs
@@ -61,46 +61,6 @@ class Game(object):
             self.player)
     ]
     return npcs
-
-  # helper method to create the platforms in the game
-  def make_obstacles(self):
-    size = 20
-
-    walls = [ob.Brick((0 * size, 48 * size, 50 * size, 2 * size)),
-             ob.Brick((0 * size, 0 * size, 50 * size, 2 * size)),
-             ob.Brick((0 * size, 0 * size, 3 * size, 50 * size)),
-             ob.Brick((47 * size, 0 * size, 3 * size, 50 * size))]
-
-    ground = [ob.Brick((1 * size, 42 * size, 32 * size, 6 * size)),
-              ob.Brick((1 * size, 36 * size, 17 * size, 6 * size))]
-
-    big = [ob.Brick((5 * size, 18 * size, 9 * size, 13 * size)),
-           ob.Brick((4 * size, 23 * size, 1 * size, 1 * size)),
-           ob.Brick((4 * size, 30 * size, 1 * size, 1 * size)),
-           ob.Brick((14 * size, 23 * size, 1 * size, 1 * size)),
-           ob.Brick((14 * size, 30 * size, 1 * size, 1 * size))]
-
-    floating = [ob.Brick((20 * size, 21 * size, 9 * size, 2 * size)),
-                ob.Brick((23 * size, 31 * size, 15 * size, 1 * size)),
-                ob.Brick((33 * size, 19 * size, 1 * size, 1 * size)),
-                ob.Brick((37 * size, 16 * size, 7 * size, 2 * size))]
-
-    high = [ob.Brick((6 * size, 9 * size, 3 * size, 2 * size)),
-            ob.Brick((15 * size, 9 * size, 3 * size, 2 * size)),
-            ob.Brick((24 * size, 9 * size, 3 * size, 2 * size)),
-            ob.Brick((33 * size, 9 * size, 3 * size, 2 * size))]
-
-    high_pillars = [ob.Pillar((6 * size, 8 * size, 3 * size, 1 * size)),
-                    ob.Pillar((15 * size, 8 * size, 3 * size, 1 * size)),
-                    ob.Pillar((24 * size, 8 * size, 3 * size, 1 * size)),
-                    ob.Pillar((33 * size, 8 * size, 3 * size, 1 * size))]
-
-    floating_pillars = [ob.Pillar((20 * size, 20 * size, 9 * size, 1 * size)),
-                        ob.Pillar((23 * size, 30 * size, 15 * size, 1 * size)),
-                        ob.Pillar((37 * size, 15 * size, 7 * size, 1 * size))]
-
-    return (pg.sprite.Group(walls, ground, big, floating, high),
-            pg.sprite.Group(high_pillars, floating_pillars))
 
   # check for key presses and releases
   def event_loop(self):
