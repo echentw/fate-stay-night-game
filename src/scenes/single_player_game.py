@@ -81,6 +81,8 @@ class Game(object):
                 if not self.mute:
                   self.sound_impact.play()
         npc.servant.handle_keydown(key, self.player_obstacles)
+      for key in key_releases:
+        npc.servant.handle_keyup(key)
 
     # player actions
     for event in pg.event.get():
