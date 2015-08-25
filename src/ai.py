@@ -16,10 +16,9 @@ class AI:
     }
 
     self.keys_pressed = []
-
     self.time = pg.time.get_ticks()
 
-    
+
   def get_actions(self):
     key_presses = []
     if pg.time.get_ticks() - self.time > AI.DELAY:
@@ -28,43 +27,23 @@ class AI:
         self.time = pg.time.get_ticks()
       if self.should_move_left():
         key_presses.append(self.servant.LEFT_KEY)
-        self.move[self.servant.LEFT_KEY][1] = \
-            self.move[self.servant.LEFT_KEY][0]
-        self.move[self.servant.LEFT_KEY][0] = True
-        self.move[self.servant.RIGHT_KEY][1] = \
-            self.move[self.servant.RIGHT_KEY][0]
-        self.move[self.servant.RIGHT_KEY][0] = False
+        self.move_left()
       elif self.should_move_right():
         key_presses.append(self.servant.RIGHT_KEY)
-        self.move[self.servant.RIGHT_KEY][1] = \
-            self.move[self.servant.RIGHT_KEY][0]
-        self.move[self.servant.RIGHT_KEY][0] = True
-        self.move[self.servant.LEFT_KEY][1] = \
-            self.move[self.servant.LEFT_KEY][0]
-        self.move[self.servant.LEFT_KEY][0] = False
+        self.move_right()
 
     key_releases = []
-    if self.move[self.servant.LEFT_KEY][0] == False and \
-       self.move[self.servant.LEFT_KEY][1] == True:
+    if self.stopped_moving_left():
       key_releases.append(self.servant.LEFT_KEY)
-    if self.move[self.servant.RIGHT_KEY][0] == False and \
-       self.move[self.servant.RIGHT_KEY][1] == True:
+    if self.stopped_moving_right():
       key_releases.append(self.servant.RIGHT_KEY)
 
     return key_presses, key_releases
 
 
-  # check whether the AI should attack
   def should_attack(self):
-    if self.servant.direction == self.servant.LEFT_KEY:
-      if pg.Rect.colliderect(self.servant.attack_left_rect, self.player.rect):
-        return True
-    else:
-      if pg.Rect.colliderect(self.servant.attack_right_rect, self.player.rect):
-        return True
-    return False
+    return pg.Rect.colliderect(self.servant.rect, self.player.rect)
 
-  # check whether the AI should move left
   def should_move_left(self):
     dx = self.player.rect.x - self.servant.rect.x
     if dx < 50 and dx > -50:
@@ -74,7 +53,6 @@ class AI:
     else:
       return False
 
-  # check whether the AI should move right
   def should_move_right(self):
     dx = self.player.rect.x - self.servant.rect.x
     if dx < 50 and dx > -50:
@@ -83,3 +61,23 @@ class AI:
       return True
     else:
       return False
+
+  def move_left(self):
+    self.move[self.servant.LEFT_KEY][1] = self.move[self.servant.LEFT_KEY][0]
+    self.move[self.servant.RIGHT_KEY][1] = self.move[self.servant.RIGHT_KEY][0]
+    self.move[self.servant.LEFT_KEY][0] = True
+    self.move[self.servant.RIGHT_KEY][0] = False
+
+  def move_right(self):
+    self.move[self.servant.LEFT_KEY][1] = self.move[self.servant.LEFT_KEY][0]
+    self.move[self.servant.RIGHT_KEY][1] = self.move[self.servant.RIGHT_KEY][0]
+    self.move[self.servant.LEFT_KEY][0] = False
+    self.move[self.servant.RIGHT_KEY][0] = True
+
+  def stopped_moving_left(self):
+    return self.move[self.servant.LEFT_KEY][0] == False and \
+           self.move[self.servant.LEFT_KEY][1] == True
+
+  def stopped_moving_right(self):
+    return self.move[self.servant.RIGHT_KEY][0] == False and \
+           self.move[self.servant.RIGHT_KEY][1] == True

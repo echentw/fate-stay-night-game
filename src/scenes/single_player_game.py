@@ -2,6 +2,7 @@ import pygame as pg
 
 from src import maps
 from src import ai
+from src import obstacles as ob
 
 from src.servants import assassin as ass
 
@@ -34,6 +35,7 @@ class Game(object):
     # initialize the obstacles of the game
     self.obstacles, self.fake_obstacles = maps.get_simple_map()
     self.player_obstacles = pg.sprite.Group(self.obstacles)
+    self.holy_grail = pg.sprite.Group(ob.HolyGrail((500, 525, 30, 32)))
 
     # initialize the player and npcs
     self.player = player
@@ -112,6 +114,10 @@ class Game(object):
 
   # check for winner, update player position
   def update(self):
+    if pg.sprite.spritecollide(self.player, self.holy_grail, False):
+      self.done = True
+      self.quit = False
+      self.win = True
     for npc in self.npcs:
       if npc.servant.health <= 0:
         self.npcs.remove(npc)
@@ -119,10 +125,6 @@ class Game(object):
       self.done = True
       self.quit = False
       self.win = False
-    elif not self.npcs:
-      self.done = True
-      self.quit = False
-      self.win = True
     self.player.update(self.screen_rect, self.player_obstacles)
     for npc in self.npcs:
       npc.servant.update(self.screen_rect, self.player_obstacles)
@@ -137,6 +139,7 @@ class Game(object):
       npc.servant.draw(self.level)
     self.player.draw(self.level)
     self.fake_obstacles.draw(self.level)
+    self.holy_grail.draw(self.level)
     self.screen.blit(self.level, (0, 0), self.screen_rect)
 
     self.screen.blit(self.player.face_im, self.player_face_rect)
@@ -149,6 +152,7 @@ class Game(object):
     self.screen.blit(name, textpos)
     textpos.y = textpos.y + 12
     self.screen.blit(health, textpos)
+
 
 
   # main loop of the game
