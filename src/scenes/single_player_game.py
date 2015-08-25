@@ -33,9 +33,9 @@ class Game(object):
     self.sound_impact = pg.mixer.Sound("assets/soundfx/hit.wav")
 
     # initialize the obstacles of the game
-    self.obstacles, self.fake_obstacles = maps.get_simple_map()
+    self.obstacles, self.fake_obstacles = maps.get_complex_map()
     self.player_obstacles = pg.sprite.Group(self.obstacles)
-    self.holy_grail = pg.sprite.Group(ob.HolyGrail((500, 525, 30, 32)))
+    self.holy_grail = pg.sprite.Group(ob.HolyGrail((1160, 166, 30, 32)))
 
     # initialize the player and npcs
     self.player = player

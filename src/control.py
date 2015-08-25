@@ -33,9 +33,6 @@ class Control:
     self.menu = main_menu.Menu(Control.SCREEN_SIZE)
     self.sp_menu = sp_menu.Menu(Control.SCREEN_SIZE)
     self.tp_menu = tp_menu.Menu(Control.SCREEN_SIZE)
-#    self.sp_game = sp_game.Game((1000, 1000), self.sp_menu.player)
-#    self.tp_game = tp_game.Game((1000, 1000), self.tp_menu.p1,
-#                                              self.tp_menu.p2)
     self.sp_game = sp_game.Game((1600, 700), self.sp_menu.player)
     self.tp_game = tp_game.Game((1600, 700), self.tp_menu.p1,
                                              self.tp_menu.p2)

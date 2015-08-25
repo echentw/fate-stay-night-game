@@ -50,3 +50,33 @@ def get_simple_map():
 
   return (pg.sprite.Group(walls, floating),
           pg.sprite.Group())
+
+def get_complex_map():
+  walls = [ob.Brick((0 * SIZE, 32 * SIZE, 80 * SIZE, 3 * SIZE)),
+           ob.Brick((0 * SIZE, 0 * SIZE, 80 * SIZE, 3 * SIZE)),
+           ob.Brick((0 * SIZE, 0 * SIZE, 3 * SIZE, 35 * SIZE)),
+           ob.Brick((77 * SIZE, 0 * SIZE, 3 * SIZE, 35 * SIZE))]
+
+  part1 = [ob.Brick((3 * SIZE, 27 * SIZE, 2 * SIZE, 1 * SIZE)),
+           ob.Brick((19 * SIZE, 27 * SIZE, 9 * SIZE, 1 * SIZE)),
+           ob.Brick((14 * SIZE, 23 * SIZE, 4 * SIZE, 1 * SIZE)),
+           ob.Brick((3 * SIZE, 19 * SIZE, 10 * SIZE, 1 * SIZE)),
+           ob.Brick((3 * SIZE, 14 * SIZE, 1 * SIZE, 1 * SIZE)),
+           ob.Brick((9 * SIZE, 10 * SIZE, 22 * SIZE, 1 * SIZE))]
+
+  part2 = [ob.Brick((36 * SIZE, 14 * SIZE, 5 * SIZE, 18 * SIZE)),
+           ob.Brick((41 * SIZE, 14 * SIZE, 5 * SIZE, 1 * SIZE)),
+           ob.Brick((53 * SIZE, 3 * SIZE, 4 * SIZE, 22 * SIZE)),
+           ob.Brick((45 * SIZE, 24 * SIZE, 8 * SIZE, 1 * SIZE))]
+
+  part3 = [ob.Brick((62 * SIZE, 26 * SIZE, 4 * SIZE, 1 * SIZE)),
+           ob.Brick((71 * SIZE, 21 * SIZE, 6 * SIZE, 1 * SIZE)),
+           ob.Brick((60 * SIZE, 18 * SIZE, 6 * SIZE, 1 * SIZE)),
+           ob.Brick((71 * SIZE, 13 * SIZE, 6 * SIZE, 1 * SIZE)),
+           ob.Brick((57 * SIZE, 10 * SIZE, 9 * SIZE, 1 * SIZE))]
+
+  pillars = [ob.Pillar((9 * SIZE, 9 * SIZE, 22 * SIZE, 1 * SIZE)),
+             ob.Pillar((36 * SIZE, 13 * SIZE, 10 * SIZE, 1 * SIZE))]
+
+  return (pg.sprite.Group(walls, part1, part2, part3),
+          pg.sprite.Group(pillars))

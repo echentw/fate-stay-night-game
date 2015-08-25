@@ -36,7 +36,7 @@ class Menu(object):
     self.quit = False
 
     # player
-    self.player_loc = (200, 200)
+    self.player_loc = (120, 580)
     self.player_keys = (pg.K_UP, pg.K_DOWN, pg.K_LEFT, pg.K_RIGHT)
     self.player = sab.Saber(self.player_keys, self.player_loc, mute)
 
