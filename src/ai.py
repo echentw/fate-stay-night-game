@@ -2,8 +2,6 @@ import pygame as pg
 
 
 class AI:
-  DELAY = 2000
-
   def __init__(self, servant, obstacles, player):
     self.servant = servant
     self.obstacles = obstacles
@@ -21,16 +19,24 @@ class AI:
 
   def get_actions(self):
     key_presses = []
-    if pg.time.get_ticks() - self.time > AI.DELAY:
-      if self.should_attack():
-        key_presses.append(self.servant.DOWN_KEY)
-        self.time = pg.time.get_ticks()
-      if self.should_move_left():
+    if self.should_attack():
+      key_presses.append(self.servant.DOWN_KEY)
+      self.time = pg.time.get_ticks()
+    if self.servant.direction == self.servant.LEFT_KEY:
+      if self.can_move_left():
         key_presses.append(self.servant.LEFT_KEY)
         self.move_left()
-      elif self.should_move_right():
+      elif self.can_move_right():
         key_presses.append(self.servant.RIGHT_KEY)
         self.move_right()
+    else:
+      if self.can_move_right():
+        key_presses.append(self.servant.RIGHT_KEY)
+        self.move_right()
+      elif self.can_move_left():
+        key_presses.append(self.servant.LEFT_KEY)
+        self.move_left()
+
 
     key_releases = []
     if self.stopped_moving_left():
@@ -44,23 +50,33 @@ class AI:
   def should_attack(self):
     return pg.Rect.colliderect(self.servant.rect, self.player.rect)
 
-  def should_move_left(self):
-    dx = self.player.rect.x - self.servant.rect.x
-    if dx < 50 and dx > -50:
-      return False
-    if dx < 0:
-      return True
-    else:
-      return False
+  def can_move_left(self):
+    # check for wall on left
+    self.servant.rect.move_ip((-5, 0))
+    col_left = pg.sprite.spritecollide(self.servant, self.obstacles, False)
+    self.servant.rect.move_ip((5, 0))
 
-  def should_move_right(self):
-    dx = self.player.rect.x - self.servant.rect.x
-    if dx < 50 and dx > -50:
-      return False
-    if dx > 0:
-      return True
-    else:
-      return False
+    # check for ground on left
+    self.servant.rect.move_ip((-15, 1))
+    col_below = pg.sprite.spritecollide(self.servant, self.obstacles, False)
+    self.servant.rect.move_ip((15, -1))
+
+    return not col_left and col_below
+
+
+  def can_move_right(self):
+    # check for wall on left
+    self.servant.rect.move_ip((5, 0))
+    col_right = pg.sprite.spritecollide(self.servant, self.obstacles, False)
+    self.servant.rect.move_ip((-5, 0))
+
+    # check for ground on left
+    self.servant.rect.move_ip((15, 1))
+    col_below = pg.sprite.spritecollide(self.servant, self.obstacles, False)
+    self.servant.rect.move_ip((-15, -1))
+
+    return not col_right and col_below
+
 
   def move_left(self):
     self.move[self.servant.LEFT_KEY][1] = self.move[self.servant.LEFT_KEY][0]
