@@ -83,14 +83,22 @@ class Menu(object):
           if not self.mute:
             self.sound_switch.play()
             self.sound_select.play()
-        elif self.state == State.PLAYER:
-          self.player_selection = (self.player_selection + 1) % 3
-          if not self.mute:
-            self.sound_switch.play()
         elif self.state == State.BACK:
           self.done = True
           if not self.mute:
             self.sound_switch.play()
+      elif self.keys[pg.K_RIGHT]:
+        if self.state == State.PLAYER:
+          if self.player_selection < 2:
+            self.player_selection += 1
+            if not self.mute:
+              self.sound_switch.play()
+      elif self.keys[pg.K_LEFT]:
+        if self.state == State.PLAYER:
+          if self.player_selection > 0:
+            self.player_selection -= 1
+            if not self.mute:
+              self.sound_switch.play()
 
 
   def draw(self):
@@ -134,7 +142,7 @@ class Menu(object):
     self.screen.blit(text, textpos)
 
     font = pg.font.Font(None, 24)
-    text = font.render('UP and DOWN to navigate, ENTER to toggle', 1, (200, 200, 200))
+    text = font.render('Arrow keys to navigate, ENTER to toggle', 1, (200, 200, 200))
     textpos = text.get_rect()
     textpos.bottomright = self.screen_rect.bottomright
     self.screen.blit(text, textpos)

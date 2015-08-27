@@ -131,7 +131,7 @@ class Menu(object):
     self.screen.blit(text, textpos)
 
     font = pg.font.Font(None, 24)
-    text = font.render('UP and DOWN to navigate, ENTER to toggle', 1, (200, 200, 200))
+    text = font.render('Arrow keys to navigate, ENTER to toggle', 1, (200, 200, 200))
     textpos = text.get_rect()
     textpos.bottomright = self.screen_rect.bottomright
     self.screen.blit(text, textpos)
