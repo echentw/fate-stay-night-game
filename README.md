@@ -1,7 +1,7 @@
 Fate/Stay Night Platform Game
 =============================
 
-A (most likely 2-player) platform game with characters from Fate/Stay Night.
+A platform game with characters from Fate/Stay Night, with both single player and two player modes.
 
 To play:
 --------
