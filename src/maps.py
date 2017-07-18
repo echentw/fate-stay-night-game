@@ -1,6 +1,6 @@
 import pygame as pg
 
-import obstacles as ob
+import src.obstacles as ob
 
 SIZE = 20
 
