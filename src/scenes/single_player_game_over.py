@@ -59,7 +59,7 @@ class GameOver(object):
   def get_big_frames(self, servant):
     frames = [pg.transform.scale(servant.walk_frames[servant.LEFT_KEY][i],
         (servant.rect.width * 2, servant.rect.height * 2)) \
-        for i in xrange(len(servant.walk_frames[servant.LEFT_KEY]))]
+        for i in range(len(servant.walk_frames[servant.LEFT_KEY]))]
     return frames
 
   # check for key presses
