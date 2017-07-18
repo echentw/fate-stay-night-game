@@ -1,13 +1,13 @@
 import os
 import pygame as pg
 
-from scenes import single_player_menu as sp_menu
-from scenes import single_player_game as sp_game
-from scenes import two_player_menu as tp_menu
-from scenes import two_player_game as tp_game
-from scenes import main_menu
-from scenes import two_player_game_over as tp_go
-from scenes import single_player_game_over as sp_go
+from src.scenes import single_player_menu as sp_menu
+from src.scenes import single_player_game as sp_game
+from src.scenes import two_player_menu as tp_menu
+from src.scenes import two_player_game as tp_game
+from src.scenes import main_menu
+from src.scenes import two_player_game_over as tp_go
+from src.scenes import single_player_game_over as sp_go
 
 class State:
   MAIN_MENU               = 0

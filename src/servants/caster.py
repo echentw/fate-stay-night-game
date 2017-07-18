@@ -41,7 +41,7 @@ class Caster(player.Player):
     # handle walking frames
     self.rect = pg.Rect(rect)
     self.walk_frames = self.get_walk_frames(
-        walk_im, [[i, 0] for i in xrange(6)], self.rect)
+        walk_im, [[i, 0] for i in range(6)], self.rect)
 
     # handle attacking frames
     self.attack_left_rect = pg.Rect(attack_rect)
@@ -49,7 +49,7 @@ class Caster(player.Player):
     self.attack_left_rect.x = self.rect.x - 50
     self.attack_right_rect.x = self.rect.x - 14
     self.attack_frames = self.get_attack_frames(
-        attack_im, [[0,i] for i in xrange(4)], self.attack_right_rect)
+        attack_im, [[0,i] for i in range(4)], self.attack_right_rect)
 
     # handle jumping frames
     self.jump_up_rects, self.jump_down_rects = \
@@ -78,9 +78,9 @@ class Caster(player.Player):
     sheet = pg.image.load(walk_im).convert()
     sheet.set_colorkey(player.Player.COLOR_KEY)
     frames = player.get_images(sheet, indices, rect.size)
-    frame_dict = {self.LEFT_KEY : [frames[i] for i in xrange(6)],
+    frame_dict = {self.LEFT_KEY : [frames[i] for i in range(6)],
                   self.RIGHT_KEY: [pg.transform.flip(frames[i], True, False) \
-                      for i in xrange(6)]}
+                      for i in range(6)]}
     return frame_dict
 
   # Helper method to get jump bounding boxes
@@ -130,9 +130,9 @@ class Caster(player.Player):
     sheet.set_colorkey(player.Player.COLOR_KEY)
     frames = player.get_images(sheet, indices, rect.size)
     frame_dict = {
-      self.LEFT_KEY : [frames[i] for i in xrange(4)],
+      self.LEFT_KEY : [frames[i] for i in range(4)],
       self.RIGHT_KEY: [pg.transform.flip(frames[i], True, False)
-          for i in xrange(4)]
+          for i in range(4)]
     }
     return frame_dict
 

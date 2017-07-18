@@ -194,7 +194,7 @@ class Game(object):
 # Hacky way to show the health bar
 def get_health_bar(player):
   output = ''
-  for i in xrange(player.health):
+  for i in range(player.health):
     output += '--'
   return output
 

@@ -1,6 +1,6 @@
 import pygame as pg
 
-import physics
+from src import physics
 
 
 class Player(physics.Physics, pg.sprite.Sprite):
@@ -169,7 +169,7 @@ class Player(physics.Physics, pg.sprite.Sprite):
         elif self.direction == self.RIGHT_KEY:
           self.x_vel += self.agility
         if abs(self.x_vel) > self.max_speed:
-          self.x_vel -= cmp(self.x_vel, 0) * self.agility
+          self.x_vel -= ((self.x_vel > 0) - (self.x_vel < 0)) * self.agility
     self.get_position(obstacles)
 
   # Draw the image to the screen
