@@ -41,7 +41,7 @@ class Saber(player.Player):
     # handle walking frames
     self.rect = pg.Rect(rect)
     self.walk_frames = self.get_walk_frames(
-        walk_im, [[i, 1] for i in xrange(6)], self.rect)
+        walk_im, [[i, 1] for i in range(6)], self.rect)
 
     # handle attacking frames
     self.attack_left_rect = pg.Rect(attack_rect)
